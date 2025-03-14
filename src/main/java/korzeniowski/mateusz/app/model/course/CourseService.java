@@ -17,7 +17,7 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
-    public List<CourseNameDto> findAllCourses() {
-        return courseRepository.findAllBy().stream().map(CourseNameDto::map).toList();
+    public List<CourseNameDto> findAllCoursesById(Long id) {
+        return courseRepository.findAllById(id).stream().map(CourseNameDto::map).toList();
     }
 }

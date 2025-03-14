@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -20,12 +21,15 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String home(Model model) {
-        List<CourseNameDto> courses = courseService.findAllCourses();
+    public String home(Model model, Principal principal) {
+        Long idOfAuthenticatedUser = userService.findIdOfAuthenticatedUser(principal.getName());
+        List<CourseNameDto> courses = userService.findCoursesByUserId(idOfAuthenticatedUser);
         addCreatorNameToCourse(courses);
         model.addAttribute("courses", courses);
+        model.addAttribute("userName", principal.getName());
         return "index";
     }
+
 
     private void addCreatorNameToCourse(List<CourseNameDto> courseNameDto) {
         for (CourseNameDto course : courseNameDto) {

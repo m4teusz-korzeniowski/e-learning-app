@@ -14,7 +14,9 @@ public class SecurityConfig {
         http.authorizeHttpRequests(request -> request
                 .requestMatchers("/h2-console/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated());
-        http.formLogin(login -> login.loginPage("/login").permitAll());
+        http.formLogin(login -> login.loginPage("/login")
+                .defaultSuccessUrl("/", true)
+                .permitAll());
         http.csrf(AbstractHttpConfigurer::disable);
         http.headers(config -> config.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
         return http.build();

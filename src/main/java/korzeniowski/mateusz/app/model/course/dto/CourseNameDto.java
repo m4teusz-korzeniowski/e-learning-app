@@ -3,13 +3,20 @@ package korzeniowski.mateusz.app.model.course.dto;
 import korzeniowski.mateusz.app.model.course.Course;
 
 public class CourseNameDto {
+    private final Long id;
     private final String name;
     private final Long creatorId;
     private String creatorName;
 
-    public CourseNameDto(String name, Long creatorId) {
+
+    public CourseNameDto(Long id, String name, Long creatorId) {
+        this.id = id;
         this.name = name;
         this.creatorId = creatorId;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
@@ -29,6 +36,6 @@ public class CourseNameDto {
     }
 
     public static CourseNameDto map (Course course) {
-        return new CourseNameDto(course.getName(), course.getCreatorId());
+        return new CourseNameDto(course.getId(), course.getName(), course.getCreatorId());
     }
 }

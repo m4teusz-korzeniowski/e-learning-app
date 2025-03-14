@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head>
     <meta charset="UTF-8">
     <title>Strona startowa</title>
@@ -12,6 +15,10 @@
         <li th:each="course: ${courses}">
             <p th:text="${course.getName()}">Nazwa kursu</p>
             <p th:text="'Autor: '+${course.getCreatorName()}">Email twórcy kursu</p>
+            <p th:text="'User name= ' + ${userName}"></p>
+        </li>
+        <li>
+            <a href="/logout" >Wyloguj się</a>
         </li>
     </ul>
 </main>
