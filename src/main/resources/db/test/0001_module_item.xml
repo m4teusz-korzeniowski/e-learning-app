@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+    <changeSet id="0001" author="mk">
+        <insert tableName="module_item">
+            <column name="name" value="Mowa zależna"/>
+            <column name="description" value="xyz"/>
+            <column name="file_url" value="/xyz.pdf"/>
+            <column name="module_id" value="1"/>
+        </insert>
+        <insert tableName="module_item">
+            <column name="name" value="Strona bierna"/>
+            <column name="description" value="xyz"/>
+            <column name="file_url" value="/xyz.pdf"/>
+            <column name="module_id" value="2"/>
+        </insert>
+        <insert tableName="module_item">
+            <column name="name" value="List nieformalny"/>
+            <column name="description" value="xyz"/>
+            <column name="file_url" value="/xyz.pdf"/>
+            <column name="module_id" value="2"/>
+        </insert>
+        <insert tableName="module_item">
+            <column name="name" value="Have something done"/>
+            <column name="description" value="xyz"/>
+            <column name="file_url" value="/xyz.pdf"/>
+            <column name="module_id" value="3"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

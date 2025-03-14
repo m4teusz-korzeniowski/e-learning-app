@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+    <changeSet id="0001" author="mk">
+        <createTable tableName="question">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="correct_answer" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="number_of_answers" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="score" type="float">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="test_id" type="bigint"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="question" baseColumnNames="test_id"
+                                 constraintName="fk_test_question"
+                                 referencedTableName="test"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

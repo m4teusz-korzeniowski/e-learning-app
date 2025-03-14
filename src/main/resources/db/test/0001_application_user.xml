@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+    <changeSet id="0001" author="mk">
+        <insert tableName="application_user">
+            <column name="first_name" value="Jan"/>
+            <column name="last_name" value="Kowalski"/>
+            <column name="email" value="jan.kowalski@gmail.com"/>
+            <column name="password" value="{bcrypt}$2a$10$MNHdRKDbOZUj7b9.c0PNTeVbhBl4Gvjewj3Q5n.RFG87eDEqW7GGm"/>
+        </insert>
+        <insert tableName="application_user">
+            <column name="first_name" value="Ania"/>
+            <column name="last_name" value="Kowalska"/>
+            <column name="email" value="ania.k@gmail.com"/>
+            <column name="password" value="{bcrypt}$2a$10$/H43V41I6FwR1QsafTRB.e7MyIOZPGJElZIe6DxQBdoO8yHPj1Lpq"/>
+        </insert>
+        <insert tableName="application_user">
+            <column name="first_name" value="Jan"/>
+            <column name="last_name" value="Kotlet"/>
+            <column name="email" value="jan.kotlet@gmail.com"/>
+            <column name="password" value="{bcrypt}$2a$10$vp8srk.HyseNBND48LyfduAXHIhlz2d0y6ESZamVX5ieKmkXoCnRG"/>
+        </insert>
+        <insert tableName="application_user">
+            <column name="first_name" value="Mateusz"/>
+            <column name="last_name" value="Korzeniowski"/>
+            <column name="email" value="m.k@gmail.com"/>
+            <column name="password" value="{bcrypt}$2a$10$PitQ7QfE5bkHL9.XDeQZjeFHmTjEofRwK7qb5dQEe.PGx0JL7lk5e"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

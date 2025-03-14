@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+    <include file="create_table_application_user.xml" relativeToChangelogFile="true"/>
+    <include file="create_table_course.xml" relativeToChangelogFile="true"/>
+    <include file="create_table_module.xml" relativeToChangelogFile="true"/>
+    <include file="create_table_module_item.xml" relativeToChangelogFile="true"/>
+    <include file="create_table_test.xml" relativeToChangelogFile="true"/>
+    <include file="create_table_question.xml" relativeToChangelogFile="true"/>
+    <include file="create_table_result.xml" relativeToChangelogFile="true"/>
+    <include file="create_table_user_role.xml" relativeToChangelogFile="true"/>
+    <include file="create_table_user_courses.xml" relativeToChangelogFile="true"/>
+    <include file="create_table_user_roles.xml" relativeToChangelogFile="true"/>
+
+    <include file="test/0001_application_user.xml" relativeToChangelogFile="true"/>
+    <include file="test/0001_user_role.xml" relativeToChangelogFile="true"/>
+    <include file="test/0001_user_roles.xml" relativeToChangelogFile="true"/>
+    <include file="test/0001_course.xml" relativeToChangelogFile="true"/>
+    <include file="test/0001_module.xml" relativeToChangelogFile="true"/>
+    <include file="test/0001_module_item.xml" relativeToChangelogFile="true"/>
+    <include file="test/0001_test.xml" relativeToChangelogFile="true"/>
+    <include file="test/0001_question.xml" relativeToChangelogFile="true"/>
+    <include file="test/0001_result.xml" relativeToChangelogFile="true"/>
+    <include file="test/0001_user_courses.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

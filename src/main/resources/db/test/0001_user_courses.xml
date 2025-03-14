@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+    <changeSet id="0001" author="mk">
+        <insert tableName="user_courses">
+            <column name="user_id" value="1"/>
+            <column name="course_id" value="1"/>
+        </insert>
+        <insert tableName="user_courses">
+            <column name="user_id" value="2"/>
+            <column name="course_id" value="1"/>
+        </insert>
+        <insert tableName="user_courses">
+            <column name="user_id" value="2"/>
+            <column name="course_id" value="2"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
