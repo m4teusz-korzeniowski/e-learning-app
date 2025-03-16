@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nauczyciel - strona startowa</title>
+</head>
+<body>
+<h1>Strona startowa nauczciela</h1>
+<main>
+    <h2>Moje kursy</h2>
+    <ul>
+        <li th:each="course: ${courses}">
+            <p th:text="${course.getName()}">Nazwa kursu</p>
+        </li>
+        <li>
+            <a th:href="@{/logout}" >Wyloguj się</a>
+        </li>
+    </ul>
+</main>
+</body>
+</html>

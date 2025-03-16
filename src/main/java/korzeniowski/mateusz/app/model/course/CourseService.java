@@ -1,6 +1,7 @@
 package korzeniowski.mateusz.app.model.course;
 
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
+import korzeniowski.mateusz.app.model.course.dto.TeacherCourseDto;
 import korzeniowski.mateusz.app.model.user.User;
 import korzeniowski.mateusz.app.model.user.UserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,5 +20,9 @@ public class CourseService {
 
     public List<CourseNameDto> findAllCoursesById(Long id) {
         return courseRepository.findAllById(id).stream().map(CourseNameDto::map).toList();
+    }
+
+    public List<TeacherCourseDto> findAllCoursesByTeacherId(Long id) {
+        return courseRepository.findAllByCreatorId(id).stream().map(TeacherCourseDto::map).toList();
     }
 }

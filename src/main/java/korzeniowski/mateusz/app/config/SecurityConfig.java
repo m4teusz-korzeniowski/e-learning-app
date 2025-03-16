@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -17,9 +18,11 @@ public class SecurityConfig {
         http.authorizeHttpRequests(request -> request
                 .requestMatchers("/h2-console/**").hasAnyRole("ADMIN")
                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+                .requestMatchers("/teacher/**").hasAnyRole("TEACHER")
+                .requestMatchers("/").hasAnyRole("STUDENT")
                 .anyRequest().authenticated());
         http.formLogin(login -> login.loginPage("/login")
-                .defaultSuccessUrl("/", true)
+                .successHandler(customAuthenticationSuccessHandler())
                 .permitAll());
         //http.csrf(AbstractHttpConfigurer::disable);
         http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
@@ -29,5 +32,10 @@ public class SecurityConfig {
         );
         http.headers(config -> config.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return new CustomAuthenticationSuccessHandler();
     }
 }

@@ -7,16 +7,40 @@
 <body>
 <div>
     <h1>Zarejestruj użytkownika</h1>
-    <form th:action="@{/admin/register}" method="post" th:object="${user}">
-        <input th:field="*{firstName}" placeholder="Imię">
-        <input th:field="*{lastName}" placeholder="Nazwisko">
-        <input th:field="*{email}" placeholder="e-mail" type="email">
-        <input th:field="*{password}" placeholder="Hasło" type="password">
-        <select th:field="*{role}">
-            <option th:value="'STUDENT'" th:text="Uczeń"></option>
-            <option th:value="'TEACHER'" th:text="Nauczyciel"></option>
-        </select>
-        <button type="submit">Zarejestruj użytkownika</button>
+
+    <form action="#" th:action="@{/admin/register}" method="post" th:object="${user}">
+        <table>
+            <tr>
+                <td><input type="text" th:field="*{firstName}" placeholder="Imię"></td>
+                <td th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Name Error</td>
+            </tr>
+            <tr>
+                <td><input th:field="*{lastName}" placeholder="Nazwisko"></td>
+                <td th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Name Error</td>
+            </tr>
+            <tr>
+                <td><input th:field="*{email}" placeholder="e-mail"></td>
+                <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name Error</td>
+            </tr>
+            <tr>
+                <td><input th:field="*{password}" placeholder="Hasło" type="password"></td>
+                <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name Error</td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        <select th:field="*{role}">
+                            <option th:value="'STUDENT'" th:text="Uczeń"></option>
+                            <option th:value="'TEACHER'" th:text="Nauczyciel"></option>
+                        </select>
+                    </label>
+                </td>
+
+            </tr>
+            <tr>
+                <td><button type="submit">Zarejestruj użytkownika</button></td>
+            </tr>
+        </table>
     </form>
 </div>
 </body>

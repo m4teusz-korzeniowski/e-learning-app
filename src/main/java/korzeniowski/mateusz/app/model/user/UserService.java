@@ -1,5 +1,6 @@
 package korzeniowski.mateusz.app.model.user;
 
+import korzeniowski.mateusz.app.exceptions.EmailAlreadyInUseException;
 import korzeniowski.mateusz.app.model.course.Course;
 import korzeniowski.mateusz.app.model.course.CourseRepository;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
@@ -27,6 +28,10 @@ public class UserService {
 
     public Optional<UserCredentialsDto> findCredentialsByEmail(String email) {
         return userRepository.findByEmail(email).map(UserCredentialsDtoMapper::map);
+    }
+
+    private boolean isEmailInUse(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 
     public String findUserFullNameById(Long id) {
@@ -66,6 +71,11 @@ public class UserService {
                     throw new NoSuchElementException(String.format("Role %s not found", userRegistrationDto.getRole()));
                 }
         );
-        userRepository.save(user);
+        if (isEmailInUse(user.getEmail())) {
+            System.out.printf("Email %s is already in use%n", user.getEmail());
+            throw new EmailAlreadyInUseException(String.format("Email %s is already in use", user.getEmail()));
+        } else {
+            userRepository.save(user);
+        }
     }
 }

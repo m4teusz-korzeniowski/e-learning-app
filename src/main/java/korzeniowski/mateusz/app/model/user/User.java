@@ -2,6 +2,8 @@ package korzeniowski.mateusz.app.model.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import korzeniowski.mateusz.app.model.course.Course;
 import korzeniowski.mateusz.app.model.course.test.Result;
 
@@ -17,10 +19,13 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
-    @Email
+    @NotBlank
     private String email;
+    @NotBlank
     private String password;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
