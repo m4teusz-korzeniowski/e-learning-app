@@ -24,27 +24,20 @@ public class RegistrationController {
     }
 
     @GetMapping("admin/register")
-    String registration(Model model) {
-        UserRegistrationDto user = new UserRegistrationDto();
-        model.addAttribute("user", user);
+    String registration(@ModelAttribute("user") UserRegistrationDto user) {
         return "registration-form";
     }
 
     @PostMapping("admin/register")
-    String register(@Valid UserRegistrationDto user, BindingResult bindingResult, Model model) {
+    String register(@Valid @ModelAttribute("user") UserRegistrationDto user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
-            //List<ObjectError> errors = bindingResult.getAllErrors();
-            //UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
-            //model.addAttribute("user", userRegistrationDto);
-            //model.addAttribute("errors", bindingResult);
-            return registration(model);
+            return registration(user);
         }
-        try{
+        try {
             userService.registerAppUser(user);
-        }catch (EmailAlreadyInUseException ex){
-            model.addAttribute("errors", ex.getMessage());
-            return registration(model);
+        } catch (EmailAlreadyInUseException ex) {
+            bindingResult.rejectValue("email", "error.email","email is already in use");
+            return registration(user);
         }
 
         return "redirect:/admin/confirmation";
