@@ -20,10 +20,13 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
+    private final CourseRepository courseRepository;
 
-    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository) {
+    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository
+    , CourseRepository courseRepository) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
+        this.courseRepository = courseRepository;
     }
 
     public Optional<UserCredentialsDto> findCredentialsByEmail(String email) {
@@ -72,10 +75,23 @@ public class UserService {
                 }
         );
         if (isEmailInUse(user.getEmail())) {
-            System.out.printf("Email %s is already in use%n", user.getEmail());
             throw new EmailAlreadyInUseException(String.format("Email %s is already in use", user.getEmail()));
         } else {
             userRepository.save(user);
         }
     }
+
+    public boolean ifUserHasAccessToCourse(Long userId, Long courseId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            List<Course> courses = user.get().getCourses();
+            for (Course course : courses) {
+                if(course.getId().equals(courseId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

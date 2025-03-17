@@ -14,10 +14,10 @@ public class Module {
     private String name;
     @OneToMany
     @JoinColumn(name = "module_id")
-    private List<ModuleItem> items = new ArrayList<ModuleItem>();
+    private List<ModuleItem> items = new ArrayList<>();
     @OneToMany
     @JoinColumn(name  = "module_id")
-    private List<Test> test;
+    private List<Test> test= new ArrayList<>();
 
     public Long getId() {
         return id;

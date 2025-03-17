@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${course.name}">Nazwa kursu</title>
+</head>
+<body>
+<div>
+    <main>
+        <div>
+            <h1 th:text="${course.name}">Nazwa kursu </h1>
+            <p th:text="${course.description}">Opis kursu</p>
+        </div>
+        <div>
+            <ul>
+                <li th:each="module : ${course.modules}">
+                    <p th:text="${module.getName()}">Nazwa modułu</p>
+                    <ul>
+                        <li th:each="item : ${module.getItems()}">
+                            <p th:text="${item.name}">Element modułu</p>
+                        </li>
+                        <li th:each="quiz : ${module.getTest()}">
+                            <p th:text="${quiz.name}">Test</p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+
+    </main>
+</div>
+
+</body>
+</html>
