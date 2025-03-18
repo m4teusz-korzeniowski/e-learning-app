@@ -5,7 +5,10 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
     <changeSet id="0001" author="mk">
-        <createTable tableName="user_courses">
+        <createTable tableName="enrollment">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
             <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
@@ -13,13 +16,11 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addPrimaryKey tableName="user_courses" columnNames="user_id,course_id"
-                       constraintName="pk_user_course"/>
-        <addForeignKeyConstraint baseTableName="user_courses" baseColumnNames="user_id"
+        <addForeignKeyConstraint baseTableName="enrollment" baseColumnNames="user_id"
                                  constraintName="fk_user_course_user"
                                  referencedTableName="application_user"
                                  referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="user_courses" baseColumnNames="course_id"
+        <addForeignKeyConstraint baseTableName="enrollment" baseColumnNames="course_id"
                                  constraintName="fk_user_course_course"
                                  referencedTableName="course"
                                  referencedColumnNames="id"/>

@@ -2,8 +2,11 @@ package korzeniowski.mateusz.app.model.user;
 
 import korzeniowski.mateusz.app.exceptions.EmailAlreadyInUseException;
 import korzeniowski.mateusz.app.model.course.Course;
-import korzeniowski.mateusz.app.model.course.CourseRepository;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
+import korzeniowski.mateusz.app.model.course.module.Module;
+import korzeniowski.mateusz.app.model.course.test.ResultRepository;
+import korzeniowski.mateusz.app.model.course.test.Test;
+import korzeniowski.mateusz.app.model.course.test.dto.ResultDto;
 import korzeniowski.mateusz.app.model.user.dto.UserCredentialsDto;
 import korzeniowski.mateusz.app.model.user.dto.UserNameDto;
 import korzeniowski.mateusz.app.model.user.dto.UserRegistrationDto;
@@ -20,13 +23,16 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
-    private final CourseRepository courseRepository;
+    private final ResultRepository resultRepository;
 
-    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository
-    , CourseRepository courseRepository) {
+    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, ResultRepository resultRepository) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
-        this.courseRepository = courseRepository;
+        this.resultRepository = resultRepository;
+    }
+
+    public Optional<User> findUserById(Long id){
+        return userRepository.findById(id);
     }
 
     public Optional<UserCredentialsDto> findCredentialsByEmail(String email) {
@@ -92,6 +98,37 @@ public class UserService {
             }
         }
         return false;
+    }
+
+    public Optional<ResultDto> findUserResultOfTest(Long userId, Long testId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            //result.ifPresent(value -> System.out.println("Wynik jest = " + value.getScore()));
+            return resultRepository.findByUserId(userId,testId).map(ResultDto::map);
+        }
+        throw new UsernameNotFoundException(String.format("Username with ID %s not found", userId));
+    }
+
+    public boolean ifUserHasAccessToTest(Long userId, Long testId){
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            List<Course> courses = user.get().getCourses();
+            for (Course course : courses) {
+                for (Module module : course.getModules()) {
+                    for (Test test : module.getTest()) {
+                        if(test.getId().equals(testId)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public Long findUserIdByEmail(String email) {
+        Optional<Long> userId = userRepository.findByEmail(email).map(User::getId);
+        return userId.orElseThrow(() -> new UsernameNotFoundException(String.format("Username with email %s not found", email)));
     }
 
 }

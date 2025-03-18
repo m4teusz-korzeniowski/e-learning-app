@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tworzenie kursu</title>
+</head>
+<body>
+<h1>Stwórz kurs</h1>
+<main>
+    <div>
+        <form action="#" th:action="@{/teacher/course/create}" method="post" th:object="${course}">
+            <table>
+                <tr>
+                    <td><label>
+                        <input type="text" th:field="${course.name}" placeholder="Nazwa kursu">
+                    </label></td>
+                    <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Błędna nazwa</td>
+                </tr>
+                <tr>
+                    <td><label>
+                        <textarea rows="10" th:field="*{description}"
+                                  placeholder="Wprowadź opis kursu...">Opis kursu</textarea>
+                    </label></td>
+                    <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Błędny opis</td>
+                </tr>
+                <tr>
+                    <td><label>
+                        <td th:if="${#fields.hasErrors('creatorId')}" th:errors="*{creatorId}">Błędne ID twórcy</td>
+                    </label></td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="submit">Dodaj kurs</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</main>
+</body>
+</html>

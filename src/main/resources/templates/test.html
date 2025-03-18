@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${test.name}">Nazwa testu</title>
+</head>
+<body>
+<main>
+    <div>
+        <h1 th:text="${test.name}">Nazwa testu</h1>
+        <p th:text="${test.description}">Opis testu</p>
+        <p>Wyniki testów:</p>
+        <p th:if="${result!=null}" th:text="'Wynik testu: = ' + ${result.getScore()}">Wynik</p>
+        <p th:if="${result==null}">Brak wyników!</p>
+        <p>Rozwiąż test</p>
+    </div>
+</main>
+</body>
+</html>

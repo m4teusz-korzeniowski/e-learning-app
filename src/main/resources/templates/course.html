@@ -19,8 +19,8 @@
                         <li th:each="item : ${module.getItems()}">
                             <p th:text="${item.name}">Element modułu</p>
                         </li>
-                        <li th:each="quiz : ${module.getTest()}">
-                            <p th:text="${quiz.name}">Test</p>
+                        <li th:each="test : ${module.getTest()}">
+                            <a th:href="@{/module/quiz/{id}(id=${test.getId()})}" th:text="${test.name}">Test</a>
                         </li>
                     </ul>
                 </li>

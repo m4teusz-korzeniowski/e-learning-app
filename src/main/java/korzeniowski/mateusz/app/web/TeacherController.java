@@ -13,8 +13,8 @@ import java.util.List;
 
 @Controller
 public class TeacherController {
-    private UserService userService;
-    private CourseService courseService;
+    private final UserService userService;
+    private final CourseService courseService;
 
     public TeacherController(UserService userService, CourseService courseService) {
         this.userService = userService;

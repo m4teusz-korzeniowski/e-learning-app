@@ -19,7 +19,7 @@ public class SecurityConfig {
                 .requestMatchers("/teacher/**").hasAnyRole("TEACHER")
                 .requestMatchers("/").hasAnyRole("STUDENT")
                 .requestMatchers("/course/**").hasAnyRole("STUDENT")
-                .requestMatchers("/course/").hasAnyRole("STUDENT")
+                .requestMatchers("/mod/quiz/**").hasAnyRole("STUDENT")
                 .anyRequest().authenticated());
         http.formLogin(login -> login.loginPage("/login")
                 .successHandler(customAuthenticationSuccessHandler())

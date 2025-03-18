@@ -1,10 +1,13 @@
 package korzeniowski.mateusz.app.model.course;
 
+import korzeniowski.mateusz.app.model.course.dto.CourseCreationDto;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseDto;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
@@ -26,5 +29,19 @@ public class CourseService {
 
     public Optional<Course> findCourseById(Long id) {
         return courseRepository.findById(id);
+    }
+
+    @Transactional
+    public void createCourse(CourseCreationDto courseCreationDto) {
+        Course course = new Course();
+        course.setName(courseCreationDto.getName());
+        course.setDescription(courseCreationDto.getDescription());
+        course.setCreatorId(courseCreationDto.getCreatorId());
+        courseRepository.save(course);
+    }
+
+    public Long findCourseIdByName(String name) {
+        return courseRepository.findByName(name).map(Course::getId).
+                orElseThrow(() -> new NoSuchElementException("Course not found"));
     }
 }
