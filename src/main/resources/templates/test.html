@@ -7,9 +7,19 @@
 <body>
 <main>
     <div>
-        <h1 th:text="${test.name}">Nazwa testu</h1>
+        <a th:href="@{/}">Strona główna</a>
+        <span>&nbsp>&nbsp</span>
+        <span>Moje kursy</span>
+        <span>&nbsp>&nbsp</span>
+        <a th:href="@{/course/{id}(id=${test.module.course.id})}" th:text="${test.module.course.name}">Nazwa kursu</a>
+        <span>&nbsp>&nbsp</span>
+        <span th:text="${test.module.name}">Nazwa modułu</span>
+        <span>&nbsp>&nbsp</span>
+        <a th:href="@{/module/quiz/{id}(id=${test.id})}" th:text="${test.name}">Nazwa testu</a>
+    </div>
+    <div>
+        <h2 th:text="${test.name}">Nazwa testu</h2>
         <p th:text="${test.description}">Opis testu</p>
-        <p>Wyniki testów:</p>
         <p th:if="${result!=null}" th:text="'Wynik testu: = ' + ${result.getScore()}">Wynik</p>
         <p th:if="${result==null}">Brak wyników!</p>
         <p>Rozwiąż test</p>

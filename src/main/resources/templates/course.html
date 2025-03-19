@@ -9,7 +9,11 @@
     <main>
         <div>
             <h1 th:text="${course.name}">Nazwa kursu </h1>
-            <p th:text="${course.description}">Opis kursu</p>
+            <a th:href="@{/}">Strona główna</a>
+            <span>&nbsp>&nbsp</span>
+            <span>Moje kursy</span>
+            <span>&nbsp>&nbsp</span>
+            <a th:href="@{/course/{id}(id=${course.id})}" th:text="${course.name}">Nazwa kursu</a>
         </div>
         <div>
             <ul>

@@ -13,8 +13,8 @@ public class Course {
     private Long id;
     private String name;
     private String description;
-    @OneToMany
-    @JoinColumn(name = "course_id")
+    @OneToMany(mappedBy = "course")
+    //@JoinColumn(name = "course_id")
     private List<Module> modules = new ArrayList<>();
     private Long creatorId;
 

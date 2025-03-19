@@ -1,6 +1,7 @@
 package korzeniowski.mateusz.app.model.course.module;
 
 import jakarta.persistence.*;
+import korzeniowski.mateusz.app.model.course.Course;
 import korzeniowski.mateusz.app.model.course.test.Test;
 
 import java.util.ArrayList;
@@ -15,9 +16,12 @@ public class Module {
     @OneToMany
     @JoinColumn(name = "module_id")
     private List<ModuleItem> items = new ArrayList<>();
-    @OneToMany
-    @JoinColumn(name  = "module_id")
+    @OneToMany(mappedBy = "module")
+    //@JoinColumn(name  = "module_id")
     private List<Test> test= new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private Course course;
 
     public Long getId() {
         return id;
@@ -49,5 +53,13 @@ public class Module {
 
     public void setTest(List<Test> test) {
         this.test = test;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }
