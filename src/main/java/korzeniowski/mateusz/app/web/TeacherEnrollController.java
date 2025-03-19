@@ -4,6 +4,7 @@ import korzeniowski.mateusz.app.model.course.CourseService;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseEnrollDto;
 import korzeniowski.mateusz.app.model.enroll.EnrollmentService;
 import korzeniowski.mateusz.app.model.user.UserService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -45,6 +47,10 @@ public class TeacherEnrollController {
             return enrollUserForm(enroll);
         }catch (UsernameNotFoundException e) {
             bindingResult.rejectValue("userEmail", "error.userEmail",e.getMessage());
+            return enrollUserForm(enroll);
+        }catch (DataIntegrityViolationException e){
+            bindingResult.rejectValue("userEmail", "error.userEmail",
+                    "Użytkownik jest już zapisany na dany kurs!!!");
             return enrollUserForm(enroll);
         }
         return "redirect:/teacher";

@@ -24,5 +24,6 @@
                                  constraintName="fk_user_course_course"
                                  referencedTableName="course"
                                  referencedColumnNames="id"/>
+        <addUniqueConstraint tableName="enrollment" columnNames="user_id,course_id"/>
     </changeSet>
 </databaseChangeLog>
