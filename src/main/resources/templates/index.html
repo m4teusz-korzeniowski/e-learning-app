@@ -15,7 +15,7 @@
         <li th:each="course: ${courses}">
             <a th:href="@{/course/{id}(id=${course.getId()})}" th:text="${course.getName()}">Nazwa kursu</a>
             <p th:text="'Autor: '+${course.getCreatorName()}">Email twórcy kursu</p>
-            <p th:text="'User name= ' + ${userName}"></p>
+            <p th:text="'User name= ' + ${session.userInfo.firstName} + ' ' + ${session.userInfo.lastName}"></p>
         </li>
         <li>
             <a th:href="@{/logout}" >Wyloguj się</a>

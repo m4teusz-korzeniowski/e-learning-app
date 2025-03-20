@@ -6,7 +6,6 @@ import korzeniowski.mateusz.app.model.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.security.Principal;
@@ -22,12 +21,12 @@ public class CourseController {
         this.userService = userService;
     }
 
-    @GetMapping("/course/{id}")
-    public String showCourse(@PathVariable long id, Model model, Principal principal) {
+    @GetMapping("/course/{courseId}")
+    public String showCourse(@PathVariable long courseId, Model model, Principal principal) {
         Long userId = userService.findIdOfAuthenticatedUser(principal.getName());
-        Optional<Course> courseById = courseService.findCourseById(id);
+        Optional<Course> courseById = courseService.findCourseById(courseId);
         if(courseById.isPresent()) {
-            if(userService.ifUserHasAccessToCourse(userId, id)){
+            if(userService.ifUserHasAccessToCourse(userId, courseId)){
                 model.addAttribute("course", courseById.get());
                 return "course";
             }

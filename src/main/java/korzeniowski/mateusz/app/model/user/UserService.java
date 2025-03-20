@@ -1,5 +1,6 @@
 package korzeniowski.mateusz.app.model.user;
 
+import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.exceptions.EmailAlreadyInUseException;
 import korzeniowski.mateusz.app.model.course.Course;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
@@ -10,6 +11,7 @@ import korzeniowski.mateusz.app.model.course.test.dto.ResultDto;
 import korzeniowski.mateusz.app.model.user.dto.UserCredentialsDto;
 import korzeniowski.mateusz.app.model.user.dto.UserNameDto;
 import korzeniowski.mateusz.app.model.user.dto.UserRegistrationDto;
+import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.util.CreatePasswordHash;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -129,6 +131,21 @@ public class UserService {
     public Long findUserIdByEmail(String email) {
         Optional<Long> userId = userRepository.findByEmail(email).map(User::getId);
         return userId.orElseThrow(() -> new UsernameNotFoundException(String.format("Username with email %s not found", email)));
+    }
+
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public void addUserInfoToSession(String userName, HttpSession session) {
+        Optional<User> user = findUserByEmail(userName);
+        if (user.isPresent()) {
+            UserSessionDto userSessionDto = new UserSessionDto();
+            userSessionDto.setId(user.get().getId());
+            userSessionDto.setFirstName(user.get().getFirstName());
+            userSessionDto.setLastName(user.get().getLastName());
+            session.setAttribute("userInfo", userSessionDto);
+        }
     }
 
 }

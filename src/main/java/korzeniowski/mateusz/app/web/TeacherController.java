@@ -1,5 +1,6 @@
 package korzeniowski.mateusz.app.web;
 
+import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.model.course.CourseService;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseDto;
@@ -22,10 +23,11 @@ public class TeacherController {
     }
 
     @GetMapping("/teacher")
-    public String teacherHome(Model model, Principal principal) {
+    public String teacherHome(Model model, Principal principal, HttpSession session) {
         Long teacherId = userService.findIdOfAuthenticatedUser(principal.getName());
         List<TeacherCourseDto> courses = courseService.findAllCoursesByTeacherId(teacherId);
         model.addAttribute("courses", courses);
+        userService.addUserInfoToSession(principal.getName(),session);
         return "teacher";
     }
 }
