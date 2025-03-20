@@ -1,5 +1,6 @@
-package korzeniowski.mateusz.app.model.course.test;
+package korzeniowski.mateusz.app.repository;
 
+import korzeniowski.mateusz.app.model.course.test.Result;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

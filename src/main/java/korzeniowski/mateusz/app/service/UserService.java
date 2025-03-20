@@ -1,17 +1,22 @@
-package korzeniowski.mateusz.app.model.user;
+package korzeniowski.mateusz.app.service;
 
 import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.exceptions.EmailAlreadyInUseException;
 import korzeniowski.mateusz.app.model.course.Course;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.course.module.Module;
-import korzeniowski.mateusz.app.model.course.test.ResultRepository;
+import korzeniowski.mateusz.app.model.user.User;
+import korzeniowski.mateusz.app.model.user.UserCredentialsDtoMapper;
+import korzeniowski.mateusz.app.model.user.UserRole;
+import korzeniowski.mateusz.app.repository.ResultRepository;
 import korzeniowski.mateusz.app.model.course.test.Test;
 import korzeniowski.mateusz.app.model.course.test.dto.ResultDto;
 import korzeniowski.mateusz.app.model.user.dto.UserCredentialsDto;
 import korzeniowski.mateusz.app.model.user.dto.UserNameDto;
 import korzeniowski.mateusz.app.model.user.dto.UserRegistrationDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
+import korzeniowski.mateusz.app.repository.UserRepository;
+import korzeniowski.mateusz.app.repository.UserRoleRepository;
 import korzeniowski.mateusz.util.CreatePasswordHash;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

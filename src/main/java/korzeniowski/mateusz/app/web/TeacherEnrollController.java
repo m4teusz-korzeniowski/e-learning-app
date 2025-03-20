@@ -1,9 +1,9 @@
 package korzeniowski.mateusz.app.web;
 
-import korzeniowski.mateusz.app.model.course.CourseService;
+import korzeniowski.mateusz.app.service.CourseService;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseEnrollDto;
-import korzeniowski.mateusz.app.model.enroll.EnrollmentService;
-import korzeniowski.mateusz.app.model.user.UserService;
+import korzeniowski.mateusz.app.service.EnrollmentService;
+import korzeniowski.mateusz.app.service.UserService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.NoSuchElementException;
 
 @Controller

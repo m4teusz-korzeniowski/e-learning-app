@@ -1,9 +1,9 @@
 package korzeniowski.mateusz.app.web;
 
 import jakarta.validation.Valid;
-import korzeniowski.mateusz.app.model.course.CourseService;
+import korzeniowski.mateusz.app.service.CourseService;
 import korzeniowski.mateusz.app.model.course.dto.CourseCreationDto;
-import korzeniowski.mateusz.app.model.user.UserService;
+import korzeniowski.mateusz.app.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;

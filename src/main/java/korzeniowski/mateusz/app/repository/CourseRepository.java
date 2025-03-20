@@ -1,5 +1,6 @@
-package korzeniowski.mateusz.app.model.course;
+package korzeniowski.mateusz.app.repository;
 
+import korzeniowski.mateusz.app.model.course.Course;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

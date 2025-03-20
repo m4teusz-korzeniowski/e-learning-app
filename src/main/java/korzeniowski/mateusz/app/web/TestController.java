@@ -1,11 +1,11 @@
 package korzeniowski.mateusz.app.web;
 
-import korzeniowski.mateusz.app.model.course.test.Result;
 import korzeniowski.mateusz.app.model.course.test.Test;
-import korzeniowski.mateusz.app.model.course.test.TestService;
+import korzeniowski.mateusz.app.model.course.test.dto.TestDisplayDto;
+import korzeniowski.mateusz.app.service.TestService;
 import korzeniowski.mateusz.app.model.course.test.dto.ResultDto;
 import korzeniowski.mateusz.app.model.user.User;
-import korzeniowski.mateusz.app.model.user.UserService;
+import korzeniowski.mateusz.app.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,9 +30,9 @@ public class TestController {
         Long userId = userService.findIdOfAuthenticatedUser(principal.getName());
         Optional<User> user = userService.findUserById(userId);
         if (user.isPresent()) {
-            Test test = testService.findTestById(id);
+            Optional<TestDisplayDto> test = testService.findTestById(id);
             if(userService.ifUserHasAccessToTest(userId, id)){
-                model.addAttribute("test", test);
+                model.addAttribute("test", test.get());
                 Optional<ResultDto> result = userService.findUserResultOfTest(userId, id);
                 result.ifPresent(resultDto -> model.addAttribute("result", resultDto));
                 return "test";

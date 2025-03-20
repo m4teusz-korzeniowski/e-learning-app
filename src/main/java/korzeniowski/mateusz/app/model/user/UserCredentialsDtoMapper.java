@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserCredentialsDtoMapper {
-    static UserCredentialsDto map(User user){
+    public static UserCredentialsDto map(User user){
         String email = user.getEmail();
         String password = user.getPassword();
         Set<String> roles = user.getUserRoles().stream().map(UserRole::getName).collect(Collectors.toSet());

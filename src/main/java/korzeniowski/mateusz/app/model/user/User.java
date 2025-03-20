@@ -1,8 +1,6 @@
 package korzeniowski.mateusz.app.model.user;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import korzeniowski.mateusz.app.model.course.Course;
 import korzeniowski.mateusz.app.model.course.test.Result;

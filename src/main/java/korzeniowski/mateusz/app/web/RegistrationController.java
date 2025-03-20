@@ -3,7 +3,7 @@ package korzeniowski.mateusz.app.web;
 
 import jakarta.validation.Valid;
 import korzeniowski.mateusz.app.exceptions.EmailAlreadyInUseException;
-import korzeniowski.mateusz.app.model.user.UserService;
+import korzeniowski.mateusz.app.service.UserService;
 import korzeniowski.mateusz.app.model.user.dto.UserRegistrationDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;

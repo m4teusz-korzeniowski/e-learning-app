@@ -1,6 +1,6 @@
 package korzeniowski.mateusz.app.config;
 
-import korzeniowski.mateusz.app.model.user.UserService;
+import korzeniowski.mateusz.app.service.UserService;
 import korzeniowski.mateusz.app.model.user.dto.UserCredentialsDto;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

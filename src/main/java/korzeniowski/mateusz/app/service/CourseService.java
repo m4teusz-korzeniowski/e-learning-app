@@ -1,8 +1,11 @@
-package korzeniowski.mateusz.app.model.course;
+package korzeniowski.mateusz.app.service;
 
+import korzeniowski.mateusz.app.model.course.Course;
 import korzeniowski.mateusz.app.model.course.dto.CourseCreationDto;
+import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseDto;
+import korzeniowski.mateusz.app.repository.CourseRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +30,8 @@ public class CourseService {
         return courseRepository.findAllByCreatorId(id).stream().map(TeacherCourseDto::map).toList();
     }
 
-    public Optional<Course> findCourseById(Long id) {
-        return courseRepository.findById(id);
+    public Optional<CourseDisplayDto> findCourseById(Long id) {
+        return courseRepository.findById(id).map(CourseDisplayDto::map);
     }
 
     @Transactional

@@ -17,13 +17,13 @@
         </div>
         <div>
             <ul>
-                <li th:each="module : ${course.modules}">
-                    <p th:text="${module.getName()}">Nazwa modułu</p>
+                <li th:each="courseModule : ${course.modules}">
+                    <p th:text="${courseModule.name}">Nazwa modułu</p>
                     <ul>
-                        <li th:each="item : ${module.getItems()}">
+                        <li th:each="item : ${courseModule.items}">
                             <p th:text="${item.name}">Element modułu</p>
                         </li>
-                        <li th:each="test : ${module.getTest()}">
+                        <li th:each="test : ${courseModule.tests}">
                             <a th:href="@{/module/quiz/{id}(id=${test.getId()})}" th:text="${test.name}">Test</a>
                         </li>
                     </ul>

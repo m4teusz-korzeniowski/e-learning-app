@@ -1,10 +1,12 @@
-package korzeniowski.mateusz.app.model.enroll;
+package korzeniowski.mateusz.app.service;
+import korzeniowski.mateusz.app.model.enroll.Enrollment;
+import korzeniowski.mateusz.app.repository.EnrollmentRepository;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class EnrollmentService {
-    private EnrollmentRepository enrollmentRepository;
+    private final EnrollmentRepository enrollmentRepository;
 
     public EnrollmentService(EnrollmentRepository enrollmentRepository) {
         this.enrollmentRepository = enrollmentRepository;

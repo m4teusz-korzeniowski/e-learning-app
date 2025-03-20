@@ -1,10 +1,9 @@
 package korzeniowski.mateusz.app.web;
 
 import jakarta.servlet.http.HttpSession;
-import korzeniowski.mateusz.app.model.course.CourseService;
-import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
+import korzeniowski.mateusz.app.service.CourseService;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseDto;
-import korzeniowski.mateusz.app.model.user.UserService;
+import korzeniowski.mateusz.app.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

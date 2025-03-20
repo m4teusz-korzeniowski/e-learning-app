@@ -12,9 +12,9 @@
         <span>&nbsp>&nbsp</span>
         <span>Moje kursy</span>
         <span>&nbsp>&nbsp</span>
-        <a th:href="@{/course/{id}(id=${test.module.course.id})}" th:text="${test.module.course.name}">Nazwa kursu</a>
+        <a th:href="@{/course/{id}(id=${test.courseId})}" th:text="${test.courseName}">Nazwa kursu</a>
         <span>&nbsp>&nbsp</span>
-        <span th:text="${test.module.name}">Nazwa modułu</span>
+        <span th:text="${test.moduleName}">Nazwa modułu</span>
         <span>&nbsp>&nbsp</span>
         <a th:href="@{/module/quiz/{id}(id=${test.id})}" th:text="${test.name}">Nazwa testu</a>
     </div>
