@@ -26,7 +26,9 @@ public class TeacherController {
         Long teacherId = userService.findIdOfAuthenticatedUser(principal.getName());
         List<TeacherCourseDto> courses = courseService.findAllCoursesByTeacherId(teacherId);
         model.addAttribute("courses", courses);
-        userService.addUserInfoToSession(principal.getName(),session);
+        if (session.getAttribute("userInfo") == null) {
+            userService.addUserInfoToSession(principal.getName(), session);
+        }
         return "teacher";
     }
 }

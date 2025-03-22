@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Tworzenie kursu</title>
+    <link th:replace="~{fragments :: navbar-style}">
 </head>
 <body>
+<header th:replace="~{fragments :: navbar}"></header>
 <h1>Stwórz kurs</h1>
 <main>
     <div>
@@ -24,9 +26,7 @@
                     <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Błędny opis</td>
                 </tr>
                 <tr>
-                    <td><label>
-                        <td th:if="${#fields.hasErrors('creatorId')}" th:errors="*{creatorId}">Błędne ID twórcy</td>
-                    </label></td>
+                    <td th:if="${#fields.hasErrors('creatorId')}" th:errors="*{creatorId}">Błędne ID twórcy</td>
                 </tr>
                 <tr>
                     <td>

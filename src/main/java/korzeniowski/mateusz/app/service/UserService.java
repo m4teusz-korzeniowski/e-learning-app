@@ -21,6 +21,7 @@ import korzeniowski.mateusz.util.CreatePasswordHash;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -150,6 +151,17 @@ public class UserService {
             userSessionDto.setFirstName(user.get().getFirstName());
             userSessionDto.setLastName(user.get().getLastName());
             session.setAttribute("userInfo", userSessionDto);
+        }
+    }
+
+    public void addUserInfoToNavigationBar(String userName, Model model) {
+        Optional<User> user = findUserByEmail(userName);
+        if (user.isPresent()) {
+            UserSessionDto userSessionDto = new UserSessionDto();
+            userSessionDto.setId(user.get().getId());
+            userSessionDto.setFirstName(user.get().getFirstName());
+            userSessionDto.setLastName(user.get().getLastName());
+            model.addAttribute("userInfo", userSessionDto);
         }
     }
 

@@ -2,8 +2,6 @@ package korzeniowski.mateusz.app.model.user.dto;
 
 import korzeniowski.mateusz.app.model.course.Course;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserCourseDto {
     private final Long id;
@@ -19,5 +17,4 @@ public class UserCourseDto {
     public static UserCourseDto map(Course course) {
         return new UserCourseDto(course.getId());
     }
-
 }

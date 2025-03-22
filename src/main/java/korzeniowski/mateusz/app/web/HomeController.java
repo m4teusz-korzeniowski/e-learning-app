@@ -24,7 +24,9 @@ public class HomeController {
         List<CourseNameDto> courses = userService.findCoursesByUserId(idOfAuthenticatedUser);
         addCreatorNameToCourse(courses);
         model.addAttribute("courses", courses);
-        userService.addUserInfoToSession(principal.getName(), session);
+        if (session.getAttribute("userInfo") == null) {
+            userService.addUserInfoToSession(principal.getName(), session);
+        }
         return "index";
     }
 

@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Potwierdzenie rejestracji</title>
+    <link th:replace="~{fragments :: navbar-style}">
 </head>
 <body>
+<header th:replace="~{fragments :: navbar}"></header>
 <div>
     <h1>Rejestracja zakończona</h1>
     <a th:href="@{/h2-console}">Przejdź do konsoli H2</a>

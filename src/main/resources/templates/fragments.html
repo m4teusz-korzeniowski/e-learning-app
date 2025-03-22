@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:fragment="navbar-style" rel="stylesheet" href="../static/styles/navbar.css" th:href="@{/styles/navbar.css}">
+</head>
+<body>
+<header id="navbar" th:fragment="navbar">
+    <span th:if="${session.userInfo!=null}" th:text="'Zalogowany jako: ' + ${session.userInfo.firstName}">Imię</span>
+    <a href="#">Ustawienia</a>
+    <a th:href="@{/logout}">Wyloguj się</a>
+</header>
+</body>
+</html>

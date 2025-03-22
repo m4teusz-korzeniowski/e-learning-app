@@ -17,7 +17,9 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String adminHome(Principal principal, HttpSession session) {
-        userService.addUserInfoToSession(principal.getName(), session);
+        if (session.getAttribute("userInfo") == null) {
+            userService.addUserInfoToSession(principal.getName(), session);
+        }
         return "admin";
     }
 }

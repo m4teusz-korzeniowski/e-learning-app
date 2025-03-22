@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${course.name}">Nazwa kursu</title>
+    <link th:replace="~{fragments :: navbar-style}">
 </head>
 <body>
+<header th:replace="~{fragments :: navbar}"></header>
 <div>
     <main>
         <div>

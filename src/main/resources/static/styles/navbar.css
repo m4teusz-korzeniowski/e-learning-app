@@ -1,0 +1,7 @@
+#navbar {
+    background-color: aqua;
+    padding: 25px 10px;
+    width: 100%;
+    top: 0;
+    position: sticky;
+}

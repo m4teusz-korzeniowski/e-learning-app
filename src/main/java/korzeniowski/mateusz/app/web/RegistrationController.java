@@ -1,6 +1,7 @@
 package korzeniowski.mateusz.app.web;
 
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import korzeniowski.mateusz.app.exceptions.EmailAlreadyInUseException;
 import korzeniowski.mateusz.app.service.UserService;
@@ -10,6 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.security.Principal;
 
 
 @Controller
@@ -22,20 +25,24 @@ public class RegistrationController {
     }
 
     @GetMapping("admin/register")
-    String registration(@ModelAttribute("user") UserRegistrationDto user) {
+    String registration(@ModelAttribute("user") UserRegistrationDto user, Principal principal, HttpSession session) {
+        if (session.getAttribute("userInfo") == null) {
+            userService.addUserInfoToSession(principal.getName(), session);
+        }
         return "registration-form";
     }
 
     @PostMapping("admin/register")
-    String register(@Valid @ModelAttribute("user") UserRegistrationDto user, BindingResult bindingResult) {
+    String register(@Valid @ModelAttribute("user") UserRegistrationDto user, BindingResult bindingResult,
+                    HttpSession session, Principal principal) {
         if (bindingResult.hasErrors()) {
-            return registration(user);
+            return registration(user, principal, session);
         }
         try {
             userService.registerAppUser(user);
         } catch (EmailAlreadyInUseException ex) {
             bindingResult.rejectValue("email", "error.email","email is already in use");
-            return registration(user);
+            return registration(user, principal, session);
         }
 
         return "redirect:/admin/confirmation";

@@ -28,4 +28,8 @@ public class UserSessionDto {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public String getInitials() {
+        return firstName.substring(0, 1) + lastName.substring(0, 1);
+    }
 }

@@ -1,6 +1,5 @@
 package korzeniowski.mateusz.app.service;
 
-import korzeniowski.mateusz.app.model.course.test.Test;
 import korzeniowski.mateusz.app.model.course.test.dto.TestDisplayDto;
 import korzeniowski.mateusz.app.repository.TestRepository;
 import org.springframework.stereotype.Service;
@@ -18,6 +17,4 @@ public class TestService {
     public Optional<TestDisplayDto> findTestById(Long id) {
         return testRepository.findTestById(id).map(TestDisplayDto::map);
     }
-
-
 }
