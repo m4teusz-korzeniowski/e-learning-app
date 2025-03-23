@@ -1,0 +1,6 @@
+.info-bar {
+    padding: 0 0 10px 40px;
+    background: white;
+    display: flex;
+    align-items: center;
+}

@@ -3,13 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link th:fragment="navbar-style" rel="stylesheet" href="../static/styles/navbar.css" th:href="@{/styles/navbar.css}">
+    <link th:fragment="navbar-style" rel="stylesheet" href="../static/styles/navbar.css"
+          th:href="@{/styles/navbar.css}">
 </head>
 <body>
 <header id="navbar" th:fragment="navbar">
-    <span th:if="${session.userInfo!=null}" th:text="'Zalogowany jako: ' + ${session.userInfo.firstName}">Imię</span>
-    <a href="#">Ustawienia</a>
-    <a th:href="@{/logout}">Wyloguj się</a>
+    <div class="navbar-wrapper">
+        <div class="logo-name">Logo</div>
+        <ul class="nav-items">
+            <li><span th:text="'Zalogowany jako: '
+            + ${session.userInfo.getInitials()}">Zalogowany jako: IN</span></li>
+            <li class="link"><a href="#" th:href="@{/}">Moje Kursy</a></li>
+            <li class="link"><a href="#">Ustawienia</a></li>
+            <li class="link"><a href="#" th:href="@{/logout}">Wyloguj się</a></li>
+        </ul>
+    </div>
+
 </header>
 </body>
 </html>

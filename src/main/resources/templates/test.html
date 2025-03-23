@@ -4,28 +4,45 @@
     <meta charset="UTF-8">
     <title th:text="${test.name}">Nazwa testu</title>
     <link th:replace="~{fragments :: navbar-style}">
+    <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
+    <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
 </head>
 <body>
 <header th:replace="~{fragments :: navbar}"></header>
-<main>
+<div class="info-bar">
     <div>
-        <h1 th:text="${test.name}">Nazwa testu</h1>
-        <a th:href="@{/}">Strona główna</a>
-        <span>&nbsp>&nbsp</span>
-        <span>Moje kursy</span>
-        <span>&nbsp>&nbsp</span>
-        <a th:href="@{/course/{id}(id=${test.courseId})}" th:text="${test.courseName}">Nazwa kursu</a>
-        <span>&nbsp>&nbsp</span>
-        <span th:text="${test.moduleName}">Nazwa modułu</span>
-        <span>&nbsp>&nbsp</span>
-        <a th:href="@{/module/quiz/{id}(id=${test.id})}" th:text="${test.name}">Nazwa testu</a>
+        <h2 th:text="${test.courseName}">Nazwa kursu </h2>
     </div>
-    <div>
+</div>
+<div class="info-bar">
+    <a th:href="@{/}">Strona główna</a>
+    <span>&nbsp>&nbsp</span>
+    <span>Moje kursy</span>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/course/{id}(id=${test.courseId})}" th:text="${test.courseName}">Nazwa kursu</a>
+    <span>&nbsp>&nbsp</span>
+    <span th:text="${test.moduleName}">Nazwa modułu</span>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/module/quiz/{id}(id=${test.id})}" th:text="${test.name}">Nazwa testu</a>
+</div>
+<br><br>
+<div>
+    <h3 id="test-name">Nazwa testu</h3>
+</div>
+<div class="user-courses">
+    <div class="element">
         <p th:text="${test.description}">Opis testu</p>
+    </div>
+    <br>
+    <div class="element">
         <p th:if="${result!=null}" th:text="'Wynik testu: = ' + ${result.getScore()}">Wynik</p>
         <p th:if="${result==null}">Brak wyników!</p>
+    </div>
+    <br>
+    <div class="element">
         <p>Rozwiąż test</p>
     </div>
-</main>
+    <br>
+</div>
 </body>
 </html>

@@ -1,0 +1,19 @@
+body{
+    background: aliceblue;
+    margin: 0;
+}
+.user-courses{
+    padding: 0 30px;
+}
+
+.user-courses .element{
+    border-radius: 5px;
+    border-style: outset;
+    padding: 10px;
+    background: white;
+}
+
+#test-name{
+    padding: 0 0 20px 40px;
+}
+

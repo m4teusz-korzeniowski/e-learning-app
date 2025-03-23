@@ -7,20 +7,23 @@
     <meta charset="UTF-8">
     <title>Strona startowa</title>
     <link th:replace="~{fragments :: navbar-style}">
+    <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
+    <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
 </head>
 <body>
 <header th:replace="~{fragments :: navbar}"></header>
-<div>
-    <h2>Moje kursy</h2>
-    <ul>
-        <li th:each="course: ${courses}">
+<div class="info-bar">
+    <h2>Moje Kursy</h2>
+</div>
+<br><br>
+<div class="user-courses">
+    <div th:each="course: ${courses}">
+        <div class="element">
             <a th:href="@{/course/{id}(id=${course.getId()})}" th:text="${course.getName()}">Nazwa kursu</a>
             <p th:text="'Autor: '+${course.getCreatorName()}">Email twórcy kursu</p>
-        </li>
-        <li>
-            <a th:href="@{/logout}">Wyloguj się</a>
-        </li>
-    </ul>
+        </div>
+        <br>
+    </div>
 </div>
 </body>
 </html>

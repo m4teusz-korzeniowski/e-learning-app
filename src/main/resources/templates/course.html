@@ -4,38 +4,39 @@
     <meta charset="UTF-8">
     <title th:text="${course.name}">Nazwa kursu</title>
     <link th:replace="~{fragments :: navbar-style}">
+    <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
+    <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
 </head>
 <body>
 <header th:replace="~{fragments :: navbar}"></header>
-<div>
-    <main>
-        <div>
-            <h1 th:text="${course.name}">Nazwa kursu </h1>
-            <a th:href="@{/}">Strona główna</a>
-            <span>&nbsp>&nbsp</span>
-            <span>Moje kursy</span>
-            <span>&nbsp>&nbsp</span>
-            <a th:href="@{/course/{id}(id=${course.id})}" th:text="${course.name}">Nazwa kursu</a>
-        </div>
-        <div>
-            <ul>
-                <li th:each="courseModule : ${course.modules}">
-                    <p th:text="${courseModule.name}">Nazwa modułu</p>
-                    <ul>
-                        <li th:each="item : ${courseModule.items}">
-                            <p th:text="${item.name}">Element modułu</p>
-                        </li>
-                        <li th:each="test : ${courseModule.tests}">
-                            <a th:href="@{/module/quiz/{id}(id=${test.getId()})}" th:text="${test.name}">Test</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-
-
-    </main>
+<div class="info-bar">
+    <div>
+        <h2 th:text="${course.name}">Nazwa kursu </h2>
+    </div>
 </div>
+<div class="info-bar">
+    <a th:href="@{/}">Strona główna</a>
+    <span>&nbsp>&nbsp</span>
+    <span>Moje kursy</span>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/course/{id}(id=${course.id})}" th:text="${course.name}">Nazwa kursu</a>
+</div>
+<br><br>
+<div class="user-courses">
+    <div th:each="courseModule : ${course.modules}">
+        <div class="element">
+            <h3 th:text="${courseModule.name}">Nazwa modułu</h3>
+            <div th:each="item : ${courseModule.items}">
+                <p th:text="${item.name}">Element modułu</p>
+            </div>
+            <div th:each="test : ${courseModule.tests}">
+                <p><a href="#" th:href="@{/module/quiz/{id}(id=${test.getId()})}" th:text="${test.name}">Nazwa Testu</a></p>
+            </div>
+        </div>
+        <br>
+    </div>
+</div>
+
 
 </body>
 </html>
