@@ -34,6 +34,10 @@ public class CourseService {
         return courseRepository.findById(id).map(CourseDisplayDto::map);
     }
 
+    public CourseNameDto findCourseNameById(Long id){
+        return courseRepository.findById(id).map(CourseNameDto::map).orElse(null);
+    }
+
     @Transactional
     public void createCourse(CourseCreationDto courseCreationDto) {
         Course course = new Course();

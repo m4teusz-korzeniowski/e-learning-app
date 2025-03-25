@@ -4,13 +4,31 @@
     <meta charset="UTF-8">
     <title>Potwierdzenie rejestracji</title>
     <link th:replace="~{fragments :: navbar-style}">
+    <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
+    <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
 </head>
 <body>
 <header th:replace="~{fragments :: navbar}"></header>
-<div>
-    <h1>Rejestracja zakończona</h1>
-    <a th:href="@{/h2-console}">Przejdź do konsoli H2</a>
-    <a th:href="@{/admin/register}">Rejestracja użytkowników</a>
+<div class="info-bar">
+    <div>
+        <h2>Potwierdzenie rejestracji </h2>
+    </div>
+</div>
+<br><br>
+<div class="user-courses">
+    <div class="element">
+        <p th:if="${user != null}" th:text="'Udało się zarejstrować użytkownika ' + ${user.firstName + ' ' + user.lastName}"></p>
+        <p th:if="${user == null}">Nie przeprowadzono żadnej rejestracji</p>
+    </div>
+    <br>
+    <div class="element">
+        <a th:href="@{/h2-console}">Przejdź do konsoli H2</a>
+    </div>
+    <br>
+    <div class="element">
+        <a th:href="@{/admin/register}">Rejestracja użytkowników</a>
+    </div>
+    <br>
 </div>
 </body>
 </html>

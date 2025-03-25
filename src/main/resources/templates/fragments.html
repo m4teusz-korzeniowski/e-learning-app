@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -12,8 +15,10 @@
         <div class="logo-name">Logo</div>
         <ul class="nav-items">
             <li><span th:text="'Zalogowany jako: '
-            + ${session.userInfo.getInitials()}">Zalogowany jako: IN</span></li>
-            <li class="link"><a href="#" th:href="@{/}">Moje Kursy</a></li>
+            + ${session.userInfo.firstName}">Zalogowany jako: IN</span></li>
+            <li sec:authorize="hasAnyRole('STUDENT')" class="link"><a href="#" th:href="@{/}">Strona główna</a></li>
+            <li sec:authorize="hasAnyRole('TEACHER')" class="link"><a href="#" th:href="@{/teacher}">Strona główna</a></li>
+            <li sec:authorize="hasAnyRole('ADMIN')" class="link"><a href="#" th:href="@{/admin}">Strona główna</a></li>
             <li class="link"><a href="#">Ustawienia</a></li>
             <li class="link"><a href="#" th:href="@{/logout}">Wyloguj się</a></li>
         </ul>

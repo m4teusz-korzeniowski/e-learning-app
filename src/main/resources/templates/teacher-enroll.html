@@ -4,28 +4,45 @@
     <meta charset="UTF-8">
     <title>Zapisanie</title>
     <link th:replace="~{fragments :: navbar-style}">
+    <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
+    <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
 </head>
 <body>
 <header th:replace="~{fragments :: navbar}"></header>
-<main>
+<div class="info-bar">
     <div>
-        <h1>Dodaj użytkownika do kursu</h1>
-        <form action="#" th:action="@{/teacher/enroll}" method="post" th:object="${enroll}">
-            <table>
-                <tr>
-                    <td><input type="text" th:field="*{userEmail}" placeholder="E-mail użytkownika"></td>
-                    <td th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}">Email Error</td>
-                </tr>
-                <tr>
-                    <td><input type="text" th:field="*{courseName}" placeholder="Nazwa kursu"></td>
-                    <td th:if="${#fields.hasErrors('courseName')}" th:errors="*{courseName}">Email Error</td>
-                </tr>
-                <tr>
-                    <td><button type="submit">Zapisz użytkownika</button></td>
-                </tr>
-            </table>
-        </form>
+        <h2>Zapisywanie na kurs</h2>
     </div>
-</main>
+</div>
+<div class="info-bar">
+    <a th:href="@{/teacher}">Strona główna</a>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/teacher/course}">Moje kursy</a>
+    <span>&nbsp>&nbsp</span>
+    <span>Zapisywanie</span>
+</div>
+<br><br>
+<div class="user-courses">
+    <div class="element">
+        <p th:text="'Zapisywanie na: ' + *{enroll.courseName}">Zapisywanie na: Nazwa kursu</p>
+    </div>
+    <form action="#" th:action="@{/teacher/course-enroll/{id}(id=*{courseId})}" method="post" th:object="${enroll}">
+        <table>
+            <tr>
+                <td><input type="hidden" th:field="*{courseName}" th:value="*{courseName}"></td>
+                <td th:if="${#fields.hasErrors('courseName')}" th:errors="*{courseName}">Course error</td>
+            </tr>
+            <tr>
+                <td><input type="text" th:field="*{userEmail}" placeholder="E-mail użytkownika"></td>
+                <td th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}">Email Error</td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit">Zapisz użytkownika</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
 </body>
 </html>

@@ -23,6 +23,8 @@
         <addForeignKeyConstraint baseTableName="module_item" baseColumnNames="module_id"
                                  constraintName="fk_module_module_item"
                                  referencedTableName="module"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 deleteCascade="true"
+        />
     </changeSet>
 </databaseChangeLog>

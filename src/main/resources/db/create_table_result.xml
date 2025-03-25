@@ -16,11 +16,15 @@
         <addForeignKeyConstraint baseTableName="result" baseColumnNames="test_id"
                                  constraintName="fk_result_test"
                                  referencedTableName="test"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 deleteCascade="true"
+        />
         <addForeignKeyConstraint baseTableName="result" baseColumnNames="user_id"
                                  constraintName="fk_result_user"
                                  referencedTableName="application_user"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 deleteCascade="true"
+        />
         <addUniqueConstraint tableName="result" columnNames="user_id,test_id"/>
     </changeSet>
 </databaseChangeLog>

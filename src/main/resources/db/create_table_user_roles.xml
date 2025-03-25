@@ -18,10 +18,14 @@
         <addForeignKeyConstraint baseTableName="user_roles" baseColumnNames="user_id"
                                  constraintName="fk_user_roles_user"
                                  referencedTableName="application_user"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 deleteCascade="true"
+        />
         <addForeignKeyConstraint baseTableName="user_roles" baseColumnNames="role_id"
                                  constraintName="fk_user_roles_role"
                                  referencedTableName="user_role"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 deleteCascade="true"
+        />
     </changeSet>
 </databaseChangeLog>

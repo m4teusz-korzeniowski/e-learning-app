@@ -136,7 +136,7 @@ public class UserService {
 
     public Long findUserIdByEmail(String email) {
         Optional<Long> userId = userRepository.findByEmail(email).map(User::getId);
-        return userId.orElseThrow(() -> new UsernameNotFoundException(String.format("Username with email %s not found", email)));
+        return userId.orElseThrow(() -> new UsernameNotFoundException(String.format("Nie znaleziono użytkownika z podanym adresem email - %s", email)));
     }
 
     public Optional<User> findUserByEmail(String email) {

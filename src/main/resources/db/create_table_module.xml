@@ -15,6 +15,8 @@
             <column name="course_id" type="bigint"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="module" baseColumnNames="course_id" constraintName="fk_module_course"
-                                 referencedTableName="course" referencedColumnNames="id"/>
+                                 referencedTableName="course" referencedColumnNames="id"
+                                 deleteCascade="true"
+        />
     </changeSet>
 </databaseChangeLog>

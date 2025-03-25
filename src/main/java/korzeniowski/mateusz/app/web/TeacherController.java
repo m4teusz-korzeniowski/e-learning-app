@@ -23,12 +23,20 @@ public class TeacherController {
 
     @GetMapping("/teacher")
     public String teacherHome(Model model, Principal principal, HttpSession session) {
-        Long teacherId = userService.findIdOfAuthenticatedUser(principal.getName());
-        List<TeacherCourseDto> courses = courseService.findAllCoursesByTeacherId(teacherId);
-        model.addAttribute("courses", courses);
         if (session.getAttribute("userInfo") == null) {
             userService.addUserInfoToSession(principal.getName(), session);
         }
         return "teacher";
+    }
+
+    @GetMapping("/teacher/course")
+    public String teacherCourse(Model model, Principal principal, HttpSession session) {
+        if (session.getAttribute("userInfo") == null) {
+            userService.addUserInfoToSession(principal.getName(), session);
+        }
+        Long teacherId = userService.findIdOfAuthenticatedUser(principal.getName());
+        List<TeacherCourseDto> courses = courseService.findAllCoursesByTeacherId(teacherId);
+        model.addAttribute("courses", courses);
+        return "teacher-course";
     }
 }

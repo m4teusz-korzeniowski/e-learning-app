@@ -26,6 +26,8 @@
         <addForeignKeyConstraint baseTableName="question" baseColumnNames="test_id"
                                  constraintName="fk_test_question"
                                  referencedTableName="test"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 deleteCascade="true"
+        />
     </changeSet>
 </databaseChangeLog>

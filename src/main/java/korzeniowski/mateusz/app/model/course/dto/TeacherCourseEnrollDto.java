@@ -1,11 +1,10 @@
 package korzeniowski.mateusz.app.model.course.dto;
 
-import java.util.List;
 
 public class TeacherCourseEnrollDto {
     private String userEmail;
     private String courseName;
-
+    private Long courseId;
 
     public String getUserEmail() {
         return userEmail;
@@ -21,5 +20,13 @@ public class TeacherCourseEnrollDto {
 
     public void setCourseName(String courseName) {
         this.courseName = courseName;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
     }
 }

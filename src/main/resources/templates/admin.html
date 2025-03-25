@@ -4,20 +4,34 @@
     <meta charset="UTF-8">
     <title>Admin - strona startowa</title>
     <link th:replace="~{fragments :: navbar-style}">
+    <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
+    <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
 </head>
 <body>
 <header th:replace="~{fragments :: navbar}"></header>
-<h1>Strona startowa administratora</h1>
-<div>
-    <p>
-        <a th:href="@{/logout}">Wyloguj się</a>
-    </p>
-    <p>
-        <a th:href="@{/admin/register}">Zarejestruj użytkownika</a>
-    </p>
-    <p>
-        <a th:href="@{/h2-console}">Przejdź do konsoli H2</a>
-    </p>
+<div class="info-bar">
+    <div>
+        <h2>Panel administracyjny </h2>
+    </div>
+</div>
+<br><br>
+<div class="user-courses">
+    <div class="element">
+        <p><a href="#">Użytkownicy</a></p>
+    </div>
+    <br>
+    <div class="element">
+        <p>
+            <a th:href="@{/admin/register}">Zarejestruj użytkownika</a>
+        </p>
+    </div>
+    <br>
+    <div class="element">
+        <p>
+            <a th:href="@{/h2-console}">Przejdź do konsoli H2</a>
+        </p>
+    </div>
+    <br>
 </div>
 </body>
 </html>

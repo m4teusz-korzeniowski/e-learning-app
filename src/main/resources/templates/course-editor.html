@@ -2,7 +2,7 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Nauczyciel - strona startowa</title>
+    <title>Edycja kursu</title>
     <link th:replace="~{fragments :: navbar-style}">
     <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
     <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
@@ -11,23 +11,12 @@
 <header th:replace="~{fragments :: navbar}"></header>
 <div class="info-bar">
     <div>
-        <h2>Panel nauczyciela </h2>
+        <h2>Edycja kursu</h2>
     </div>
+</div>
+<div class="user-courses">
+
 </div>
 <br><br>
-<div class="user-courses">
-    <div class="element">
-        <p><a href="#" th:href="@{/teacher/course}">Moje kursy</a></p>
-    </div>
-    <br>
-    <div class="element">
-        <p><a th:href="@{/teacher/course/create}">Dodaj nowy kurs</a></p>
-    </div>
-    <br>
-    <div class="element">
-        <p><a th:href="@{/teacher/enroll}">Zapisz na kurs</a></p>
-    </div>
-    <br>
-</div>
 </body>
 </html>

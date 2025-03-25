@@ -19,11 +19,15 @@
         <addForeignKeyConstraint baseTableName="enrollment" baseColumnNames="user_id"
                                  constraintName="fk_user_course_user"
                                  referencedTableName="application_user"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 deleteCascade="true"
+        />
         <addForeignKeyConstraint baseTableName="enrollment" baseColumnNames="course_id"
                                  constraintName="fk_user_course_course"
                                  referencedTableName="course"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 deleteCascade="true"
+        />
         <addUniqueConstraint tableName="enrollment" columnNames="user_id,course_id"/>
     </changeSet>
 </databaseChangeLog>
