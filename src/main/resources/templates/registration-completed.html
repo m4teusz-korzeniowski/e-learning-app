@@ -17,8 +17,8 @@
 <br><br>
 <div class="user-courses">
     <div class="element">
-        <p th:if="${user != null}" th:text="'Udało się zarejstrować użytkownika ' + ${user.firstName + ' ' + user.lastName}"></p>
-        <p th:if="${user == null}">Nie przeprowadzono żadnej rejestracji</p>
+        <p th:if="${message!=null}" th:text="${message}"></p>
+        <p th:if="${message.isEmpty()}">Nie przeprowadzono żadnej rejestracji</p>
     </div>
     <br>
     <div class="element">

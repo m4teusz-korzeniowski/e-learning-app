@@ -7,7 +7,6 @@ import korzeniowski.mateusz.app.exceptions.EmailAlreadyInUseException;
 import korzeniowski.mateusz.app.service.UserService;
 import korzeniowski.mateusz.app.model.user.dto.UserRegistrationDto;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,7 +35,7 @@ public class RegistrationController {
 
     @PostMapping("admin/register")
     String register(@Valid @ModelAttribute("user") UserRegistrationDto user, BindingResult bindingResult,
-                    HttpSession session, Principal principal) {
+                    HttpSession session, Principal principal, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return registration(user, principal, session);
         }
@@ -46,12 +45,16 @@ public class RegistrationController {
             bindingResult.rejectValue("email", "error.email", "email is already in use");
             return registration(user, principal, session);
         }
-        return confirmation(user, session, principal);
-        //return "redirect:/admin/confirmation";
+        //return confirmation(user, session, principal);
+        redirectAttributes.addFlashAttribute("message",
+                String.format(
+                        "Użytkownik %s %s (%s) został pomyślnie zarejestrowany"
+                        , user.getFirstName(), user.getLastName(), user.getEmail()));
+        return "redirect:/admin/confirmation";
     }
 
     @GetMapping("admin/confirmation")
-    String confirmation(@ModelAttribute UserRegistrationDto user, HttpSession session, Principal principal) {
+    String confirmation(@ModelAttribute("message") String message,HttpSession session, Principal principal) {
         if (session.getAttribute("userInfo") == null) {
             userService.addUserInfoToSession(principal.getName(), session);
         }

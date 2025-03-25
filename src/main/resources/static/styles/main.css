@@ -17,3 +17,8 @@ body{
     padding: 0 0 20px 40px;
 }
 
+.user-courses .submit-button{
+    margin: 0;
+    position: relative;
+    left: 45%;
+}

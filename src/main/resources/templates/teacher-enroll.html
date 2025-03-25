@@ -6,6 +6,7 @@
     <link th:replace="~{fragments :: navbar-style}">
     <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
     <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
+    <script src="../static/scripts/main.js" th:src="@{/scripts/main.js}"></script>
 </head>
 <body>
 <header th:replace="~{fragments :: navbar}"></header>
@@ -26,23 +27,22 @@
     <div class="element">
         <p th:text="'Zapisywanie na: ' + *{enroll.courseName}">Zapisywanie na: Nazwa kursu</p>
     </div>
-    <form action="#" th:action="@{/teacher/course-enroll/{id}(id=*{courseId})}" method="post" th:object="${enroll}">
-        <table>
-            <tr>
-                <td><input type="hidden" th:field="*{courseName}" th:value="*{courseName}"></td>
-                <td th:if="${#fields.hasErrors('courseName')}" th:errors="*{courseName}">Course error</td>
-            </tr>
-            <tr>
-                <td><input type="text" th:field="*{userEmail}" placeholder="E-mail użytkownika"></td>
-                <td th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}">Email Error</td>
-            </tr>
-            <tr>
-                <td>
-                    <button type="submit">Zapisz użytkownika</button>
-                </td>
-            </tr>
-        </table>
-    </form>
+    <br>
+    <div class="element">
+        <form action="#" th:action="@{/teacher/course-enroll/{id}(id=*{courseId})}" method="post" th:object="${enroll}">
+            <span>E-mail użytkownika: </span>
+            <label>
+                <input type="text" th:field="*{userEmail}" placeholder="example@com">
+            </label>
+            <label>
+                <input type="hidden" th:field="*{courseName}" th:value="*{courseName}">
+            </label>
+            <p th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}">Email Error</p>
+            <p class="submit">
+                <button type="submit">Zapisz użytkownika</button>
+            </p>
+        </form>
+    </div>
 </div>
 </body>
 </html>

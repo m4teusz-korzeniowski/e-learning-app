@@ -3,11 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Utworzony kurs</title>
+    <link th:replace="~{fragments :: navbar-style}">
+    <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
+    <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
 </head>
-<body>
-<h1>Utworzono kurs</h1>
-<div>
-    <a th:href="@{/teacher}">Przejdz do strony głównej</a>
+<header th:replace="~{fragments :: navbar}"></header>
+<div class="info-bar">
+    <div>
+        <h2>Utworzono nowy kurs</h2>
+    </div>
 </div>
+<br><br>
+<body>
+
+<div class="user-courses">
+    <div class="element">
+        <p th:if="${message}!=null" th:text="${message}"></p>
+        <p th:if="${message.isEmpty()}">Nie stworzono żadnego kursu</p>
+    </div>
+    <br>
+    <div class="element">
+        <a th:href="@{/teacher}">Przejdz do strony głównej</a>
+    </div>
+    <br>
+    <div class="element">
+        <a th:href="@{/teacher/course/create}">Stwórz kurs</a>
+    </div>
+    <br>
+</div>
+
 </body>
 </html>

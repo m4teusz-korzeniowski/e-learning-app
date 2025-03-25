@@ -3,8 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Brak dostępu</title>
+    <link th:replace="~{fragments :: navbar-style}">
+    <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
+    <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
 </head>
 <body>
-<h1>Nie masz dostępu do tego kursu</h1>
+<header th:replace="~{fragments :: navbar}"></header>
+<div class="info-bar">
+    <h2>Nie masz uprawnień do przeglądania tej strony!</h2>
+</div>
+<br>
 </body>
 </html>

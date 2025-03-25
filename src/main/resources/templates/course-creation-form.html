@@ -9,35 +9,38 @@
 </head>
 <body>
 <header th:replace="~{fragments :: navbar}"></header>
-<h1>Stwórz kurs</h1>
-<main>
-    <div>
-        <form action="#" th:action="@{/teacher/course/create}" method="post" th:object="${course}">
-            <table>
-                <tr>
-                    <td><label>
-                        <input type="text" th:field="${course.name}" placeholder="Nazwa kursu">
-                    </label></td>
-                    <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Błędna nazwa</td>
-                </tr>
-                <tr>
-                    <td><label>
-                        <textarea rows="10" th:field="*{description}"
-                                  placeholder="Wprowadź opis kursu...">Opis kursu</textarea>
-                    </label></td>
-                    <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Błędny opis</td>
-                </tr>
-                <tr>
-                    <td th:if="${#fields.hasErrors('creatorId')}" th:errors="*{creatorId}">Błędne ID twórcy</td>
-                </tr>
-                <tr>
-                    <td>
-                        <button type="submit">Dodaj kurs</button>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </div>
-</main>
+<div class="info-bar">
+    <h2>Tworzenie kursu</h2>
+</div>
+<div class="info-bar">
+    <a th:href="@{/teacher}">Strona główna</a>
+    <span>&nbsp>&nbsp</span>
+    <span>Tworzenie kursu</span>
+</div>
+<br><br>
+<div class="user-courses">
+    <form action="#" th:action="@{/teacher/course/create}" method="post" th:object="${course}">
+        <div class="element">
+            <label>
+                <p>Nazwa kursu:</p>
+                <p>
+                    <input type="text" th:field="${course.name}" placeholder="Kurs">
+                </p>
+                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Błędna nazwa</p>
+            </label>
+            <label>
+                <p>Opis:</p>
+                <textarea rows="10" th:field="*{description}"
+                          placeholder="Wprowadź opis kursu...">Opis kursu</textarea>
+                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Błędny opis</p>
+            </label>
+        </div>
+        <br>
+        <div class="submit-button">
+            <button type="submit">Dodaj kurs</button>
+        </div>
+        <br>
+    </form>
+</div>
 </body>
 </html>

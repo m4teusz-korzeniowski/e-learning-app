@@ -9,42 +9,52 @@
 </head>
 <body>
 <header th:replace="~{fragments :: navbar}"></header>
-<div>
-    <h1>Zarejestruj użytkownika</h1>
-
+<div class="info-bar">
+    <h2>Rejestracja użytkowników</h2>
+</div>
+<div class="info-bar">
+    <a th:href="@{/admin}">Strona główna</a>
+    <span>&nbsp>&nbsp</span>
+    <span>Rejestracja</span>
+</div>
+<br><br>
+<div class="user-courses">
     <form action="#" th:action="@{/admin/register}" method="post" th:object="${user}">
-        <table>
-            <tr>
-                <td><input type="text" th:field="*{firstName}" placeholder="Imię"></td>
-                <td th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Name Error</td>
-            </tr>
-            <tr>
-                <td><input th:field="*{lastName}" placeholder="Nazwisko"></td>
-                <td th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Name Error</td>
-            </tr>
-            <tr>
-                <td><input th:field="*{email}" placeholder="e-mail"></td>
-                <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name Error</td>
-            </tr>
-            <tr>
-                <td><input th:field="*{password}" placeholder="Hasło" type="password"></td>
-                <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name Error</td>
-            </tr>
-            <tr>
-                <td>
-                    <label>
-                        <select th:field="*{role}">
-                            <option th:value="'STUDENT'" th:text="Uczeń"></option>
-                            <option th:value="'TEACHER'" th:text="Nauczyciel"></option>
-                        </select>
-                    </label>
-                </td>
+        <div class="element">
+            <label>
+                <p>Imię:</p>
+                <input type="text" th:field="*{firstName}" placeholder="Imię">
+                <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" Błędne imię></p>
+            </label>
+            <label>
+                <p>Nazwisko:</p>
+                <input type="text" th:field="*{lastName}" placeholder="Nazwisko">
+                <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" Błędne nazwisko></p>
+            </label>
+            <label>
+                <p>E-mail:</p>
+                <input th:field="*{email}" placeholder="e-mail">
+                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Błędny email></p>
+            </label>
+            <label>
+                <p>Hasło:</p>
+                <input th:field="*{password}" placeholder="Hasło" type="password">
+                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Błędne hasło></p>
+            </label>
+            <label>
+                <p>Wybierz rolę:</p>
+                <select th:field="*{role}">
+                    <option th:value="'STUDENT'" th:text="Uczeń"></option>
+                    <option th:value="'TEACHER'" th:text="Nauczyciel"></option>
+                </select>
+            </label>
 
-            </tr>
-            <tr>
-                <td><button type="submit">Zarejestruj użytkownika</button></td>
-            </tr>
-        </table>
+        </div>
+        <br>
+        <div class="submit-button">
+            <button type="submit">Zarejestruj użytkownika</button>
+        </div>
+        <br>
     </form>
 </div>
 </body>
