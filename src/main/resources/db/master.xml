@@ -4,6 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+    <include file="create_table_group.xml" relativeToChangelogFile="true"/>
     <include file="create_table_application_user.xml" relativeToChangelogFile="true"/>
     <include file="create_table_course.xml" relativeToChangelogFile="true"/>
     <include file="create_table_module.xml" relativeToChangelogFile="true"/>
@@ -15,6 +16,7 @@
     <include file="create_table_enrollment.xml" relativeToChangelogFile="true"/>
     <include file="create_table_user_roles.xml" relativeToChangelogFile="true"/>
 
+    <include file="test/0001_group.xml" relativeToChangelogFile="true"/>
     <include file="test/0001_application_user.xml" relativeToChangelogFile="true"/>
     <include file="test/0001_user_role.xml" relativeToChangelogFile="true"/>
     <include file="test/0001_user_roles.xml" relativeToChangelogFile="true"/>

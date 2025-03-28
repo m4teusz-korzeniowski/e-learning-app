@@ -21,6 +21,11 @@
             <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="group_id" type="bigint"/>
         </createTable>
+        <addForeignKeyConstraint baseTableName="application_user" baseColumnNames="group_id" constraintName="fk_user_group"
+                                 referencedTableName="group" referencedColumnNames="id"
+                                 deleteCascade="true"
+        />
     </changeSet>
 </databaseChangeLog>

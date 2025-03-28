@@ -6,12 +6,15 @@
 </head>
 <body>
 <div>
-  <h1>Zaloguj się</h1>
-  <form th:action="@{/login}" method="post">
-    <input name="username" placeholder="e-mail">
-    <input name="password" type="password" placeholder="hasło">
-    <button type="submit">Zaloguj się</button>
-  </form>
+    <h1>Zaloguj się</h1>
+    <form th:action="@{/login}" method="post">
+        <p th:if="${param.error}" th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
+            Błędne dane
+        </p>
+        <input name="username" placeholder="e-mail">
+        <input name="password" type="password" placeholder="hasło">
+        <button type="submit">Zaloguj się</button>
+    </form>
 </div>
 </body>
 </html>

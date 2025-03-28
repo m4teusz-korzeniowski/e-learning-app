@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:replace="~{fragments :: navbar-style}">
+    <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
+    <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+<div class="info-bar">
+    <div>
+        <h2>Panel zarządzania użytkownikami</h2>
+    </div>
+</div>
+<br><br>
+<div class="user-courses">
+
+    <div class="element">
+        <form th:action="@{/admin/users}" method="get">
+            <input name="keyword" type="text" th:value="${keyword}" placeholder="Wyszukaj...">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+    <br>
+    <div th:each="user: ${users}">
+        <div class="element">
+            <p th:text="${user.id}">Id</p>
+            <p th:text="${user.lastName}">Nazwisko</p>
+            <p th:text="${user.firstName}">Imię</p>
+            <p th:text="${user.email}">E-mail</p>
+        </div>
+        <br>
+    </div>
+</div>
+<br><br>
+</body>
+</html>

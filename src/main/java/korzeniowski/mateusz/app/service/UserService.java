@@ -8,24 +8,26 @@ import korzeniowski.mateusz.app.model.course.module.Module;
 import korzeniowski.mateusz.app.model.user.User;
 import korzeniowski.mateusz.app.model.user.UserCredentialsDtoMapper;
 import korzeniowski.mateusz.app.model.user.UserRole;
+import korzeniowski.mateusz.app.model.user.dto.*;
 import korzeniowski.mateusz.app.repository.ResultRepository;
 import korzeniowski.mateusz.app.model.course.test.Test;
 import korzeniowski.mateusz.app.model.course.test.dto.ResultDto;
-import korzeniowski.mateusz.app.model.user.dto.UserCredentialsDto;
-import korzeniowski.mateusz.app.model.user.dto.UserNameDto;
-import korzeniowski.mateusz.app.model.user.dto.UserRegistrationDto;
-import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.app.repository.UserRepository;
 import korzeniowski.mateusz.app.repository.UserRoleRepository;
 import korzeniowski.mateusz.util.CreatePasswordHash;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 public class UserService {
@@ -39,7 +41,7 @@ public class UserService {
         this.resultRepository = resultRepository;
     }
 
-    public Optional<User> findUserById(Long id){
+    public Optional<User> findUserById(Long id) {
         return userRepository.findById(id);
     }
 
@@ -100,7 +102,7 @@ public class UserService {
         if (user.isPresent()) {
             List<Course> courses = user.get().getCourses();
             for (Course course : courses) {
-                if(course.getId().equals(courseId)) {
+                if (course.getId().equals(courseId)) {
                     return true;
                 }
             }
@@ -112,19 +114,19 @@ public class UserService {
         Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
             //result.ifPresent(value -> System.out.println("Wynik jest = " + value.getScore()));
-            return resultRepository.findByUserId(userId,testId).map(ResultDto::map);
+            return resultRepository.findByUserId(userId, testId).map(ResultDto::map);
         }
         throw new UsernameNotFoundException(String.format("Username with ID %s not found", userId));
     }
 
-    public boolean ifUserHasAccessToTest(Long userId, Long testId){
+    public boolean ifUserHasAccessToTest(Long userId, Long testId) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
             List<Course> courses = user.get().getCourses();
             for (Course course : courses) {
                 for (Module module : course.getModules()) {
                     for (Test test : module.getTest()) {
-                        if(test.getId().equals(testId)) {
+                        if (test.getId().equals(testId)) {
                             return true;
                         }
                     }
@@ -165,4 +167,25 @@ public class UserService {
         }
     }
 
+    public List<UserDisplayDto> findUsersContainKeyword(String string) {
+        Stream<UserDisplayDto> users;
+        if (!string.isBlank()) {
+            users = userRepository.findByLastNameContainsOrFirstNameContainsOrEmailContainsOrderByFirstName(string, string, string)
+                    .stream().map(UserDisplayDto::map);
+        } else {
+            users = userRepository.findAllByOrderByFirstName().stream().map(UserDisplayDto::map);
+        }
+        return users.toList();
+    }
+
+    public List<UserDisplayDto> findAllUsers() {
+        Stream<UserDisplayDto> users = userRepository.findAll().stream().map(UserDisplayDto::map);
+        return users.toList();
+    }
+
+    public Page<UserDisplayDto> findPage(int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber - 1, 2);
+        return userRepository.findAll(pageable).map(UserDisplayDto::map);
+    }
 }
+

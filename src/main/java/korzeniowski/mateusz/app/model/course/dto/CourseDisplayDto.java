@@ -14,12 +14,14 @@ import java.util.List;
 public class CourseDisplayDto {
     private Long id;
     private String name;
+    private String description;
     private List<ModuleDisplayDto> modules = new ArrayList<>();
 
-    public CourseDisplayDto(Long id, String name, List<ModuleDisplayDto> modules) {
+    public CourseDisplayDto(Long id, String name, String description, List<ModuleDisplayDto> modules) {
         this.id = id;
         this.name = name;
         this.modules = modules;
+        this.description = description;
     }
 
     public Long getId() {
@@ -64,6 +66,7 @@ public class CourseDisplayDto {
         return new CourseDisplayDto(
                 course.getId(),
                 course.getName(),
+                course.getDescription(),
                 modules
         );
     }

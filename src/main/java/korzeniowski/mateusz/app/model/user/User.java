@@ -27,14 +27,14 @@ public class User {
     private String password;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name="user_roles",
+            name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
     private Set<UserRole> userRoles = new HashSet<>();
     @ManyToMany
     @JoinTable(
-            name="enrollment",
+            name = "enrollment",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id")
     )
@@ -42,6 +42,9 @@ public class User {
     @OneToMany
     @JoinColumn(name = "user_id")
     private List<Result> results = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
 
 
     public Long getId() {
@@ -98,5 +101,21 @@ public class User {
 
     public void setCourses(List<Course> courses) {
         this.courses = courses;
+    }
+
+    public List<Result> getResults() {
+        return results;
+    }
+
+    public void setResults(List<Result> results) {
+        this.results = results;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 }
