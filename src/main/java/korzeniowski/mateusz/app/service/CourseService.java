@@ -6,6 +6,9 @@ import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseDto;
 import korzeniowski.mateusz.app.repository.CourseRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +37,7 @@ public class CourseService {
         return courseRepository.findById(id).map(CourseDisplayDto::map);
     }
 
-    public CourseNameDto findCourseNameById(Long id){
+    public CourseNameDto findCourseNameById(Long id) {
         return courseRepository.findById(id).map(CourseNameDto::map).orElse(null);
     }
 
@@ -50,5 +53,10 @@ public class CourseService {
     public Long findCourseIdByName(String name) {
         return courseRepository.findByName(name).map(Course::getId).
                 orElseThrow(() -> new NoSuchElementException("Course not found"));
+    }
+
+    public Page<CourseNameDto> findAllCoursesPage(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return courseRepository.findAll(pageable).map(CourseNameDto::map);
     }
 }

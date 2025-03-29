@@ -2,6 +2,7 @@ package korzeniowski.mateusz.app.service;
 
 import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.exceptions.EmailAlreadyInUseException;
+import korzeniowski.mateusz.app.exceptions.PeselAlreadyInUseException;
 import korzeniowski.mateusz.app.model.course.Course;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.course.module.Module;
@@ -23,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -51,6 +51,10 @@ public class UserService {
 
     private boolean isEmailInUse(String email) {
         return userRepository.findByEmail(email).isPresent();
+    }
+
+    private boolean isPeselInUse(String pesel) {
+        return userRepository.findByPesel(pesel).isPresent();
     }
 
     public String findUserFullNameById(Long id) {
@@ -83,6 +87,7 @@ public class UserService {
         user.setEmail(userRegistrationDto.getEmail());
         String password = CreatePasswordHash.createHashBCrypt(userRegistrationDto.getPassword());
         user.setPassword(password);
+        user.setPesel(userRegistrationDto.getPesel());
         Optional<UserRole> userRole = userRoleRepository.findByName(userRegistrationDto.getRole());
         userRole.ifPresentOrElse(
                 role -> user.getUserRoles().add(role),
@@ -91,7 +96,9 @@ public class UserService {
                 }
         );
         if (isEmailInUse(user.getEmail())) {
-            throw new EmailAlreadyInUseException(String.format("Email %s is already in use", user.getEmail()));
+            throw new EmailAlreadyInUseException(String.format("e-mail %s już istnieje", user.getEmail()));
+        } else if (isPeselInUse(user.getPesel())) {
+            throw new PeselAlreadyInUseException(String.format("pesel %s już istnieje", user.getPesel()));
         } else {
             userRepository.save(user);
         }
@@ -167,25 +174,27 @@ public class UserService {
         }
     }
 
-    public List<UserDisplayDto> findUsersContainKeyword(String string) {
-        Stream<UserDisplayDto> users;
-        if (!string.isBlank()) {
-            users = userRepository.findByLastNameContainsOrFirstNameContainsOrEmailContainsOrderByFirstName(string, string, string)
-                    .stream().map(UserDisplayDto::map);
-        } else {
-            users = userRepository.findAllByOrderByFirstName().stream().map(UserDisplayDto::map);
-        }
-        return users.toList();
-    }
-
     public List<UserDisplayDto> findAllUsers() {
         Stream<UserDisplayDto> users = userRepository.findAll().stream().map(UserDisplayDto::map);
         return users.toList();
     }
 
-    public Page<UserDisplayDto> findPage(int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, 2);
+    public Page<UserDisplayDto> findUserPage(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return userRepository.findAll(pageable).map(UserDisplayDto::map);
+    }
+
+    public Page<UserDisplayDto> findUsersPageContainKeyword(int pageNumber, int pageSize, String keyword) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<UserDisplayDto> users;
+        if (!keyword.isBlank()) {
+            users = userRepository.findByLastNameContainsOrFirstNameContainsOrEmailContains(
+                            keyword, keyword, keyword, pageable)
+                    .map(UserDisplayDto::map);
+        } else {
+            users = userRepository.findAllBy(pageable).map(UserDisplayDto::map);
+        }
+        return users;
     }
 }
 

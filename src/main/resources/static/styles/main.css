@@ -1,24 +1,51 @@
-body{
+body {
     background: aliceblue;
     margin: 0;
 }
-.user-courses{
+
+.user-courses {
     padding: 0 30px;
 }
 
-.user-courses .element{
+.user-courses .element {
     border-radius: 5px;
     border-style: outset;
     padding: 10px;
     background: white;
 }
 
-#test-name{
+#test-name {
     padding: 0 0 20px 40px;
 }
 
-.user-courses .submit-button{
+.user-courses .submit-button {
     margin: 0;
-    position: relative;
-    left: 45%;
+    position: absolute;
+    right: 50%;
+}
+
+
+.page-span {
+    margin-right: 10px;
+    border-style: ridge;
+    text-align: center;
+    padding: 2px;
+}
+
+.element table{
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: normal;
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    white-space: nowrap;
+    background-color: white;
+    text-align: center;
+}
+
+.element th, td{
+    border: solid;
+    text-align: center;
 }

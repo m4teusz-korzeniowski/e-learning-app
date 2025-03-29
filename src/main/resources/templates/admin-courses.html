@@ -2,7 +2,7 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Kursy</title>
     <link th:replace="~{fragments :: navbar-style}">
     <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
     <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
@@ -12,18 +12,18 @@
 <header th:replace="~{fragments :: navbar}"></header>
 <div class="info-bar">
     <div>
-        <h2>Panel zarządzania użytkownikami</h2>
+        <h2>Kursy</h2>
     </div>
 </div>
 <div class="info-bar">
     <a th:href="@{/admin}">Strona główna</a>
     <span>&nbsp>&nbsp</span>
-    <span>Użytkownicy</span>
+    <span>Kursy</span>
 </div>
 <br><br>
 <div class="user-courses">
     <div class="element">
-        <form th:action="@{/admin/users}" method="get">
+        <form th:action="@{/admin/courses}" method="get">
             <input name="keyword" type="text" th:value="${keyword}" placeholder="Wyszukaj...">
             <button type="submit"><i class="fa fa-search"></i></button>
         </form>
@@ -34,23 +34,19 @@
             <thead>
             <tr>
                 <td>ID:</td>
-                <td>Nazwisko:</td>
-                <td>Imię:</td>
-                <td>E-mail:</td>
-                <td>Rola:</td>
+                <td>Nazwa:</td>
+                <td>ID twórcy:</td>
+                <td>Twórca:</td>
                 <td>Działania:</td>
             </tr>
             </thead>
-            <tr th:each="user: ${users}">
-                <td th:text="${user.id}"></td>
-                <td th:text="${user.lastName}"></td>
-                <td th:text="${user.firstName}"></td>
-                <td th:text="${user.email}"></td>
-                <td th:text="${user.role}"></td>
+            <tr th:each="course: ${courses}">
+                <td th:text="${course.id}"></td>
+                <td th:text="${course.name}"></td>
+                <td th:text="${course.creatorId}"></td>
+                <td th:text="${course.creatorName}"></td>
                 <td>
-                    <a th:unless="${user.role=='ADMIN' && !session.userInfo.id.equals(user.id)}" href="#"><i
-                            class="fa-solid fa-user-edit"></i></a>
-                    <a th:unless="${user.role=='ADMIN'}" href="#"><i class="fa-solid fa-remove"></i></a>
+                    <a href="#"><i class="fa-solid fa-remove"></i></a>
                 </td>
             </tr>
         </table>
@@ -59,11 +55,12 @@
         <a class="page-span"
            th:each="pageElem: ${#numbers.sequence(1,totalPages)}"
            th:if="${pageElem > 0}"
-           th:href="@{/admin/users(keyword=${keyword},page=${pageElem}-1)}"
+           th:href="@{/admin/courses(keyword=${keyword},page=${pageElem}-1)}"
            th:text="${pageElem}"
         ></a>
     </div>
 </div>
+<br><br>
 <br><br>
 </body>
 </html>

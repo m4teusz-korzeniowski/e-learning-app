@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import korzeniowski.mateusz.app.model.course.Course;
 import korzeniowski.mateusz.app.model.course.test.Result;
+import org.hibernate.validator.constraints.pl.PESEL;
 
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class User {
     private String email;
     @NotBlank
     private String password;
+    private String pesel;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
@@ -117,5 +119,13 @@ public class User {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    public @PESEL String getPesel() {
+        return pesel;
+    }
+
+    public void setPesel(String pesel) {
+        this.pesel = pesel;
     }
 }

@@ -42,6 +42,11 @@
                 <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Błędne hasło></p>
             </label>
             <label>
+                <p>Nr. Pesel:</p>
+                <input th:field="*{pesel}" placeholder="02070803628" type="text">
+                <p th:if="${#fields.hasErrors('pesel')}" th:errors="*{pesel}">Błędny pesel</p>
+            </label>
+            <label>
                 <p>Wybierz rolę:</p>
                 <select th:field="*{role}">
                     <option th:value="'STUDENT'" th:text="Uczeń"></option>
@@ -54,7 +59,7 @@
         <div class="submit-button">
             <button type="submit">Zarejestruj użytkownika</button>
         </div>
-        <br>
+        <br><br>
     </form>
 </div>
 </body>

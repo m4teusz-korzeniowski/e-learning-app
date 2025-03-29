@@ -2,7 +2,6 @@ package korzeniowski.mateusz.app.web;
 
 import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.exceptions.StudentRoleMissingException;
-import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.service.CourseService;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseEnrollDto;
@@ -46,7 +45,7 @@ public class TeacherEnrollController {
         }
         enroll.setCourseName(courseNameById.getName());
         enroll.setCourseId(id);
-        return "teacher-enroll";
+        return "user-enroll";
     }
 
     @PostMapping("/teacher/course-enroll/{id}")

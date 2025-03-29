@@ -5,8 +5,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
     <changeSet id="0001" author="mk">
-        <insert tableName="group">
-            <column name="name" value="Klasa 1a"/>
+        <insert tableName="user_group">
+            <column name="name" value="1A"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

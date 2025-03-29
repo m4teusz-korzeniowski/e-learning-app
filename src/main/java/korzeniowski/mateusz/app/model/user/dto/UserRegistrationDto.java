@@ -1,25 +1,25 @@
 package korzeniowski.mateusz.app.model.user.dto;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import korzeniowski.mateusz.app.model.user.UserRole;
-import org.springframework.beans.factory.annotation.Value;
+import org.hibernate.validator.constraints.pl.PESEL;
 
-import java.util.Set;
 
 public class UserRegistrationDto {
-    @NotBlank
-    @Size(min = 2, max = 50)
+    @NotBlank(message = "pole nie może być puste")
+    @Size(min = 2, max = 50, message = "pole musi mieć od 2 do 50 znaków")
     private String firstName;
-    @NotBlank
+    @NotBlank(message = "pole nie może być puste")
     private String lastName;
-    @Email
+    @Email(message = "niepoprawny format adresu e-mail")
+    @NotBlank(message = "pole nie może być puste")
     private String email;
-    @NotBlank
+    @NotBlank(message = "pole nie może być puste")
     private String password;
     //private String confirmPassword;
+    @PESEL
+    private String pesel;
     private String role;
 
     public String getFirstName() {
@@ -60,5 +60,13 @@ public class UserRegistrationDto {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public @PESEL String getPesel() {
+        return pesel;
+    }
+
+    public void setPesel(@PESEL String pesel) {
+        this.pesel = pesel;
     }
 }

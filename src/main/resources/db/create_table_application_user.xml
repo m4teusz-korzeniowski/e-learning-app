@@ -21,10 +21,15 @@
             <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="group_id" type="bigint"/>
+            <column name="group_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="pesel" type="varchar(11)">
+                <constraints nullable="false" unique="true"/>
+            </column>
         </createTable>
         <addForeignKeyConstraint baseTableName="application_user" baseColumnNames="group_id" constraintName="fk_user_group"
-                                 referencedTableName="group" referencedColumnNames="id"
+                                 referencedTableName="user_group" referencedColumnNames="id"
                                  deleteCascade="true"
         />
     </changeSet>

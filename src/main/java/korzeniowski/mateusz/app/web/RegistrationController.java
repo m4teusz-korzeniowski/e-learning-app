@@ -4,6 +4,7 @@ package korzeniowski.mateusz.app.web;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import korzeniowski.mateusz.app.exceptions.EmailAlreadyInUseException;
+import korzeniowski.mateusz.app.exceptions.PeselAlreadyInUseException;
 import korzeniowski.mateusz.app.service.UserService;
 import korzeniowski.mateusz.app.model.user.dto.UserRegistrationDto;
 import org.springframework.stereotype.Controller;
@@ -42,10 +43,12 @@ public class RegistrationController {
         try {
             userService.registerAppUser(user);
         } catch (EmailAlreadyInUseException ex) {
-            bindingResult.rejectValue("email", "error.email", "email is already in use");
+            bindingResult.rejectValue("email", "error.email", "adres e-mail jest już w użyciu");
+            return registration(user, principal, session);
+        } catch (PeselAlreadyInUseException ex) {
+            bindingResult.rejectValue("pesel", "error.pesel", "pesel jest już w użyciu");
             return registration(user, principal, session);
         }
-        //return confirmation(user, session, principal);
         redirectAttributes.addFlashAttribute("message",
                 String.format(
                         "Użytkownik %s %s (%s) został pomyślnie zarejestrowany"
