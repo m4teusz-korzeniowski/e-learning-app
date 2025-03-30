@@ -188,8 +188,8 @@ public class UserService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<UserDisplayDto> users;
         if (!keyword.isBlank()) {
-            users = userRepository.findByLastNameContainsOrFirstNameContainsOrEmailContains(
-                            keyword, keyword, keyword, pageable)
+            users = userRepository.findAllByKeywordPageable(
+                            keyword, pageable)
                     .map(UserDisplayDto::map);
         } else {
             users = userRepository.findAllBy(pageable).map(UserDisplayDto::map);

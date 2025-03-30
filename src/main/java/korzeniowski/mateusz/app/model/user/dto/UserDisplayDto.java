@@ -11,13 +11,15 @@ public class UserDisplayDto {
     private String lastName;
     private String email;
     private String role;
+    private String group;
 
-    public UserDisplayDto(Long id, String firstName, String lastName, String email, String role) {
+    public UserDisplayDto(Long id, String firstName, String lastName, String email, String role, String group) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.role = role;
+        this.group = group;
     }
 
     public Long getId() {
@@ -60,9 +62,23 @@ public class UserDisplayDto {
         this.role = role;
     }
 
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
     public static UserDisplayDto map(User user) {
         Stream<String> stream = user.getUserRoles().stream().map(UserRole::getName);
-        return new UserDisplayDto(user.getId(), user.getFirstName(),
-                user.getLastName(), user.getEmail(), stream.toList().get(0));
+        String role = stream.toList().get(0);
+        if (role.equals("STUDENT") && user.getGroup() != null) {
+            return new UserDisplayDto(user.getId(), user.getFirstName(),
+                    user.getLastName(), user.getEmail(), role, user.getGroup().getName());
+        } else {
+            return new UserDisplayDto(user.getId(), user.getFirstName(),
+                    user.getLastName(), user.getEmail(), role, null);
+        }
     }
 }

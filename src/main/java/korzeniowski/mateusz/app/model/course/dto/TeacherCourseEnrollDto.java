@@ -1,17 +1,19 @@
 package korzeniowski.mateusz.app.model.course.dto;
 
 
+import java.util.List;
+
 public class TeacherCourseEnrollDto {
-    private String userEmail;
+    private List<String> emails;
     private String courseName;
     private Long courseId;
 
-    public String getUserEmail() {
-        return userEmail;
+    public List<String> getEmails() {
+        return emails;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setEmails(List<String> emails) {
+        this.emails = emails;
     }
 
     public String getCourseName() {

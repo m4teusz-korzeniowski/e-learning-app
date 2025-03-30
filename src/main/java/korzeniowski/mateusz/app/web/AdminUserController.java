@@ -31,18 +31,14 @@ public class AdminUserController {
         if (currentPage != null) {
             if (keyword != null) {
                 page = userService.findUsersPageContainKeyword(currentPage, PAGE_SIZE, keyword);
-                System.out.println("Case 1");
             } else {
                 page = userService.findUserPage(currentPage, PAGE_SIZE);
-                System.out.println("Case 2");
             }
         } else {
             if (keyword != null) {
                 page = userService.findUsersPageContainKeyword(0, PAGE_SIZE, keyword);
-                System.out.println("Case 3");
             }else {
                 page = userService.findUserPage(0, PAGE_SIZE);
-                System.out.println("Case 4");
             }
         }
         System.out.println("Ilosc stron: " + page.getTotalElements());

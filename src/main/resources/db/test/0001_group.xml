@@ -8,5 +8,11 @@
         <insert tableName="user_group">
             <column name="name" value="1A"/>
         </insert>
+        <insert tableName="user_group">
+            <column name="name" value="1B"/>
+        </insert>
+        <insert tableName="user_group">
+            <column name="name" value="1C"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>

@@ -6,7 +6,7 @@
     <link th:replace="~{fragments :: navbar-style}">
     <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
     <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
-    <script src="../static/scripts/main.js" th:src="@{/scripts/main.js}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
 <header th:replace="~{fragments :: navbar}"></header>
@@ -28,16 +28,33 @@
         <p th:text="'Zapisywanie na: ' + *{enroll.courseName}">Zapisywanie na: Nazwa kursu</p>
     </div>
     <br>
+    <div class="element" th:object="${enroll}">
+        <form th:action="@{/teacher/course-enroll/{id}(id=*{courseId})}" method="get">
+            <input name="keyword" type="text" th:value="${keyword}" placeholder="Wyszukaj...">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+    <br>
     <div class="element">
-        <form action="#" th:action="@{/teacher/course-enroll/{id}(id=*{courseId})}" method="post" th:object="${enroll}">
-            <span>E-mail użytkownika: </span>
-            <label>
-                <input type="text" th:field="*{userEmail}" placeholder="example@com">
-            </label>
+        <form action="#" th:action="@{/teacher/course-enroll/{id}(id=${enroll.courseId})}" method="post" th:object="${enroll}">
+            <div>
+                <span>Użytkownicy do zapisania: </span>
+            </div>
+            <br>
             <label>
                 <input type="hidden" th:field="*{courseName}" th:value="*{courseName}">
             </label>
-            <p th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}">Email Error</p>
+            <div th:each="user: ${users}" th:if="${user.role.equals('STUDENT')}">
+                <input type="checkbox" th:field="*{emails}" th:value="${user.email}">
+                <label th:text="${user.lastName +' '+ user.firstName +' ' + user.email + ' ' + user.group}">
+                </label>
+                <br>
+            </div>
+            <div th:if="${#fields.hasAnyErrors()}">
+                <ul>
+                    <li th:each="err: ${#fields.allErrors()}" th:text="${err}"></li>
+                </ul>
+            </div>
             <p class="submit">
                 <button type="submit">Zapisz użytkownika</button>
             </p>

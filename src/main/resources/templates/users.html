@@ -2,7 +2,7 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Użytkownicy</title>
     <link th:replace="~{fragments :: navbar-style}">
     <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
     <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
@@ -38,6 +38,7 @@
                 <td>Imię:</td>
                 <td>E-mail:</td>
                 <td>Rola:</td>
+                <td>Grupa:</td>
                 <td>Działania:</td>
             </tr>
             </thead>
@@ -47,6 +48,8 @@
                 <td th:text="${user.firstName}"></td>
                 <td th:text="${user.email}"></td>
                 <td th:text="${user.role}"></td>
+                <td th:if="${user.role.equals('STUDENT') and user.group!=null}" th:text="${user.group}"></td>
+                <td th:if="${user.group == null}">Brak</td>
                 <td>
                     <a th:unless="${user.role=='ADMIN' && !session.userInfo.id.equals(user.id)}" href="#"><i
                             class="fa-solid fa-user-edit"></i></a>
