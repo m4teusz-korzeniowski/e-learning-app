@@ -13,29 +13,24 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
-    /*@Query("select user from User user where user.firstName like %:keyword%" +
-            " or user.lastName like %:keyword%" +
-            " or user.email like %:keyword%" +
-            " or user.group.name like %:keyword")
-    List<User> findAllByKeyword(@Param("keyword") String keyword);*/
-    @Query("select user from User user where upper(user.firstName) like UPPER(concat('%', :keyword, '%'))" +
+    @Query("select user from User user where upper(user.firstName) like upper(concat('%', :keyword, '%'))" +
             " or upper(user.lastName) like upper(concat('%', :keyword, '%'))" +
             " or upper(user.email) like upper(concat('%', :keyword, '%'))" +
             " or upper(user.group.name) like upper(concat('%', :keyword, '%'))")
     List<User> findAllByKeyword(@Param("keyword") String keyword);
 
 
-    @Query(value = "select user from User user join user.userRoles role" +
+    @Query(value = "select user from User user left join user.userRoles role left join user.group group" +
             " where upper(user.firstName) like upper(concat('%',:keyword, '%'))" +
             " or upper(user.lastName) like upper(concat('%', :keyword, '%'))" +
             " or upper(user.email) like upper(concat('%', :keyword, '%'))" +
-            " or upper(user.group.name) like upper(concat('%', :keyword, '%'))" +
+            " or upper(coalesce(group.name, 'Brak')) like upper(concat('%', :keyword, '%'))" +
             " or upper(role.name) like upper(concat('%',:keyword,'%'))",
-            countQuery = "select count(user)from User user join user.userRoles role" +
+            countQuery = "select count(user)from User user left join user.userRoles role left join user.group group" +
                     " where upper(user.firstName) like upper(concat('%',:keyword, '%'))" +
                     " or upper(user.lastName) like upper(concat('%', :keyword, '%'))" +
                     " or upper(user.email) like upper(concat('%', :keyword, '%'))" +
-                    " or upper(user.group.name) like upper(concat('%', :keyword, '%'))" +
+                    " or upper(coalesce(group.name, 'Brak')) like upper(concat('%', :keyword, '%'))" +
                     " or upper(role.name) like upper(concat('%',:keyword,'%'))")
     Page<User> findAllByKeywordPageable(@Param("keyword") String keyword, Pageable pageable);
 

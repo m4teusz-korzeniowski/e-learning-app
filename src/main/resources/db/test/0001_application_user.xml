@@ -33,7 +33,6 @@
             <column name="last_name" value="Korzeniowski"/>
             <column name="email" value="mk@gmail.com"/>
             <column name="password" value="{bcrypt}$2a$10$PitQ7QfE5bkHL9.XDeQZjeFHmTjEofRwK7qb5dQEe.PGx0JL7lk5e"/>
-            <column name="group_id" value="1"/>
             <column name="pesel" value="04250113002"/>
         </insert>
         <insert tableName="application_user">

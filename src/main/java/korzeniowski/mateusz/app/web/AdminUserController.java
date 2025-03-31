@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class AdminUserController {
     private final UserService userService;
-    private static final int PAGE_SIZE = 2;
+    private static final int PAGE_SIZE = 4;
 
     public AdminUserController(UserService userService) {
         this.userService = userService;
@@ -40,6 +41,10 @@ public class AdminUserController {
             }else {
                 page = userService.findUserPage(0, PAGE_SIZE);
             }
+        }
+        List<UserDisplayDto> content = page.getContent();
+        for (UserDisplayDto u : content) {
+            System.out.println(u.getFirstName() + " " + u.getLastName() + "\n");
         }
         System.out.println("Ilosc stron: " + page.getTotalElements());
         model.addAttribute("users", page.getContent());

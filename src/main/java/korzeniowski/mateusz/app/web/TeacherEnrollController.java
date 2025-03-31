@@ -67,15 +67,19 @@ public class TeacherEnrollController {
             return enrollUserForm(id, enroll, principal, session, keyword, model);
         }
         try {
-            StringBuilder message = new StringBuilder(
-                    String.format("Na kurs %s zapisano następujących użytkowników: ", enroll.getCourseName()));
+            StringBuilder builder = new StringBuilder
+                    (String.format("Na kurs %s zapisano następujących użytkowników: (", enroll.getCourseName()));
             for (String email : enroll.getEmails()) {
                 Long userId = userService.findUserIdByEmail(email);
                 enrollmentService.enrollUserToCourse(userId, id);
-                message.append("\n- ").append(email);
+                builder.append(" ").append(email);
             }
+            if (builder.toString().equals(String.format("Na kurs %s zapisano następujących użytkowników: (", enroll.getCourseName()))) {
+                throw new NullPointerException();
+            }
+            builder.append(" )");
             redirectAttributes.addFlashAttribute(
-                    "message", message.toString());
+                    "message", builder.toString());
         } catch (UsernameNotFoundException e) {
             bindingResult.rejectValue("emails", "error.emails", e.getMessage());
             return enrollUserForm(id, enroll, principal, session, keyword, model);
