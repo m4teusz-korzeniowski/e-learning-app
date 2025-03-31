@@ -2,7 +2,7 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Potwierdzenie zapisu</title>
+    <title>Dodanie do grupy - potwierdzenie</title>
     <link th:replace="~{fragments :: navbar-style}">
     <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
     <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
@@ -11,13 +11,15 @@
 <header th:replace="~{fragments :: navbar}"></header>
 <div class="info-bar">
     <div>
-        <h2>Potwierdzenie zapisu</h2>
+        <h2>Dodanie do grupy - potwierdzenie</h2>
     </div>
 </div>
 <div class="info-bar">
-    <a th:href="@{/teacher}">Strona główna</a>
+    <a th:href="@{/admin}">Strona główna</a>
     <span>&nbsp>&nbsp</span>
-    <a th:href="@{/teacher/course}">Moje kursy</a>
+    <a th:href="@{/admin/groups}">Zarządzanie grupami</a>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/admin/groups/add}">Dodawanie do grupy</a>
     <span>&nbsp>&nbsp</span>
     <span>Potwierdzenie</span>
 </div>
@@ -25,13 +27,8 @@
 <div class="user-courses">
     <div class="element">
         <p th:if="${message!=null}" th:text="${message}"></p>
-        <p th:if="${message.isEmpty()}">Nie przeprowadzono żadnego zapisu</p>
+        <p th:if="${message.isEmpty()}">Nie dodano nikogo do grupy</p>
     </div>
-    <br>
-    <div class="element">
-        <a th:href="@{/teacher/course}">Moje kursy</a>
-    </div>
-    <br>
 </div>
 <br><br>
 </body>

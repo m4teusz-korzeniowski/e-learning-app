@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodawanie do grupy</title>
+    <link th:replace="~{fragments :: navbar-style}">
+    <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
+    <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+<div class="info-bar">
+    <div>
+        <h2>Dodawanie do grupy</h2>
+    </div>
+</div>
+<div class="info-bar">
+    <a th:href="@{/admin}">Strona główna</a>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/admin/groups}">Zarządzanie grupami</a>
+    <span>&nbsp>&nbsp</span>
+    <span>Dodawanie do grupy</span>
+</div>
+<br><br>
+<div class="user-courses">
+    <div class="element">
+        <form th:action="@{/admin/groups/add}" method="get">
+            <input name="keyword" type="text" th:value="${keyword}" placeholder="Wyszukaj użytkowników...">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+    <br>
+    <form action="#" th:action="@{/admin/groups/add}" method="post" th:object="${enroll}">
+        <div class="element">
+            <p>Wybierz użytkowników:</p>
+            <div th:each="user: ${users}" th:if="${user.role.equals('STUDENT')}">
+                <input type="radio" th:field="*{userEmails}" th:value="${user.email}">
+                <label th:text="${user.lastName +' '+ user.firstName +' ' + user.email}">
+                </label>
+                <br>
+            </div>
+        </div>
+        <br>
+        <div class="element">
+            <label>Wybierz grupę:</label>
+            <input list="groups" th:field="*{groupName}">
+            <datalist id="groups">
+                <option th:each="group: ${groups}" th:value="${group.name}"></option>
+            </datalist>
+            <div th:if="${#fields.hasAnyErrors()}">
+                <p th:each="err: ${#fields.allErrors()}" th:text="${err}"></p>
+            </div>
+        </div>
+        <br>
+        <div class="submit-button">
+            <button type="submit">Dodaj do grupy</button>
+        </div>
+        <br>
+    </form>
+    <br>
+</div>
+<br><br>
+</body>
+</html>

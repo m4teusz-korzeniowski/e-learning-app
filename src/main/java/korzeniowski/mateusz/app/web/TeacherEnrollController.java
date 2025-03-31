@@ -63,18 +63,18 @@ public class TeacherEnrollController {
         }
         try {
             StringBuilder builder = new StringBuilder
-                    (String.format("Na kurs %s zapisano następujących użytkowników: (", enroll.getCourseName()));
+                    (String.format("Na kurs %s zapisano następujących użytkowników: ", enroll.getCourseName()));
             for (String email : enroll.getEmails()) {
                 Long userId = userService.findUserIdByEmail(email);
                 enrollmentService.enrollUserToCourse(userId, id);
-                builder.append(" ").append(email);
+                builder.append(email).append(", ");
             }
-            if (builder.toString().equals(String.format("Na kurs %s zapisano następujących użytkowników: (", enroll.getCourseName()))) {
+            if (builder.toString().equals(
+                    String.format("Na kurs %s zapisano następujących użytkowników: ", enroll.getCourseName()))) {
                 throw new NullPointerException();
             }
-            builder.append(" )");
             redirectAttributes.addFlashAttribute(
-                    "message", builder.toString());
+                    "message", builder.substring(0, builder.length() - 2));
         } catch (UsernameNotFoundException e) {
             bindingResult.rejectValue("emails", "error.emails", e.getMessage());
             return enrollUserForm(id, enroll, keyword, model);

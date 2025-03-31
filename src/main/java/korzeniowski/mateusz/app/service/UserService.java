@@ -2,14 +2,17 @@ package korzeniowski.mateusz.app.service;
 
 import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.exceptions.EmailAlreadyInUseException;
+import korzeniowski.mateusz.app.exceptions.NoSuchGroup;
 import korzeniowski.mateusz.app.exceptions.PeselAlreadyInUseException;
 import korzeniowski.mateusz.app.model.course.Course;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.course.module.Module;
+import korzeniowski.mateusz.app.model.user.Group;
 import korzeniowski.mateusz.app.model.user.User;
 import korzeniowski.mateusz.app.model.user.UserCredentialsDtoMapper;
 import korzeniowski.mateusz.app.model.user.UserRole;
 import korzeniowski.mateusz.app.model.user.dto.*;
+import korzeniowski.mateusz.app.repository.GroupRepository;
 import korzeniowski.mateusz.app.repository.ResultRepository;
 import korzeniowski.mateusz.app.model.course.test.Test;
 import korzeniowski.mateusz.app.model.course.test.dto.ResultDto;
@@ -34,11 +37,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
     private final ResultRepository resultRepository;
+    private final GroupRepository groupRepository;
 
-    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, ResultRepository resultRepository) {
+    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, ResultRepository resultRepository, GroupRepository groupRepository) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.resultRepository = resultRepository;
+        this.groupRepository = groupRepository;
     }
 
     public Optional<User> findUserById(Long id) {
@@ -195,6 +200,25 @@ public class UserService {
             users = userRepository.findAllBy(pageable).map(UserDisplayDto::map);
         }
         return users;
+    }
+
+    public List<UserDisplayDto> findUsersWithoutGroupContainKeyword(String keyword) {
+        Stream<UserDisplayDto> stream = userRepository
+                .findAllStudentsWithoutGroupAndKeyword(keyword).stream().map(UserDisplayDto::map);
+        return stream.toList();
+    }
+
+    @Transactional
+    public void addUserToGroup(String userEmail, String groupName) {
+        Optional<User> user = userRepository.findByEmail(userEmail);
+        Group group = groupRepository.findByName(groupName);
+        if (group == null) {
+            throw new NoSuchGroup("Grupa, do której chcesz zapisać użytkowników nie istnieje!");
+        }
+        if (user.isPresent()) {
+            user.get().setGroup(group);
+            userRepository.save(user.get());
+        }
     }
 }
 

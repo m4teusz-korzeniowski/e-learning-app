@@ -34,11 +34,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
                     " or upper(role.name) like upper(concat('%',:keyword,'%'))")
     Page<User> findAllByKeywordPageable(@Param("keyword") String keyword, Pageable pageable);
 
-    /*Page<User> findByLastNameContainsIgnoreCaseOrFirstNameContainsIgnoreCaseOrEmailContainsIgnoreCase(
-            String lastName, String firstName, String email, Pageable pageable);*/
-
     Page<User> findAllBy(Pageable pageable);
 
     Optional<User> findByPesel(String pesel);
+
+    @Query("select user from User user left join user.userRoles role left join user.group group" +
+            " where role.name='STUDENT' and group is null" +
+            " and" +
+            " (upper(user.firstName) like upper(concat('%', :keyword,'%')) or" +
+            " upper(user.lastName) like upper(concat('%', :keyword,'%')) or" +
+            " upper(user.email) like upper(concat('%', :keyword,'%')))")
+    List<User> findAllStudentsWithoutGroupAndKeyword(@Param("keyword") String keyword);
 
 }

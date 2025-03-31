@@ -36,7 +36,8 @@
     </div>
     <br>
     <div class="element">
-        <form action="#" th:action="@{/teacher/course-enroll/{id}(id=${enroll.courseId})}" method="post" th:object="${enroll}">
+        <form action="#" th:action="@{/teacher/course-enroll/{id}(id=${enroll.courseId})}" method="post"
+              th:object="${enroll}">
             <div>
                 <span>Użytkownicy do zapisania: </span>
             </div>
@@ -51,11 +52,9 @@
                 <br>
             </div>
             <div th:if="${#fields.hasAnyErrors()}">
-                <ul>
-                    <li th:each="err: ${#fields.allErrors()}" th:text="${err}"></li>
-                </ul>
+                <p th:each="err: ${#fields.allErrors()}" th:text="${err}"></p>
             </div>
-            <p class="submit">
+            <p class="submit-button">
                 <button type="submit">Zapisz użytkownika</button>
             </p>
         </form>
