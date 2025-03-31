@@ -27,10 +27,7 @@ public class RegistrationController {
     }
 
     @GetMapping("admin/register")
-    String registration(@ModelAttribute("user") UserRegistrationDto user, Principal principal, HttpSession session) {
-        if (session.getAttribute("userInfo") == null) {
-            userService.addUserInfoToSession(principal.getName(), session);
-        }
+    String registration(@ModelAttribute("user") UserRegistrationDto user) {
         return "registration-form";
     }
 
@@ -38,16 +35,16 @@ public class RegistrationController {
     String register(@Valid @ModelAttribute("user") UserRegistrationDto user, BindingResult bindingResult,
                     HttpSession session, Principal principal, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return registration(user, principal, session);
+            return registration(user);
         }
         try {
             userService.registerAppUser(user);
         } catch (EmailAlreadyInUseException ex) {
             bindingResult.rejectValue("email", "error.email", "adres e-mail jest już w użyciu");
-            return registration(user, principal, session);
+            return registration(user);
         } catch (PeselAlreadyInUseException ex) {
             bindingResult.rejectValue("pesel", "error.pesel", "pesel jest już w użyciu");
-            return registration(user, principal, session);
+            return registration(user);
         }
         redirectAttributes.addFlashAttribute("message",
                 String.format(
@@ -57,10 +54,7 @@ public class RegistrationController {
     }
 
     @GetMapping("admin/confirmation")
-    String confirmation(@ModelAttribute("message") String message,HttpSession session, Principal principal) {
-        if (session.getAttribute("userInfo") == null) {
-            userService.addUserInfoToSession(principal.getName(), session);
-        }
+    String confirmation(@ModelAttribute("message") String message) {
         return "/registration-completed";
     }
 }

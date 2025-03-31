@@ -1,6 +1,5 @@
 package korzeniowski.mateusz.app.web;
 
-import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.model.user.dto.UserDisplayDto;
 import korzeniowski.mateusz.app.service.UserService;
 import org.springframework.data.domain.Page;
@@ -9,8 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.security.Principal;
-import java.util.List;
 
 @Controller
 public class AdminUserController {
@@ -22,12 +19,8 @@ public class AdminUserController {
     }
 
     @GetMapping("/admin/users")
-    public String showUsers(Principal principal, HttpSession session, Model model,
-                            @RequestParam(value = "keyword", required = false) String keyword,
+    public String showUsers(Model model, @RequestParam(value = "keyword", required = false) String keyword,
                             @RequestParam(value = "page", required = false) Integer currentPage) {
-        if (session.getAttribute("userInfo") == null) {
-            userService.addUserInfoToSession(principal.getName(), session);
-        }
         Page<UserDisplayDto> page;
         if (currentPage != null) {
             if (keyword != null) {
@@ -41,10 +34,6 @@ public class AdminUserController {
             }else {
                 page = userService.findUserPage(0, PAGE_SIZE);
             }
-        }
-        List<UserDisplayDto> content = page.getContent();
-        for (UserDisplayDto u : content) {
-            System.out.println(u.getFirstName() + " " + u.getLastName() + "\n");
         }
         System.out.println("Ilosc stron: " + page.getTotalElements());
         model.addAttribute("users", page.getContent());

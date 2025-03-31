@@ -16,20 +16,14 @@ import java.util.Optional;
 
 @Controller
 public class TeacherEditorController {
-    private final UserService userService;
     private final CourseService courseService;
 
-    public TeacherEditorController(UserService userService, CourseService courseService) {
-        this.userService = userService;
+    public TeacherEditorController(CourseService courseService) {
         this.courseService = courseService;
     }
 
     @GetMapping("/teacher/course/edit/{id}")
-    public String showEditableCourse(@PathVariable long id, Principal principal, HttpSession session
-            , Model model) {
-        if (session.getAttribute("userInfo") == null) {
-            userService.addUserInfoToSession(principal.getName(), session);
-        }
+    public String showEditableCourse(@PathVariable long id, Model model) {
         Optional<CourseDisplayDto> course = courseService.findCourseById(id);
         course.ifPresent(courseDisplayDto -> model.addAttribute("course", courseDisplayDto));
         course.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

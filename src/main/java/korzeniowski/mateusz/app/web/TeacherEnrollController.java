@@ -37,12 +37,8 @@ public class TeacherEnrollController {
 
     @GetMapping("/teacher/course-enroll/{id}")
     public String enrollUserForm(@PathVariable long id, @ModelAttribute("enroll") TeacherCourseEnrollDto enroll,
-                                 Principal principal, HttpSession session,
                                  @RequestParam(name = "keyword", required = false) @ModelAttribute("keyword") String keyword,
                                  Model model) {
-        if (session.getAttribute("userInfo") == null) {
-            userService.addUserInfoToSession(principal.getName(), session);
-        }
         CourseNameDto courseNameById = courseService.findCourseNameById(id);
         if (courseNameById == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -59,12 +55,11 @@ public class TeacherEnrollController {
 
     @PostMapping("/teacher/course-enroll/{id}")
     public String enrollUser(@PathVariable long id, @ModelAttribute("enroll") TeacherCourseEnrollDto enroll,
-                             BindingResult bindingResult, HttpSession session, Principal principal,
-                             RedirectAttributes redirectAttributes,
+                             BindingResult bindingResult, RedirectAttributes redirectAttributes,
                              @RequestParam(name = "keyword", required = false) @ModelAttribute("keyword") String keyword,
                              Model model) {
         if (bindingResult.hasErrors()) {
-            return enrollUserForm(id, enroll, principal, session, keyword, model);
+            return enrollUserForm(id, enroll, keyword, model);
         }
         try {
             StringBuilder builder = new StringBuilder
@@ -82,20 +77,17 @@ public class TeacherEnrollController {
                     "message", builder.toString());
         } catch (UsernameNotFoundException e) {
             bindingResult.rejectValue("emails", "error.emails", e.getMessage());
-            return enrollUserForm(id, enroll, principal, session, keyword, model);
+            return enrollUserForm(id, enroll, keyword, model);
         } catch (NullPointerException e) {
             bindingResult.rejectValue("emails", "error.emails",
                     "Wybierz co najmniej jednego użytkownika!");
-            return enrollUserForm(id, enroll, principal, session, keyword, model);
+            return enrollUserForm(id, enroll, keyword, model);
         }
         return "redirect:/teacher/course-enroll/confirmation";
     }
 
     @GetMapping("/teacher/course-enroll/confirmation")
-    public String enrollUserConfirmationForm(@ModelAttribute("message") String message, Principal principal, HttpSession session) {
-        if (session.getAttribute("userInfo") == null) {
-            userService.addUserInfoToSession(principal.getName(), session);
-        }
+    public String enrollUserConfirmationForm(@ModelAttribute("message") String message) {
         return "enroll-confirmation";
     }
 

@@ -2,6 +2,7 @@ package korzeniowski.mateusz.app.web;
 
 import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
+import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.app.service.CourseService;
 import korzeniowski.mateusz.app.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -26,12 +27,10 @@ public class CourseController {
 
     @GetMapping("/course/{courseId}")
     public String showCourse(@PathVariable long courseId, Model model,
-                             Principal principal, HttpSession session) {
-        Long userId = userService.findIdOfAuthenticatedUser(principal.getName());
+                             HttpSession session) {
+        UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
+        Long userId = userInfo.getId();
         Optional<CourseDisplayDto> courseById = courseService.findCourseById(courseId);
-        if (session.getAttribute("userInfo") == null) {
-            userService.addUserInfoToSession(principal.getName(), session);
-        }
         if (courseById.isPresent()) {
             if (userService.ifUserHasAccessToCourse(userId, courseId)) {
                 model.addAttribute("course", courseById.get());

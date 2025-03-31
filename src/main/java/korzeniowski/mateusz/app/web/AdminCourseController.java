@@ -1,6 +1,5 @@
 package korzeniowski.mateusz.app.web;
 
-import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.service.CourseService;
 import korzeniowski.mateusz.app.service.UserService;
@@ -10,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -26,12 +24,8 @@ public class AdminCourseController {
     }
 
     @GetMapping("/admin/courses")
-    public String showCourses(Principal principal, HttpSession session, Model model,
-                              @RequestParam(value = "keyword", required = false) String keyword,
+    public String showCourses(Model model, @RequestParam(value = "keyword", required = false) String keyword,
                               @RequestParam(value = "page", required = false) Integer currentPage) {
-        if (session.getAttribute("userInfo") == null) {
-            userService.addUserInfoToSession(principal.getName(), session);
-        }
         Page<CourseNameDto> page;
         if (currentPage != null) {
             page = courseService.findAllCoursesPage(currentPage, PAGE_SIZE);

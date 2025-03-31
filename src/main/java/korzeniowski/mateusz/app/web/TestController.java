@@ -2,6 +2,7 @@ package korzeniowski.mateusz.app.web;
 
 import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.model.course.test.dto.TestDisplayDto;
+import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.app.service.TestService;
 import korzeniowski.mateusz.app.model.course.test.dto.ResultDto;
 import korzeniowski.mateusz.app.model.user.User;
@@ -28,21 +29,21 @@ public class TestController {
     }
 
     @GetMapping("/module/quiz/{id}")
-    public String showTest(@PathVariable long id, Model model, Principal principal,
-                           HttpSession session) {
-        if (session.getAttribute("userInfo") == null) {
-            userService.addUserInfoToSession(principal.getName(), session);
-        }
-        Long userId = userService.findIdOfAuthenticatedUser(principal.getName());
+    public String showTest(@PathVariable long id, Model model, HttpSession session) {
+        UserSessionDto userSessionDto = (UserSessionDto) session.getAttribute("userInfo");
+        Long userId = userSessionDto.getId();
         Optional<User> user = userService.findUserById(userId);
         if (user.isPresent()) {
             Optional<TestDisplayDto> test = testService.findTestById(id);
-            if(userService.ifUserHasAccessToTest(userId, id)){
+            if (test.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+            if (userService.ifUserHasAccessToTest(userId, id)) {
                 test.ifPresent(testDisplayDto -> model.addAttribute("test", testDisplayDto));
                 Optional<ResultDto> result = userService.findUserResultOfTest(userId, id);
                 result.ifPresent(resultDto -> model.addAttribute("result", resultDto));
                 return "test";
-            }else {
+            } else {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
         }
