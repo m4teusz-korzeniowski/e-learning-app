@@ -30,7 +30,6 @@
         </createTable>
         <addForeignKeyConstraint baseTableName="application_user" baseColumnNames="group_id" constraintName="fk_user_group"
                                  referencedTableName="user_group" referencedColumnNames="id"
-                                 deleteCascade="true"
         />
     </changeSet>
 </databaseChangeLog>

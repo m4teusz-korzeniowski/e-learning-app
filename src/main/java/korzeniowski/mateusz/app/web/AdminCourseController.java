@@ -28,9 +28,17 @@ public class AdminCourseController {
                               @RequestParam(value = "page", required = false) Integer currentPage) {
         Page<CourseNameDto> page;
         if (currentPage != null) {
-            page = courseService.findAllCoursesPage(currentPage, PAGE_SIZE);
+            if (keyword != null) {
+                page = courseService.findAllCoursesPageWithKeyword(keyword, currentPage, PAGE_SIZE);
+            } else {
+                page = courseService.findAllCoursesPage(currentPage, PAGE_SIZE);
+            }
         } else {
-            page = courseService.findAllCoursesPage(0, PAGE_SIZE);
+            if (keyword != null) {
+                page = courseService.findAllCoursesPageWithKeyword(keyword, 0, PAGE_SIZE);
+            } else {
+                page = courseService.findAllCoursesPage(0, PAGE_SIZE);
+            }
         }
 
         List<CourseNameDto> courses = page.getContent();

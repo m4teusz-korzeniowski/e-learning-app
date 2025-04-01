@@ -8,9 +8,11 @@ public class GroupDto {
     @NotBlank(message = "*pole nie może być puste")
     @NotNull(message = "*pole nie może być puste")
     private String name;
+    private Long id;
 
-    public GroupDto(String name) {
+    public GroupDto(String name, Long id) {
         this.name = name;
+        this.id = id;
     }
 
     public String getName() {
@@ -21,7 +23,15 @@ public class GroupDto {
         this.name = name;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public static GroupDto map(Group group) {
-        return new GroupDto(group.getName());
+        return new GroupDto(group.getName(), group.getId());
     }
 }

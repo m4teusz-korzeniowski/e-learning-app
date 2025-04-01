@@ -2,7 +2,7 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Zarządzanie grupami</title>
+    <title>Stworzenie grupy - potwierdzenie</title>
     <link th:replace="~{fragments :: navbar-style}">
     <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
     <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
@@ -11,26 +11,23 @@
 <header th:replace="~{fragments :: navbar}"></header>
 <div class="info-bar">
     <div>
-        <h2>Zarządzanie grupami</h2>
+        <h2>Stworzenie grupy - potwierdzenie</h2>
     </div>
 </div>
 <div class="info-bar">
     <a th:href="@{/admin}">Strona główna</a>
     <span>&nbsp>&nbsp</span>
-    <span>Zarządzanie grupami</span>
+    <a th:href="@{/admin/groups}">Zarządzanie grupami</a>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/admin/groups/create}">Tworzenie grupy</a>
+    <span>&nbsp>&nbsp</span>
+    <span>Potwierdzenie</span>
 </div>
 <br><br>
 <div class="user-courses">
     <div class="element">
-        <p><a th:href="@{/admin/groups/create}">Dodaj grupę</a></p>
-    </div>
-    <br>
-    <div class="element">
-        <p><a th:href="@{/admin/groups/add}">Dodaj do grupy</a></p>
-    </div>
-    <br>
-    <div class="element">
-        <p><a th:href="@{/admin/groups/display}">Grupy</a></p>
+        <p th:if="${message!=null}" th:text="${message}"></p>
+        <p th:if="${message.isEmpty()}">Nie stworzono żadnej grupy</p>
     </div>
 </div>
 <br><br>

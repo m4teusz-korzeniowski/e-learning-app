@@ -184,7 +184,7 @@ public class UserService {
         return users.toList();
     }
 
-    public Page<UserDisplayDto> findUserPage(int pageNumber, int pageSize) {
+    public Page<UserDisplayDto> findUsersPage(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return userRepository.findAll(pageable).map(UserDisplayDto::map);
     }

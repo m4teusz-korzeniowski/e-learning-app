@@ -26,16 +26,15 @@ public class AdminUserController {
             if (keyword != null) {
                 page = userService.findUsersPageContainKeyword(currentPage, PAGE_SIZE, keyword);
             } else {
-                page = userService.findUserPage(currentPage, PAGE_SIZE);
+                page = userService.findUsersPage(currentPage, PAGE_SIZE);
             }
         } else {
             if (keyword != null) {
                 page = userService.findUsersPageContainKeyword(0, PAGE_SIZE, keyword);
             }else {
-                page = userService.findUserPage(0, PAGE_SIZE);
+                page = userService.findUsersPage(0, PAGE_SIZE);
             }
         }
-        System.out.println("Ilosc stron: " + page.getTotalElements());
         model.addAttribute("users", page.getContent());
         model.addAttribute("keyword", keyword);
         model.addAttribute("currentPage", currentPage);

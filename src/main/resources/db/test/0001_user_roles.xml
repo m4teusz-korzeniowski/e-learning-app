@@ -53,5 +53,9 @@
             <column name="user_id" value="12"/>
             <column name="role_id" value="1"/>
         </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" value="13"/>
+            <column name="role_id" value="2"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>

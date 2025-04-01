@@ -5,6 +5,7 @@ import korzeniowski.mateusz.app.exceptions.StudentRoleMissingException;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.user.dto.UserDisplayDto;
 import korzeniowski.mateusz.app.model.user.dto.UserEmailsDto;
+import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.app.service.CourseService;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseEnrollDto;
 import korzeniowski.mateusz.app.service.EnrollmentService;
@@ -38,10 +39,17 @@ public class TeacherEnrollController {
     @GetMapping("/teacher/course-enroll/{id}")
     public String enrollUserForm(@PathVariable long id, @ModelAttribute("enroll") TeacherCourseEnrollDto enroll,
                                  @RequestParam(name = "keyword", required = false) @ModelAttribute("keyword") String keyword,
-                                 Model model) {
+                                 Model model, HttpSession session) {
         CourseNameDto courseNameById = courseService.findCourseNameById(id);
         if (courseNameById == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
+
+        System.out.println("Creator id= " + courseNameById.getCreatorId());
+        System.out.println("Teacher id= " + userInfo.getId());
+        if (!ifLoggedInTeacherIsOwnerOfTheCourse(courseNameById.getCreatorId(), userInfo.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         List<UserDisplayDto> users = new ArrayList<>();
         if (keyword != null) {
@@ -53,13 +61,17 @@ public class TeacherEnrollController {
         return "user-enroll";
     }
 
+    private boolean ifLoggedInTeacherIsOwnerOfTheCourse(Long creatorId, Long teacherId) {
+        return creatorId.equals(teacherId);
+    }
+
     @PostMapping("/teacher/course-enroll/{id}")
     public String enrollUser(@PathVariable long id, @ModelAttribute("enroll") TeacherCourseEnrollDto enroll,
                              BindingResult bindingResult, RedirectAttributes redirectAttributes,
                              @RequestParam(name = "keyword", required = false) @ModelAttribute("keyword") String keyword,
-                             Model model) {
+                             Model model, HttpSession session) {
         if (bindingResult.hasErrors()) {
-            return enrollUserForm(id, enroll, keyword, model);
+            return enrollUserForm(id, enroll, keyword, model, session);
         }
         try {
             StringBuilder builder = new StringBuilder
@@ -77,11 +89,11 @@ public class TeacherEnrollController {
                     "message", builder.substring(0, builder.length() - 2));
         } catch (UsernameNotFoundException e) {
             bindingResult.rejectValue("emails", "error.emails", e.getMessage());
-            return enrollUserForm(id, enroll, keyword, model);
+            return enrollUserForm(id, enroll, keyword, model, session);
         } catch (NullPointerException e) {
             bindingResult.rejectValue("emails", "error.emails",
                     "Wybierz co najmniej jednego użytkownika!");
-            return enrollUserForm(id, enroll, keyword, model);
+            return enrollUserForm(id, enroll, keyword, model, session);
         }
         return "redirect:/teacher/course-enroll/confirmation";
     }

@@ -59,4 +59,9 @@ public class CourseService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return courseRepository.findAll(pageable).map(CourseNameDto::map);
     }
+
+    public Page<CourseNameDto> findAllCoursesPageWithKeyword(String keyword, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return courseRepository.findAllByKeyword(keyword, pageable).map(CourseNameDto::map);
+    }
 }
