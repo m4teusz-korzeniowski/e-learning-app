@@ -2,7 +2,7 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Tworzenie grupy</title>
+    <title>Edycja grupy</title>
     <link th:replace="~{fragments :: navbar-style}">
     <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
     <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
@@ -11,7 +11,7 @@
 <header th:replace="~{fragments :: navbar}"></header>
 <div class="info-bar">
     <div>
-        <h2>Tworzenie grupy</h2>
+        <h2 th:text="'Edycja grupy: ' + ${editedGroupName}">Edycja grupy</h2>
     </div>
 </div>
 <div class="info-bar">
@@ -19,21 +19,28 @@
     <span>&nbsp>&nbsp</span>
     <a th:href="@{/admin/groups}">Zarządzanie grupami</a>
     <span>&nbsp>&nbsp</span>
-    <span>Tworzenie grupy</span>
+    <a th:href="@{/admin/groups/display}">Grupy</a>
+    <span>&nbsp>&nbsp</span>
+    <span>Edycja grupy</span>
 </div>
 <br><br>
 <div class="user-courses">
-    <form action="#" th:action="@{/admin/groups/create}" method="post" th:object="${group}">
+    <div th:if="${message}!=null and ${!message.isBlank()}">
+        <div class="element">
+            <p th:text="${message}"></p>
+        </div>
+        <br>
+    </div>
+    <form action="#" th:action="@{/admin/groups/display/edit/{id}(id=${id})}" method="post" th:object="${group}">
         <div class="element">
             <label>
-                <p>Nazwa grupy:</p>
-                <span><input type="text" th:field="*{name}"></span>
+                <p>Nazwa grupy: <input type="text" th:field="*{name}"></p>
                 <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Błędna nazwa</p>
             </label>
         </div>
         <br>
         <div class="submit-button">
-            <button type="submit">Dodaj grupę</button>
+            <button type="submit">Zatwierdź zmiany</button>
         </div>
     </form>
 </div>

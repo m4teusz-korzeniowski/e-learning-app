@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.app.service.CourseService;
 import korzeniowski.mateusz.app.model.course.dto.CourseCreationDto;
-import korzeniowski.mateusz.app.service.UserService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -14,15 +13,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.security.Principal;
 
 @Controller
 public class CourseCreationController {
-    private final UserService userService;
     private final CourseService courseService;
 
-    public CourseCreationController(UserService userService, CourseService courseService) {
-        this.userService = userService;
+    public CourseCreationController(CourseService courseService) {
         this.courseService = courseService;
     }
 

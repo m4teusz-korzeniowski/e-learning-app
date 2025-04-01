@@ -1,6 +1,7 @@
 package korzeniowski.mateusz.app.web;
 
 import jakarta.validation.Valid;
+import korzeniowski.mateusz.app.exceptions.GroupNameAlreadyExistsException;
 import korzeniowski.mateusz.app.exceptions.NoSuchGroup;
 import korzeniowski.mateusz.app.model.user.dto.GroupDto;
 import korzeniowski.mateusz.app.model.user.dto.UserDisplayDto;
@@ -9,15 +10,18 @@ import korzeniowski.mateusz.app.service.GroupService;
 import korzeniowski.mateusz.app.service.UserService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 
 @Controller
@@ -155,5 +159,41 @@ public class GroupController {
         }
         redirectAttributes.addFlashAttribute("message", message.toString());
         return "redirect:/admin/groups/display";
+    }
+
+    @GetMapping("/admin/groups/display/edit/{id}")
+    public String showGroupEdit(@PathVariable long id, @ModelAttribute("group") GroupDto group,
+                                @ModelAttribute("message") String message, Model model) {
+        Optional<GroupDto> groupById = groupService.findGroupById(id);
+        if (groupById.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } else {
+            model.addAttribute("editedGroupName", groupById.get().getName());
+            return "group-edit";
+        }
+    }
+
+    @PostMapping("/admin/groups/display/edit/{id}")
+    public String editGroup(@PathVariable long id, Model model,
+                            @ModelAttribute("group") @Valid GroupDto group,
+                            BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return showGroupEdit(id, group, null, model);
+        }
+        try {
+            groupService.updateGroup(group);
+        } catch (NoSuchElementException e) {
+            return showGroupEdit(id, group, null, model);
+        } catch (DataIntegrityViolationException e) {
+            bindingResult.rejectValue("name", "error.name",
+                    "Grupa o podanej przez ciebie nazwie już istnieje!");
+
+        } catch (GroupNameAlreadyExistsException e){
+            bindingResult.rejectValue("name", "error.name",
+                    "Podana przez ciebie nazwa jest taka sama jak poprzednia!");
+            return showGroupEdit(id, group, null, model);
+        }
+        redirectAttributes.addFlashAttribute("message", "Zmiana nazwy zakończyła się sukcesem");
+        return "redirect:/admin/groups/display/edit/" + id;
     }
 }

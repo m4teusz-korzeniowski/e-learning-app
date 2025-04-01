@@ -45,9 +45,7 @@ public class TeacherEnrollController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-
-        System.out.println("Creator id= " + courseNameById.getCreatorId());
-        System.out.println("Teacher id= " + userInfo.getId());
+        
         if (!ifLoggedInTeacherIsOwnerOfTheCourse(courseNameById.getCreatorId(), userInfo.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }

@@ -44,8 +44,8 @@
                 <td th:text="${group.id}"></td>
                 <td th:text="${group.name}"></td>
                 <td>
-                    <a href="#"><i
-                            class="fa-solid fa-edit"></i></a>
+                    <a href="#" th:href="@{/admin/groups/display/edit/{id}(id=${group.id})}">
+                        <i class="fa-solid fa-edit"></i></a>
                     <a href="#" th:href="@{/admin/groups/display/remove/{id}(id=${group.id})}">
                         <i class="fa-solid fa-remove"></i>
                     </a>
