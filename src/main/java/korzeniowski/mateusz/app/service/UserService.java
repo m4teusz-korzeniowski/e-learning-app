@@ -229,5 +229,10 @@ public class UserService {
             throw new UsernameNotFoundException(String.format("Username with ID %s not found", userId));
         }
     }
+
+    public List<UserDisplayDto> findTeachersWithKeyword(String keyword) {
+        Stream<UserDisplayDto> stream = userRepository.findAllTeachersWithKeyword(keyword).stream().map(UserDisplayDto::map);
+        return stream.toList();
+    }
 }
 

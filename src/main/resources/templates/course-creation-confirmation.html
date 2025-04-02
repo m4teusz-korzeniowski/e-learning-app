@@ -13,6 +13,13 @@
         <h2>Utworzono nowy kurs</h2>
     </div>
 </div>
+<div class="info-bar">
+    <a th:href="@{/admin}">Strona główna</a>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/admin/course/create}">Tworzenie kursu</a>
+    <span>&nbsp>&nbsp</span>
+    <span>Potwierdzenie</span>
+</div>
 <br><br>
 <body>
 
@@ -20,14 +27,6 @@
     <div class="element">
         <p th:if="${message}!=null" th:text="${message}"></p>
         <p th:if="${message.isEmpty()}">Nie stworzono żadnego kursu</p>
-    </div>
-    <br>
-    <div class="element">
-        <a th:href="@{/teacher}">Przejdz do strony głównej</a>
-    </div>
-    <br>
-    <div class="element">
-        <a th:href="@{/teacher/course/create}">Stwórz kurs</a>
     </div>
     <br>
 </div>

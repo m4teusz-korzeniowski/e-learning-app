@@ -73,7 +73,7 @@ public class UserDisplayDto {
     public static UserDisplayDto map(User user) {
         Stream<String> stream = user.getUserRoles().stream().map(UserRole::getName);
         String role = stream.toList().get(0);
-        if (role.equals("STUDENT") && user.getGroup() != null) {
+        if (user.getGroup() != null) {
             return new UserDisplayDto(user.getId(), user.getFirstName(),
                     user.getLastName(), user.getEmail(), role, user.getGroup().getName());
         } else {

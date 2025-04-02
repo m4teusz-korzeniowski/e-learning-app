@@ -5,7 +5,8 @@
     <title>Tworzenie kursu</title>
     <link th:replace="~{fragments :: navbar-style}">
     <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
-    <link rel="stylesheet" href="../static/scripts/main.css" th:href="@{/scripts/main.css}">
+    <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
 
@@ -14,14 +15,28 @@
     <h2>Tworzenie kursu</h2>
 </div>
 <div class="info-bar">
-    <a th:href="@{/teacher}">Strona główna</a>
+    <a th:href="@{/admin}">Strona główna</a>
     <span>&nbsp>&nbsp</span>
     <span>Tworzenie kursu</span>
 </div>
 <br><br>
 <div class="user-courses">
-    <form action="#" th:action="@{/teacher/course/create}" method="post" th:object="${course}">
+    <div class="element">
+        <form th:action="@{/admin/course/create}" method="get">
+            <input name="keyword" type="text" th:value="${keyword}" placeholder="Wyszukaj użytkowników...">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+    <br>
+    <form action="#" th:action="@{/admin/course/create}" method="post" th:object="${course}">
         <div class="element">
+            <p>Wybierz nauczyciela:</p>
+            <div th:each="user: ${users}">
+                <input type="radio" th:field="*{creatorId}" th:value="${user.id}">
+                <label th:text="${user.lastName +' '+ user.firstName +' ' + user.email}">
+                </label>
+                <br>
+            </div>
             <label>
                 <p>Nazwa kursu:</p>
                 <p>
