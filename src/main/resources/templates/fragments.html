@@ -20,7 +20,7 @@
             <li sec:authorize="hasAnyRole('TEACHER')" class="link"><a href="#" th:href="@{/teacher}">Strona główna</a>
             </li>
             <li sec:authorize="hasAnyRole('ADMIN')" class="link"><a href="#" th:href="@{/admin}">Strona główna</a></li>
-            <li class="link"><a href="#">Ustawienia</a></li>
+            <li class="link"><a href="#" th:href="@{/settings}">Ustawienia</a></li>
             <li class="link"><a href="#" th:href="@{/logout}">Wyloguj się</a></li>
         </ul>
     </div>

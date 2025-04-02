@@ -220,5 +220,14 @@ public class UserService {
             userRepository.save(user.get());
         }
     }
+
+    public UserSettingsDto findUserSettingsById(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            return user.map(UserSettingsDto::map).get();
+        } else {
+            throw new UsernameNotFoundException(String.format("Username with ID %s not found", userId));
+        }
+    }
 }
 

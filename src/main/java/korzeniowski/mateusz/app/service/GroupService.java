@@ -1,7 +1,5 @@
 package korzeniowski.mateusz.app.service;
 
-import korzeniowski.mateusz.app.exceptions.GroupNameAlreadyExistsException;
-import korzeniowski.mateusz.app.exceptions.NoSuchGroup;
 import korzeniowski.mateusz.app.model.user.Group;
 import korzeniowski.mateusz.app.model.user.dto.GroupDto;
 import korzeniowski.mateusz.app.repository.GroupRepository;

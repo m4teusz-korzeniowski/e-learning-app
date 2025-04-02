@@ -32,7 +32,7 @@ body {
     padding: 2px;
 }
 
-.element table{
+.element table {
     border-radius: 5px;
     font-size: 12px;
     font-weight: normal;
@@ -45,7 +45,19 @@ body {
     text-align: center;
 }
 
-.element th, td{
+.element th, td {
     border: solid;
     text-align: center;
+}
+
+.element .user-settings-label {
+    padding: 3px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.element .change-pass {
+    padding: 3px;
+    border-style: solid;
+    border-width: 1px;
 }

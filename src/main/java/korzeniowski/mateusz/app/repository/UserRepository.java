@@ -46,4 +46,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
             " upper(user.email) like upper(concat('%', :keyword,'%')))")
     List<User> findAllStudentsWithoutGroupAndKeyword(@Param("keyword") String keyword);
 
+    @Query("select user from User user left join user.userRoles role" +
+            " where role.name='TEACHER'" +
+            " and" +
+            " (upper(user.firstName) like upper(concat('%', :keyword,'%')) or" +
+            " upper(user.lastName) like upper(concat('%', :keyword,'%')) or" +
+            " upper(user.email) like upper(concat('%', :keyword,'%')))")
+    List<User> findAllTeachersWithKeyword(@Param("keyword") String keyword);
+
 }

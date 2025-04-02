@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Ustawienia</title>
+    <link th:replace="~{fragments :: navbar-style}">
+    <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
+    <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+<div class="info-bar">
+    <div>
+        <h2>Twoje dane:</h2>
+    </div>
+</div>
+<div class="info-bar">
+    <a sec:authorize="hasAnyRole('ADMIN')" th:href="@{/admin}">Strona główna</a>
+    <a sec:authorize="hasAnyRole('STUDENT')" th:href="@{/}">Strona główna</a>
+    <a sec:authorize="hasAnyRole('TEACHER')" th:href="@{/teacher}">Strona główna</a>
+    <span>&nbsp>&nbsp</span>
+    <span>Twoje dane</span>
+</div>
+<br><br>
+<div class="user-courses">
+    <div class="element" th:object="${user}">
+        <p>Imię:</p>
+        <p class="user-settings-label" th:text="*{firstName}"></p>
+        <p>Nazwisko:</p>
+        <p class="user-settings-label" th:text="*{lastName}"></p>
+        <p>E-mail:</p>
+        <p class="user-settings-label" th:text="*{email}"></p>
+        <p>Pesel:</p>
+        <p class="user-settings-label" th:text="*{pesel}"></p>
+        <p>Grupa:</p>
+        <p class="user-settings-label" th:text="*{group}"></p>
+        <p>Uprawnienia:</p>
+        <p th:if="*{role.equals('STUDENT')}" class="user-settings-label">Uczeń</p>
+        <p th:if="*{role.equals('TEACHER')}" class="user-settings-label">Nauczyciel</p>
+        <p th:if="*{role.equals('ADMIN')}" class="user-settings-label">Admin</p>
+        <br>
+        <p><a class="change-pass" th:href="@{/password-change}">Zmiana hasła</a></p>
+    </div>
+</div>
+<br><br>
+</body>
+</html>

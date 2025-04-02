@@ -182,18 +182,15 @@ public class GroupController {
         }
         try {
             groupService.updateGroup(group);
+            redirectAttributes.addFlashAttribute("message",
+                    "Zmiana nazwy zakończyła się sukcesem");
         } catch (NoSuchElementException e) {
             return showGroupEdit(id, group, null, model);
         } catch (DataIntegrityViolationException e) {
             bindingResult.rejectValue("name", "error.name",
                     "Grupa o podanej przez ciebie nazwie już istnieje!");
-
-        } catch (GroupNameAlreadyExistsException e){
-            bindingResult.rejectValue("name", "error.name",
-                    "Podana przez ciebie nazwa jest taka sama jak poprzednia!");
             return showGroupEdit(id, group, null, model);
         }
-        redirectAttributes.addFlashAttribute("message", "Zmiana nazwy zakończyła się sukcesem");
         return "redirect:/admin/groups/display/edit/" + id;
     }
 }

@@ -7,8 +7,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
-import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -21,12 +19,12 @@ public class SecurityConfig {
                 .requestMatchers("/teacher/**").hasAnyRole("TEACHER")
                 .requestMatchers("/").hasAnyRole("STUDENT")
                 .requestMatchers("/course/**").hasAnyRole("STUDENT")
-                .requestMatchers("/mod/quiz/**").hasAnyRole("STUDENT")
+                .requestMatchers("/module/quiz/**").hasAnyRole("STUDENT")
+                .requestMatchers("/settings").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
                 .anyRequest().authenticated());
         http.formLogin(login -> login.loginPage("/login")
                 .successHandler(customAuthenticationSuccessHandler())
                 .permitAll());
-        //http.csrf(AbstractHttpConfigurer::disable);
         http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
         http.logout(logout -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout/**", HttpMethod.GET.name()))
