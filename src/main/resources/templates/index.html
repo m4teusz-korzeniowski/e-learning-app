@@ -19,7 +19,12 @@
     <div th:each="course: ${courses}">
         <div class="element">
             <a th:href="@{/course/{id}(id=${course.getId()})}" th:text="${course.getName()}">Nazwa kursu</a>
-            <p th:text="'Autor: '+${course.getCreatorName()}">Email twórcy kursu</p>
+            <p>
+                <a th:href="@{/user/{id}(id=${course.getCreatorId()})}" th:text="'Autor: '+${course.getCreatorName()}">
+
+                </a>
+            </p>
+
         </div>
         <br>
     </div>

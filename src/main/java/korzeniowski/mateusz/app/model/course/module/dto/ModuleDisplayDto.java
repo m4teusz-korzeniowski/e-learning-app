@@ -15,9 +15,7 @@ public class ModuleDisplayDto {
         this.items = items;
         this.tests = tests;
     }
-
-    public ModuleDisplayDto() {
-    }
+    
 
     public String getName() {
         return name;

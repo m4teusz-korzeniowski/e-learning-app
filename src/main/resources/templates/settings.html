@@ -40,7 +40,7 @@
         <p th:if="*{role.equals('TEACHER')}" class="user-settings-label">Nauczyciel</p>
         <p th:if="*{role.equals('ADMIN')}" class="user-settings-label">Admin</p>
         <br>
-        <p><a class="change-pass" th:href="@{/password-change}">Zmiana hasła</a></p>
+        <a th:href="@{/password-change}"><button type="button">Zmiana hasła</button></a>
     </div>
 </div>
 <br><br>

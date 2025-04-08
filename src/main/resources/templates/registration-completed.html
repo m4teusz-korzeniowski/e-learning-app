@@ -14,19 +14,18 @@
         <h2>Potwierdzenie rejestracji </h2>
     </div>
 </div>
+<div class="info-bar">
+    <a th:href="@{/admin}">Strona główna</a>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/admin/register}">Rejestracja użytkowników</a>
+    <span>&nbsp>&nbsp</span>
+    <span>Potwierdzenie</span>
+</div>
 <br><br>
 <div class="user-courses">
     <div class="element">
         <p th:if="${message!=null}" th:text="${message}"></p>
         <p th:if="${message.isEmpty()}">Nie przeprowadzono żadnej rejestracji</p>
-    </div>
-    <br>
-    <div class="element">
-        <a th:href="@{/h2-console}">Przejdź do konsoli H2</a>
-    </div>
-    <br>
-    <div class="element">
-        <a th:href="@{/admin/register}">Rejestracja użytkowników</a>
     </div>
     <br>
 </div>

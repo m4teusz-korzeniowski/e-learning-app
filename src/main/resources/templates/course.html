@@ -23,6 +23,10 @@
 </div>
 <br><br>
 <div class="user-courses">
+    <div class="element">
+        <p th:utext="${course.description}">Opis kursu</p>
+    </div>
+    <br>
     <div th:each="courseModule : ${course.modules}">
         <div class="element">
             <h3 th:text="${courseModule.name}">Nazwa modułu</h3>

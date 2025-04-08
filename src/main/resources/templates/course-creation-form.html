@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
     <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 </head>
 <body>
-
 <header th:replace="~{fragments :: navbar}"></header>
 <div class="info-bar">
     <h2>Tworzenie kursu</h2>
@@ -28,7 +29,7 @@
         </form>
     </div>
     <br>
-    <form action="#" th:action="@{/admin/course/create}" method="post" th:object="${course}">
+    <form id="course-create-form" action="#" th:action="@{/admin/course/create}" method="post" th:object="${course}">
         <div class="element">
             <p>Wybierz nauczyciela:</p>
             <div th:each="user: ${users}">
@@ -44,12 +45,9 @@
                 </p>
                 <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Błędna nazwa</p>
             </label>
-            <label>
-                <p>Opis:</p>
-                <textarea rows="10" th:field="*{description}"
-                          placeholder="Wprowadź opis kursu...">Opis kursu</textarea>
-                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Błędny opis</p>
-            </label>
+            <label for="description">Opis</label>
+            <textarea id="description" style="display: none" th:field="*{description}" name="description"></textarea>
+            <div id="editor"></div>
         </div>
         <br>
         <div class="submit-button">
@@ -58,5 +56,24 @@
         <br>
     </form>
 </div>
+<script>
+    const quill = new Quill('#editor', {
+        modules: {
+            toolbar: [
+                ['bold', 'italic'],
+                ['link', 'blockquote', 'code-block', 'image'],
+                [{ list: 'ordered' }, { list: 'bullet' }],
+            ],
+        },
+        theme: 'snow',
+    });
+    let form = document.getElementById("course-create-form");
+    form.onsubmit = function (event) {
+        event.preventDefault();
+        document.querySelector('#description').value = quill.root.innerHTML;
+        form.submit();
+    }
+
+</script>
 </body>
 </html>

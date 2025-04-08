@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,7 +37,7 @@ public class CourseCreationController {
         if (keyword != null) {
             users = userService.findTeachersWithKeyword(keyword);
         } else {
-            users = userService.findTeachersWithKeyword("");
+            users = new ArrayList<>();
         }
         model.addAttribute("users", users);
         model.addAttribute("keyword", keyword);
@@ -58,7 +59,7 @@ public class CourseCreationController {
         }
         redirectAttributes.addFlashAttribute(
                 "message",
-                String.format("Utworzono kurs: %s oraz przypisano do niego nauczyciela od ID: %s",
+                String.format("Utworzono kurs: %s oraz przypisano do niego nauczyciela o ID = %s",
                         course.getName(), course.getCreatorId())
         );
         return "redirect:/admin/course/confirmation";

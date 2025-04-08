@@ -48,6 +48,14 @@ public class CourseDisplayDto {
         this.modules = modules;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public static CourseDisplayDto map(Course course) {
         List<ModuleDisplayDto> modules = new ArrayList<>();
         for (Module module : course.getModules()) {

@@ -23,6 +23,9 @@ public class AdminUserController {
                             @RequestParam(value = "page", required = false) Integer currentPage) {
         Page<UserDisplayDto> page;
         if (currentPage != null) {
+            if (currentPage < 0) {
+                currentPage = 0;
+            }
             if (keyword != null) {
                 page = userService.findUsersPageContainKeyword(currentPage, PAGE_SIZE, keyword);
             } else {
@@ -31,7 +34,7 @@ public class AdminUserController {
         } else {
             if (keyword != null) {
                 page = userService.findUsersPageContainKeyword(0, PAGE_SIZE, keyword);
-            }else {
+            } else {
                 page = userService.findUsersPage(0, PAGE_SIZE);
             }
         }

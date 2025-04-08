@@ -234,5 +234,10 @@ public class UserService {
         Stream<UserDisplayDto> stream = userRepository.findAllTeachersWithKeyword(keyword).stream().map(UserDisplayDto::map);
         return stream.toList();
     }
+
+    public Optional<UserProfileDto> findUserProfileById(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        return user.map(UserProfileDto::map);
+    }
 }
 

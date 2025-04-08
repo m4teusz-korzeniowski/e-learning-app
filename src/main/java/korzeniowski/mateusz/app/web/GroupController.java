@@ -123,6 +123,9 @@ public class GroupController {
                              @ModelAttribute("message") String message) {
         Page<GroupDto> page;
         if (currentPage != null) {
+            if (currentPage < 0) {
+                currentPage = 0;
+            }
             if (keyword != null) {
                 page = groupService.findAllGroupsWithPageAndKeyword(currentPage, PAGE_SIZE, keyword);
             } else {

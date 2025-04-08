@@ -28,6 +28,9 @@ public class AdminCourseController {
                               @RequestParam(value = "page", required = false) Integer currentPage) {
         Page<CourseNameDto> page;
         if (currentPage != null) {
+            if (currentPage < 0) {
+                currentPage = 0;
+            }
             if (keyword != null) {
                 page = courseService.findAllCoursesPageWithKeyword(keyword, currentPage, PAGE_SIZE);
             } else {
@@ -41,13 +44,13 @@ public class AdminCourseController {
             }
         }
 
+
         List<CourseNameDto> courses = page.getContent();
         for (CourseNameDto course : courses) {
             Long creatorId = course.getCreatorId();
             userService.findUserById(creatorId).ifPresent(
                     user -> course.setCreatorName(user.getFirstName() + " " + user.getLastName()));
         }
-
         model.addAttribute("courses", courses);
         model.addAttribute("keyword", keyword);
         model.addAttribute("currentPage", currentPage);
