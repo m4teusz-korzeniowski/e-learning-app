@@ -239,5 +239,35 @@ public class UserService {
         Optional<User> user = userRepository.findById(userId);
         return user.map(UserProfileDto::map);
     }
+
+    public boolean ifUserExists(Long userId) {
+        return userRepository.existsById(userId);
+    }
+
+    public void removeUser(Long userId) {
+        userRepository.deleteById(userId);
+    }
+
+
+    private void updateUserData(User user, UserSettingsDto userDto) {
+        if (!user.getEmail().equals(userDto.getEmail()) && isEmailInUse(userDto.getEmail())) {
+            throw new EmailAlreadyInUseException("e-mail jest już w użyciu");
+        }
+        if (!user.getPesel().equals(userDto.getPesel()) && isPeselInUse(userDto.getPesel())) {
+            throw new PeselAlreadyInUseException("numer PESEL jest już w użyciu");
+        }
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setEmail(userDto.getEmail());
+        user.setPesel(userDto.getPesel());
+    }
+
+    public void updateUser(UserSettingsDto userDto) {
+        Optional<User> user = userRepository.findById(userDto.getId());
+        if (user.isPresent()) {
+            updateUserData(user.get(), userDto);
+            userRepository.save(user.get());
+        }
+    }
 }
 

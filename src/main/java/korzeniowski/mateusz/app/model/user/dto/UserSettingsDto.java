@@ -1,15 +1,23 @@
 package korzeniowski.mateusz.app.model.user.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import korzeniowski.mateusz.app.model.user.User;
 import korzeniowski.mateusz.app.model.user.UserRole;
+import org.hibernate.validator.constraints.pl.PESEL;
 
 import java.util.List;
 
 public class UserSettingsDto {
     private Long id;
+    @NotBlank(message = "pole nie może być puste")
     private String firstName;
+    @NotBlank(message = "pole nie może być puste")
     private String lastName;
+    @Email(message = "niepoprawny format adresu e-mail")
+    @NotBlank(message = "pole nie może być puste")
     private String email;
+    @PESEL(message = "niepoprawny numer PESEL")
     private String pesel;
     private String group;
     private String role;

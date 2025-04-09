@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil publiczny</title>
+    <link th:replace="~{fragments :: navbar-style}">
+    <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
+    <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+<div class="info-bar">
+    <div>
+        <h2>Profil Użytkownika</h2>
+    </div>
+</div>
+<div class="info-bar">
+    <a th:href="@{/}">Strona główna</a>
+    <span>&nbsp>&nbsp</span>
+    <span>Użytkownicy</span>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/user/{id}(id=${user.id})}" th:text="${user.getFullName()}">Nazwa kursu</a>
+</div>
+<br><br>
+<div class="user-courses">
+    <div class="element">
+        <h3 th:text="${user.getFullName()}"></h3>
+    </div>
+    <br>
+    <div class="element">
+        <p>E-mail:</p>
+        <p th:text="${user.email}"></p>
+    </div>
+</div>
+<br><br>
+</body>
+</html>

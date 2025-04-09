@@ -9,12 +9,12 @@ import korzeniowski.mateusz.app.service.UserService;
 import korzeniowski.mateusz.app.model.user.dto.UserRegistrationDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.security.Principal;
 
 
 @Controller
@@ -33,7 +33,7 @@ public class RegistrationController {
 
     @PostMapping("admin/register")
     String register(@Valid @ModelAttribute("user") UserRegistrationDto user, BindingResult bindingResult,
-                    HttpSession session, Principal principal, RedirectAttributes redirectAttributes) {
+                    RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return registration(user);
         }

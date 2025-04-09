@@ -64,4 +64,9 @@ public class CourseService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return courseRepository.findAllByKeyword(keyword, pageable).map(CourseNameDto::map);
     }
+
+    @Transactional
+    public void removeCoursesByCreatorId(Long id) {
+        courseRepository.deleteAllByCreatorId(id);
+    }
 }

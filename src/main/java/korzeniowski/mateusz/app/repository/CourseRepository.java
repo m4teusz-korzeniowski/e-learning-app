@@ -22,6 +22,13 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             "(select user.id from User user " +
             " where upper(user.firstName) like upper(concat('%', :keyword,'%'))" +
             " or upper(user.lastName) like upper(concat('%', :keyword, '%')))" +
-            " or upper(course.name) like upper(concat('%', :keyword,'%'))")
+            " or upper(course.name) like upper(concat('%', :keyword,'%'))",
+            countQuery = "select count(course) from Course course where course.creatorId = " +
+                    "(select user.id from User user " +
+                    " where upper(user.firstName) like upper(concat('%', :keyword,'%'))" +
+                    " or upper(user.lastName) like upper(concat('%', :keyword, '%')))" +
+                    " or upper(course.name) like upper(concat('%', :keyword,'%'))")
     Page<Course> findAllByKeyword(@Param("keyword") String keyword, Pageable pageable);
+
+    void deleteAllByCreatorId(Long id);
 }

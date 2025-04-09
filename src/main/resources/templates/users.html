@@ -51,14 +51,24 @@
                 <td th:if="${user.role.equals('STUDENT') and user.group!=null}" th:text="${user.group}"></td>
                 <td th:if="${user.group == null}">Brak</td>
                 <td>
-                    <a th:unless="${user.role=='ADMIN' && !session.userInfo.id.equals(user.id)}" href="#"><i
-                            class="fa-solid fa-user-edit"></i></a>
-                    <a th:unless="${user.role=='ADMIN'}" href="#"><i class="fa-solid fa-remove"></i></a>
+                    <a th:unless="${user.role=='ADMIN' && !session.userInfo.id.equals(user.id)}"
+                       href="#" th:href="@{/admin/users/edit/{id}(id=${user.id})}">
+                        <i class="fa-solid fa-user-edit"></i>
+                    </a>
+                    <a th:unless="${user.role=='ADMIN'}" th:href="@{/admin/users/remove/{id}(id=${user.id})}">
+                        <i class="fa-solid fa-remove"></i>
+                    </a>
                 </td>
             </tr>
         </table>
     </div>
     <br>
+    <div th:if="${deleteMessage!=null} and ${!deleteMessage.isBlank()}">
+        <div class="element">
+            <p th:text="${deleteMessage}"></p>
+        </div>
+        <br>
+    </div>
     <div class="element">
         <a class="page-span"
            th:each="pageElem: ${#numbers.sequence(1,totalPages)}"

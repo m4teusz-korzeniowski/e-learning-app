@@ -2,6 +2,7 @@ package korzeniowski.mateusz.app.model.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.pl.PESEL;
 
@@ -66,7 +67,7 @@ public class UserRegistrationDto {
         return pesel;
     }
 
-    public void setPesel(@PESEL String pesel) {
+    public void setPesel(String pesel) {
         this.pesel = pesel;
     }
 }
