@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -69,11 +70,6 @@ public class UserService {
         } else {
             throw new UsernameNotFoundException(String.format("Username with ID %s not found", id));
         }
-    }
-
-    public Long findIdOfAuthenticatedUser(String name) {
-        return userRepository.findByEmail(name).map(User::getId)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format("Username with e-mail %s not found", name)));
     }
 
     public List<CourseNameDto> findCoursesByUserId(Long userId) {
@@ -125,7 +121,6 @@ public class UserService {
     public Optional<ResultDto> findUserResultOfTest(Long userId, Long testId) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
-            //result.ifPresent(value -> System.out.println("Wynik jest = " + value.getScore()));
             return resultRepository.findByUserId(userId, testId).map(ResultDto::map);
         }
         throw new UsernameNotFoundException(String.format("Username with ID %s not found", userId));
@@ -268,6 +263,10 @@ public class UserService {
             updateUserData(user.get(), userDto);
             userRepository.save(user.get());
         }
+    }
+
+    public boolean ifLoggedInTeacherIsOwnerOfTheCourse(Long creatorId, Long teacherId) {
+        return creatorId.equals(teacherId);
     }
 }
 

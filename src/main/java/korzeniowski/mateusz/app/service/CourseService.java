@@ -5,6 +5,7 @@ import korzeniowski.mateusz.app.model.course.dto.CourseCreationDto;
 import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseDto;
+import korzeniowski.mateusz.app.model.course.module.Module;
 import korzeniowski.mateusz.app.repository.CourseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -68,5 +69,39 @@ public class CourseService {
     @Transactional
     public void removeCoursesByCreatorId(Long id) {
         courseRepository.deleteAllByCreatorId(id);
+    }
+
+    @Transactional
+    public void editCourse(CourseDisplayDto courseDto) {
+        Optional<Course> course = courseRepository.findById(courseDto.getId());
+        if (course.isPresent()) {
+            course.get().setDescription(courseDto.getDescription());
+            courseRepository.save(course.get());
+        }
+        else {
+            throw new NoSuchElementException("Nie znaleziono kursu!");
+        }
+    }
+
+    @Transactional
+    public void addModuleToCourse(Module module, Long courseId) {
+        Optional<Course> course = courseRepository.findById(courseId);
+        if (course.isPresent()) {
+            module.setCourse(course.get());
+            course.get().getModules().add(module);
+        } else {
+            throw new NoSuchElementException("Nie znaleziono kursu!");
+        }
+    }
+
+    public boolean maximumNumberOfModuleReached(Long courseId, int maxSize) {
+        Optional<Course> course = courseRepository.findById(courseId);
+        if (course.isPresent()) {
+            int size = course.get().getModules().size();
+            return size >= maxSize;
+        }
+        else {
+            throw new NoSuchElementException("Nie znaleziono kursu!");
+        }
     }
 }

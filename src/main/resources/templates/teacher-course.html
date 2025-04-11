@@ -24,7 +24,7 @@
     <div th:each="course : ${courses}">
         <div class="element">
             <p th:text="${course.name}">Nazwa kursu</p>
-            <p><a href="#" th:href="@{/teacher/course-edit/{id}(id=${course.id})}">Edytuj</a></p>
+            <p><a href="#" th:href="@{/teacher/course/edit/{id}(id=${course.id})}">Edytuj</a></p>
             <p><a href="#" th:href="@{/teacher/course-enroll/{id}(id=${course.id})}">Zapisz do kursu</a></p>
         </div>
         <br>

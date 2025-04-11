@@ -14,7 +14,6 @@ public class Course {
     private String name;
     private String description;
     @OneToMany(mappedBy = "course")
-    //@JoinColumn(name = "course_id")
     private List<Module> modules = new ArrayList<>();
     private Long creatorId;
 

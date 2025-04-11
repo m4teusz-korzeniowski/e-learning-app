@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.exceptions.StudentRoleMissingException;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.user.dto.UserDisplayDto;
-import korzeniowski.mateusz.app.model.user.dto.UserEmailsDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.app.service.CourseService;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseEnrollDto;
@@ -45,8 +44,8 @@ public class TeacherEnrollController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-        
-        if (!ifLoggedInTeacherIsOwnerOfTheCourse(courseNameById.getCreatorId(), userInfo.getId())) {
+
+        if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(courseNameById.getCreatorId(), userInfo.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         List<UserDisplayDto> users = new ArrayList<>();

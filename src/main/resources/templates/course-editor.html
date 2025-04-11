@@ -6,6 +6,9 @@
     <link th:replace="~{fragments :: navbar-style}">
     <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
     <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 </head>
 <body>
 <header th:replace="~{fragments :: navbar}"></header>
@@ -23,11 +26,90 @@
 </div>
 <br><br>
 <div class="user-courses">
-
+    <div th:if="${message!=null} and ${!message.isBlank()}">
+        <div class="element">
+            <p th:text="${message}"></p>
+        </div>
+        <br>
+    </div>
+    <form th:action="@{/teacher/course/edit/{id}(id=${id})}" method="post" th:object="${course}">
+        <div class="element">
+            <input type="hidden" th:field="*{creatorId}" th:value="*{creatorId}">
+            <label for="description">Opis kursu:</label>
+            <textarea id="description" style="display: none" th:field="*{description}"
+                      name="description"></textarea>
+            <div id="editor"></div>
+        </div>
+        <br>
+        <div th:each="courseModule,iter : *{modules}">
+            <div class="element">
+                <div class="module-row">
+                    <span>Nazwa modułu:</span>
+                    <input type="text" th:field="*{modules[__${iter.index}__].name}"/>
+                    <input type="hidden" th:field="*{modules[__${iter.index}__].id}"/>
+                    <span class="action-button">
+                        <a th:href="@{/teacher/course/edit/{id}/remove-module(id=${id})}">
+                            <button type="button">Usuń moduł</button>
+                        </a>
+                    </span>
+                </div>
+                <br>
+                <div th:each="item : ${courseModule.items}">
+                    <p th:text="${item.name}">Element modułu</p>
+                </div>
+                <div th:each="test,iter2: ${courseModule.tests}">
+                    <div class="test-row">
+                        <span>Nazwa testu:</span>
+                        <input type="text" th:field="*{modules[__${iter.index}__].tests[__${iter2.index}__].name}">
+                        <input type="hidden" th:field="*{modules[__${iter.index}__].tests[__${iter2.index}__].id}">
+                        <span class="action-button">
+                            <a th:href="@{/teacher/course/edit/{id}/remove-test(id=${id})}">
+                                <button type="button">Usuń test</button>
+                            </a>
+                        </span>
+                    </div>
+                    <br>
+                </div>
+                <div>
+                    <a th:href="@{/teacher/course/edit/{id}/create-test(id=${id})}">
+                        <button type="button">Dodaj test</button>
+                    </a>
+                </div>
+                <br>
+            </div>
+            <br>
+        </div>
+        <div th:if="${course.modules.size() < maxModules}">
+            <div class="element">
+                <a th:href="@{/teacher/course/edit/{id}/create-module(id=${id})}">
+                    <button type="button">Dodaj moduł</button>
+                </a>
+            </div>
+            <br>
+        </div>
+        <div class="submit-button">
+            <button type="submit">Zapisz zmiany</button>
+        </div>
+        <br>
+    </form>
 </div>
 <br><br>
-<script>
+<script th:inline="javascript">
+    const quill = new Quill('#editor', {
+        modules: {
+            toolbar: [
+                ['bold', 'italic'],
+                ['link', 'blockquote', 'code-block', 'image'],
+            ],
+        },
+        theme: 'snow',
+    });
 
+    const description = /*[[${course.description}]]*/ '';
+    quill.root.innerHTML = description;
+    document.querySelector('form').onsubmit = function (event) {
+        document.querySelector('#description').value = quill.root.innerHTML;
+    };
 </script>
 </body>
 </html>

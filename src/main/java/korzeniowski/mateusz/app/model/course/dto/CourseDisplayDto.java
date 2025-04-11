@@ -16,12 +16,14 @@ public class CourseDisplayDto {
     private String name;
     private String description;
     private List<ModuleDisplayDto> modules = new ArrayList<>();
+    private Long creatorId;
 
-    public CourseDisplayDto(Long id, String name, String description, List<ModuleDisplayDto> modules) {
+    public CourseDisplayDto(Long id, String name, String description, List<ModuleDisplayDto> modules, Long creatorId) {
         this.id = id;
         this.name = name;
         this.modules = modules;
         this.description = description;
+        this.creatorId = creatorId;
     }
 
     public Long getId() {
@@ -56,6 +58,14 @@ public class CourseDisplayDto {
         this.description = description;
     }
 
+    public Long getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(Long creatorId) {
+        this.creatorId = creatorId;
+    }
+
     public static CourseDisplayDto map(Course course) {
         List<ModuleDisplayDto> modules = new ArrayList<>();
         for (Module module : course.getModules()) {
@@ -68,14 +78,15 @@ public class CourseDisplayDto {
                 tests.add(new TestNameIdDto(test.getId(), test.getName()));
             }
             modules.add(new ModuleDisplayDto(
-                    module.getName(), moduleItems, tests
+                    module.getId(), module.getName(), moduleItems, tests
             ));
         }
         return new CourseDisplayDto(
                 course.getId(),
                 course.getName(),
                 course.getDescription(),
-                modules
+                modules,
+                course.getCreatorId()
         );
     }
 }
