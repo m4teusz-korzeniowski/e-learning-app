@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface ResultRepository extends CrudRepository<Result, Long> {
 
-    @Query("SELECT result FROM Result result WHERE result.user_id = :userId AND result.test_id = :testId")
+    @Query("SELECT result FROM Result result WHERE result.user.id = :userId AND result.test.id = :testId")
     public Optional<Result> findByUserId(@Param("userId") long userId, @Param("testId") long testId);
 }

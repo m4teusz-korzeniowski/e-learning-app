@@ -17,8 +17,7 @@ public class Test {
     @OneToMany
     @JoinColumn(name = "test_id")
     private List<Question> questions = new ArrayList<Question>();
-    @OneToMany
-    @JoinColumn(name = "test_id")
+    @OneToMany(mappedBy = "test")
     private List<Result> results = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name="module_id")

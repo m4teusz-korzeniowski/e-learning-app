@@ -62,6 +62,7 @@ public class ModuleService {
         return moduleRepository.existsById(moduleId);
     }
 
+    @Transactional
     public void deleteModule(Long id) {
         moduleRepository.deleteById(id);
     }

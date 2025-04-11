@@ -1,9 +1,7 @@
 package korzeniowski.mateusz.app.model.course.test;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import korzeniowski.mateusz.app.model.user.User;
 
 @Entity
 public class Result {
@@ -11,8 +9,13 @@ public class Result {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double score;
-    private Long test_id;
-    private Long user_id;
+
+    @ManyToOne
+    @JoinColumn(name="test_id")
+    private Test test;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Long getId() {
         return id;
@@ -28,21 +31,5 @@ public class Result {
 
     public void setScore(Double score) {
         this.score = score;
-    }
-
-    public Long getTest_id() {
-        return test_id;
-    }
-
-    public void setTest_id(Long test_id) {
-        this.test_id = test_id;
-    }
-
-    public Long getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
     }
 }
