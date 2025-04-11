@@ -3,9 +3,12 @@ package korzeniowski.mateusz.app.web;
 import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
 import korzeniowski.mateusz.app.model.course.module.dto.ModuleDisplayDto;
+import korzeniowski.mateusz.app.model.course.test.dto.TestDisplayDto;
+import korzeniowski.mateusz.app.model.course.test.dto.TestNameIdDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.app.service.CourseService;
 import korzeniowski.mateusz.app.service.ModuleService;
+import korzeniowski.mateusz.app.service.TestService;
 import korzeniowski.mateusz.app.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -28,11 +31,13 @@ public class TeacherEditorController {
     private final UserService userService;
     private final static int MAX_MODULES = 5;
     private final static int MAX_NUMBER_OF_TESTS = 3;
+    private final TestService testService;
 
-    public TeacherEditorController(CourseService courseService, ModuleService moduleService, UserService userService) {
+    public TeacherEditorController(CourseService courseService, ModuleService moduleService, UserService userService, TestService testService) {
         this.courseService = courseService;
         this.moduleService = moduleService;
         this.userService = userService;
+        this.testService = testService;
     }
 
     @GetMapping("/teacher/course/edit/{id}")
@@ -68,6 +73,11 @@ public class TeacherEditorController {
             if (course.getModules() != null) {
                 for (ModuleDisplayDto module : course.getModules()) {
                     moduleService.updateModule(module.getId(), module);
+                    if (module.getTests() != null) {
+                        for (TestNameIdDto test : module.getTests()) {
+                            testService.updateTest(test.getId(), test);
+                        }
+                    }
                 }
             }
             redirectAttributes.addFlashAttribute("message", "Edycja zakończyła się sukcesem!");
@@ -79,11 +89,10 @@ public class TeacherEditorController {
 
     @GetMapping("/teacher/course/edit/{courseId}/create-module")
     public String addModule(@PathVariable long courseId,
-                            @ModelAttribute("module") ModuleDisplayDto module,
                             RedirectAttributes redirectAttributes, HttpSession session) {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-            long creatorId = moduleService.findIdOfModuleCreator(courseId);
+            long creatorId = courseService.findCreatorId(courseId);
             if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
@@ -94,6 +103,60 @@ public class TeacherEditorController {
                 moduleService.createModule(courseId);
             }
         } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return "redirect:/teacher/course/edit/" + courseId;
+    }
+
+    @GetMapping("/teacher/course/edit/{courseId}/remove-module/{moduleId}")
+    public String removeModule(@PathVariable long courseId, @PathVariable long moduleId,
+                               HttpSession session) {
+        UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
+        long creatorId = courseService.findCreatorId(courseId);
+        if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+        if (moduleService.moduleExist(moduleId)) {
+            moduleService.deleteModule(moduleId);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return "redirect:/teacher/course/edit/" + courseId;
+    }
+
+    @GetMapping("/teacher/course/edit/{courseId}/{moduleId}/create-test")
+    public String addTest(@PathVariable long courseId, @PathVariable long moduleId,
+                          RedirectAttributes redirectAttributes,
+                          HttpSession session) {
+        try {
+            UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
+            long creatorId = courseService.findCreatorId(courseId);
+            if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
+            if (moduleService.maximumNumberOfTestReached(courseId, MAX_NUMBER_OF_TESTS)) {
+                redirectAttributes.addFlashAttribute("message",
+                        "Moduł nie może mieć więcej testów niż " + MAX_NUMBER_OF_TESTS + "!");
+            } else {
+                testService.createTest(moduleId);
+            }
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return "redirect:/teacher/course/edit/" + courseId;
+    }
+
+    @GetMapping("/teacher/course/edit/{courseId}/remove-test/{testId}")
+    public String removeTest(@PathVariable long courseId, @PathVariable long testId,
+                             HttpSession session) {
+        UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
+        long creatorId = courseService.findCreatorId(courseId);
+        if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+        if (testService.testExists(testId)) {
+            testService.deleteTest(testId);
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         return "redirect:/teacher/course/edit/" + courseId;

@@ -48,7 +48,7 @@
                     <input type="text" th:field="*{modules[__${iter.index}__].name}"/>
                     <input type="hidden" th:field="*{modules[__${iter.index}__].id}"/>
                     <span class="action-button">
-                        <a th:href="@{/teacher/course/edit/{id}/remove-module(id=${id})}">
+                        <a th:href="@{/teacher/course/edit/{id}/remove-module/{moduleId}(id=${id},moduleId=${courseModule.id})}">
                             <button type="button">Usuń moduł</button>
                         </a>
                     </span>
@@ -63,15 +63,15 @@
                         <input type="text" th:field="*{modules[__${iter.index}__].tests[__${iter2.index}__].name}">
                         <input type="hidden" th:field="*{modules[__${iter.index}__].tests[__${iter2.index}__].id}">
                         <span class="action-button">
-                            <a th:href="@{/teacher/course/edit/{id}/remove-test(id=${id})}">
+                            <a th:href="@{/teacher/course/edit/{id}/remove-test/{testId}(id=${id},testId=${test.id})}">
                                 <button type="button">Usuń test</button>
                             </a>
                         </span>
                     </div>
                     <br>
                 </div>
-                <div>
-                    <a th:href="@{/teacher/course/edit/{id}/create-test(id=${id})}">
+                <div th:if="${courseModule.getTests().size() < maxNumberOfTests}">
+                    <a th:href="@{/teacher/course/edit/{id}/{moduleId}/create-test(id=${id},moduleId=${courseModule.id})}">
                         <button type="button">Dodaj test</button>
                     </a>
                 </div>

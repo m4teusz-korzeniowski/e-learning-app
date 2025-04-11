@@ -6,6 +6,7 @@ import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseDto;
 import korzeniowski.mateusz.app.model.course.module.Module;
+import korzeniowski.mateusz.app.model.course.test.Test;
 import korzeniowski.mateusz.app.repository.CourseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -99,6 +100,16 @@ public class CourseService {
         if (course.isPresent()) {
             int size = course.get().getModules().size();
             return size >= maxSize;
+        }
+        else {
+            throw new NoSuchElementException("Nie znaleziono kursu!");
+        }
+    }
+
+    public Long findCreatorId(Long courseId) {
+        Optional<Course> course = courseRepository.findById(courseId);
+        if (course.isPresent()) {
+            return course.get().getCreatorId();
         }
         else {
             throw new NoSuchElementException("Nie znaleziono kursu!");

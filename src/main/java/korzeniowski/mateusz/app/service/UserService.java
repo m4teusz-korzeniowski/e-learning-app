@@ -239,8 +239,9 @@ public class UserService {
         return userRepository.existsById(userId);
     }
 
+    @Transactional
     public void removeUser(Long userId) {
-        userRepository.deleteById(userId);
+        userRepository.findById(userId).ifPresent(userRepository::delete);
     }
 
 
@@ -257,6 +258,7 @@ public class UserService {
         user.setPesel(userDto.getPesel());
     }
 
+    @Transactional
     public void updateUser(UserSettingsDto userDto) {
         Optional<User> user = userRepository.findById(userDto.getId());
         if (user.isPresent()) {
