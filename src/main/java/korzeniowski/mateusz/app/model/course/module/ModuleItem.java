@@ -46,4 +46,12 @@ public class ModuleItem {
     public void setFileUrl(String fileUrl) {
         this.fileUrl = fileUrl;
     }
+
+    public Module getModule() {
+        return module;
+    }
+
+    public void setModule(Module module) {
+        this.module = module;
+    }
 }

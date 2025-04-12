@@ -1,6 +1,7 @@
 package korzeniowski.mateusz.app.service;
 
 import korzeniowski.mateusz.app.model.course.module.Module;
+import korzeniowski.mateusz.app.model.course.module.ModuleItem;
 import korzeniowski.mateusz.app.model.course.module.dto.ModuleDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.Test;
 import korzeniowski.mateusz.app.repository.ModuleRepository;
@@ -81,6 +82,27 @@ public class ModuleService {
         if (module.isPresent()) {
             test.setModule(module.get());
             module.get().getTest().add(test);
+        } else {
+            throw new NoSuchElementException("Nie znaleziono modułu!");
+        }
+    }
+
+    public boolean maximumNumberOfItemsReached(Long moduleId, int maxSize) {
+        Optional<Module> module = moduleRepository.findById(moduleId);
+        if (module.isPresent()) {
+            int size = module.get().getItems().size();
+            return size >= maxSize;
+        } else {
+            throw new NoSuchElementException("Module with id " + moduleId + " not found");
+        }
+    }
+
+    @Transactional
+    public void addItemToModule(Long moduleId, ModuleItem item) {
+        Optional<Module> module = moduleRepository.findById(moduleId);
+        if (module.isPresent()) {
+            item.setModule(module.get());
+            module.get().getItems().add(item);
         } else {
             throw new NoSuchElementException("Nie znaleziono modułu!");
         }

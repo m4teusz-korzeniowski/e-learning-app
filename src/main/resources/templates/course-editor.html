@@ -54,8 +54,18 @@
                     </span>
                 </div>
                 <br>
-                <div th:each="item : ${courseModule.items}">
-                    <p th:text="${item.name}">Element modułu</p>
+                <div th:each="item,iter3 : ${courseModule.items}">
+                    <div class="item-row">
+                        <span>Nazwa elementu:</span>
+                        <input type="text" th:field="*{modules[__${iter.index}__].items[__${iter3.index}__].name}">
+                        <input type="hidden" th:field="*{modules[__${iter.index}__].items[__${iter3.index}__].id}">
+                        <span class="action-button">
+                            <a th:href="@{/teacher/course/edit/{id}/remove-item/{itemId}(id=${id},itemId=${item.id})}">
+                                <button type="button">Usuń element</button>
+                            </a>
+                        </span>
+                    </div>
+                    <br>
                 </div>
                 <div th:each="test,iter2: ${courseModule.tests}">
                     <div class="test-row">
@@ -70,6 +80,12 @@
                     </div>
                     <br>
                 </div>
+                <div th:if="${courseModule.getItems().size() < maxNumberOfModuleItems}">
+                    <a th:href="@{/teacher/course/edit/{id}/{moduleId}/create-item(id=${id},moduleId=${courseModule.id})}">
+                        <button type="button">Dodaj element</button>
+                    </a>
+                </div>
+                <br>
                 <div th:if="${courseModule.getTests().size() < maxNumberOfTests}">
                     <a th:href="@{/teacher/course/edit/{id}/{moduleId}/create-test(id=${id},moduleId=${courseModule.id})}">
                         <button type="button">Dodaj test</button>
@@ -99,7 +115,7 @@
         modules: {
             toolbar: [
                 ['bold', 'italic'],
-                ['link', 'blockquote', 'code-block', 'image'],
+                ['link'],
             ],
         },
         theme: 'snow',

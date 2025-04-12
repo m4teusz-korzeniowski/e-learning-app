@@ -72,7 +72,7 @@ public class CourseDisplayDto {
             List<ModuleItemDisplayDto> moduleItems = new ArrayList<>();
             List<TestNameIdDto> tests = new ArrayList<>();
             for (ModuleItem item : module.getItems()) {
-                moduleItems.add(new ModuleItemDisplayDto(item.getName()));
+                moduleItems.add(new ModuleItemDisplayDto(item.getId(), item.getName(), item.getDescription()));
             }
             for (Test test : module.getTest()) {
                 tests.add(new TestNameIdDto(test.getId(), test.getName()));
