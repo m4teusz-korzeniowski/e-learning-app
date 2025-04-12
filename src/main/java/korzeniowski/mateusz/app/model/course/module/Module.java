@@ -13,11 +13,9 @@ public class Module {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToMany
-    @JoinColumn(name = "module_id")
+    @OneToMany(mappedBy = "module")
     private List<ModuleItem> items = new ArrayList<>();
     @OneToMany(mappedBy = "module")
-    //@JoinColumn(name  = "module_id")
     private List<Test> test= new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "course_id")

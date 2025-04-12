@@ -3,7 +3,6 @@ package korzeniowski.mateusz.app.web;
 import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
 import korzeniowski.mateusz.app.model.course.module.dto.ModuleDisplayDto;
-import korzeniowski.mateusz.app.model.course.test.dto.TestDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.dto.TestNameIdDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.app.service.CourseService;
@@ -134,7 +133,7 @@ public class TeacherEditorController {
             if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
-            if (moduleService.maximumNumberOfTestReached(courseId, MAX_NUMBER_OF_TESTS)) {
+            if (moduleService.maximumNumberOfTestReached(moduleId, MAX_NUMBER_OF_TESTS)) {
                 redirectAttributes.addFlashAttribute("message",
                         "Moduł nie może mieć więcej testów niż " + MAX_NUMBER_OF_TESTS + "!");
             } else {

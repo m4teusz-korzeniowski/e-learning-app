@@ -15,12 +15,10 @@ import java.util.Optional;
 public class ModuleService {
     private final ModuleRepository moduleRepository;
     private final CourseService courseService;
-    private final TestRepository testRepository;
 
-    public ModuleService(ModuleRepository moduleRepository, CourseService courseService, TestRepository testRepository) {
+    public ModuleService(ModuleRepository moduleRepository, CourseService courseService) {
         this.moduleRepository = moduleRepository;
         this.courseService = courseService;
-        this.testRepository = testRepository;
     }
 
     public ModuleDisplayDto findModuleById(Long id) {
