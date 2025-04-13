@@ -6,7 +6,6 @@ import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseDto;
 import korzeniowski.mateusz.app.model.course.module.Module;
-import korzeniowski.mateusz.app.model.course.test.Test;
 import korzeniowski.mateusz.app.repository.CourseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

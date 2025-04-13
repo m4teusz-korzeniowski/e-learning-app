@@ -3,6 +3,7 @@ package korzeniowski.mateusz.app.web;
 import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
 import korzeniowski.mateusz.app.model.course.module.dto.ModuleDisplayDto;
+import korzeniowski.mateusz.app.model.course.module.dto.ModuleItemDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.dto.TestNameIdDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.app.service.*;
@@ -76,6 +77,11 @@ public class TeacherEditorController {
                     if (module.getTests() != null) {
                         for (TestNameIdDto test : module.getTests()) {
                             testService.updateTest(test.getId(), test);
+                        }
+                    }
+                    if (module.getItems() != null) {
+                        for (ModuleItemDisplayDto moduleItem : module.getItems()) {
+                            moduleItemService.updateModuleItem(moduleItem);
                         }
                     }
                 }

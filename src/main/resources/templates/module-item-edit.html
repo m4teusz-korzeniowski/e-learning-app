@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edycja elementu</title>
+    <link th:replace="~{fragments :: navbar-style}">
+    <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
+    <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+</head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+<div class="info-bar">
+    <div>
+        <h2>Edycja elementu modułu</h2>
+    </div>
+</div>
+<div class="info-bar">
+    <a th:href="@{/teacher}">Strona główna</a>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/teacher/course}">Moje kursy</a>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/teacher/course/edit/{id}(id=${courseId})}">Edycja kursu</a>
+    <span>&nbsp>&nbsp</span>
+    <span>Edycja elementu</span>
+</div>
+<br><br>
+<div class="user-courses">
+    <div th:if="${message!=null} and ${!message.isBlank()}">
+        <div class="element">
+            <p th:text="${message}"></p>
+        </div>
+        <br>
+    </div>
+    <form th:action="@{/teacher/course/edit/{courseId}/edit-item/{itemId}(courseId=${courseId},itemId=${itemId})}"
+    th:object="${moduleItem}" method="post" enctype="multipart/form-data">
+        <div class="element">
+            <input type="hidden" th:field="*{id}" th:value="*{id}">
+            <label for="description">Opis kursu:</label>
+            <textarea id="description" style="display: none" th:field="*{description}"
+                      name="description"></textarea>
+            <div id="editor"></div>
+            <br>
+            <p>Wybierz plik:</p>
+            <input type="file" name="file">
+        </div>
+        <br>
+        <div class="submit-button">
+            <button type="submit">Zapisz zmiany</button>
+        </div>
+        <br>
+    </form>
+</div>
+<br><br>
+<script th:inline="javascript">
+    const quill = new Quill('#editor', {
+        modules: {
+            toolbar: [
+                ['bold', 'italic'],
+                ['link'],
+            ],
+        },
+        theme: 'snow',
+    });
+
+    const description = /*[[${moduleItem.description}]]*/ '';
+    quill.root.innerHTML = description;
+    document.querySelector('form').onsubmit = function (event) {
+        document.querySelector('#description').value = quill.root.innerHTML;
+    };
+</script>
+</body>
+</html>

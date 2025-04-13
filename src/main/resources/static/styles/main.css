@@ -87,3 +87,7 @@ body {
     justify-content: space-between;
     gap: 10px;
 }
+
+#editor {
+    min-height: 250px;
+}
