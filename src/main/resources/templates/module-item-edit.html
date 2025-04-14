@@ -3,18 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Edycja elementu</title>
-    <link th:replace="~{fragments :: navbar-style}">
-    <link rel="stylesheet" href="../static/styles/info-bar.css" th:href="@{/styles/info-bar.css}">
-    <link rel="stylesheet" href="../static/styles/main.css" th:href="@{/styles/main.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+    <th:block th:replace="~{fragments :: head}"></th:block>
 </head>
 <body>
 <header th:replace="~{fragments :: navbar}"></header>
 <div class="info-bar">
     <div>
-        <h2>Edycja elementu modułu</h2>
+        <h2 th:text="'Edycja elementu modułu: '+${moduleItem.name}">Edycja elementu modułu</h2>
     </div>
 </div>
 <div class="info-bar">
@@ -35,7 +30,7 @@
         <br>
     </div>
     <form th:action="@{/teacher/course/edit/{courseId}/edit-item/{itemId}(courseId=${courseId},itemId=${itemId})}"
-    th:object="${moduleItem}" method="post" enctype="multipart/form-data">
+          th:object="${moduleItem}" method="post" enctype="multipart/form-data">
         <div class="element">
             <input type="hidden" th:field="*{id}" th:value="*{id}">
             <label for="description">Opis kursu:</label>
@@ -43,7 +38,14 @@
                       name="description"></textarea>
             <div id="editor"></div>
             <br>
-            <p>Wybierz plik:</p>
+            <div th:if="*{fileUrl != null}">
+                <p>Aktualnie załączony plik:</p>
+                <div>
+                    <a th:href="@{/teacher/{courseId}/files/{filename}(filename=*{fileUrl},courseId=${courseId})}"
+                       th:text="*{fileUrl}" target="_blank">Plik</a>
+                </div>
+                <br>
+            </div>
             <input type="file" name="file">
         </div>
         <br>

@@ -1,9 +1,11 @@
 package korzeniowski.mateusz.app.model.course.test.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import korzeniowski.mateusz.app.model.course.test.Test;
 
 public class TestNameIdDto {
     private Long id;
+    @NotBlank(message = "*pole nie może być puste")
     private String name;
 
     public TestNameIdDto(Long id, String name) {
@@ -26,6 +28,8 @@ public class TestNameIdDto {
     public void setName(String name) {
         this.name = name;
     }
+
+
 
     public static TestNameIdDto map(Test test){
         return new TestNameIdDto(test.getId(), test.getName());

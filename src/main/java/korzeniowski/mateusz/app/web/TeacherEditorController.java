@@ -1,6 +1,8 @@
 package korzeniowski.mateusz.app.web;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
 import korzeniowski.mateusz.app.model.course.module.dto.ModuleDisplayDto;
 import korzeniowski.mateusz.app.model.course.module.dto.ModuleItemDisplayDto;
@@ -11,11 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.NoSuchElementException;
@@ -42,7 +43,7 @@ public class TeacherEditorController {
 
     @GetMapping("/teacher/course/edit/{id}")
     public String showEditableCourse(@PathVariable long id, Model model,
-                                     @ModelAttribute("message") String message, HttpSession session) {
+                                     @ModelAttribute("error") String error, HttpSession session) {
         Optional<CourseDisplayDto> course = courseService.findCourseById(id);
         course.ifPresent(courseDisplayDto -> {
             model.addAttribute("course", courseDisplayDto);
@@ -55,15 +56,18 @@ public class TeacherEditorController {
         model.addAttribute("maxModules", MAX_MODULES);
         model.addAttribute("maxNumberOfTests", MAX_NUMBER_OF_TESTS);
         model.addAttribute("maxNumberOfModuleItems", MAX_NUMBER_OF_MODULE_ITEMS);
+        if (error != null && !error.isEmpty()) {
+            model.addAttribute("message", error);
+        }
         return "course-editor";
     }
 
     @PostMapping("/teacher/course/edit/{id}")
-    public String editCourse(@PathVariable long id, @ModelAttribute("course") CourseDisplayDto course,
-                             Model model, BindingResult bindingResult, RedirectAttributes redirectAttributes,
-                             HttpSession session) {
+    public String editCourse(@PathVariable long id, @ModelAttribute("course") @Valid CourseDisplayDto course,
+                             BindingResult bindingResult, RedirectAttributes redirectAttributes,
+                             HttpSession session, Model model) {
         if (bindingResult.hasErrors()) {
-            return showEditableCourse(id, model, null, session);
+            return showEditableCourse(id, model, "*pola nie mogą być puste!", session);
         }
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
@@ -217,4 +221,5 @@ public class TeacherEditorController {
         }
         return "redirect:/teacher/course/edit/" + courseId;
     }
+
 }

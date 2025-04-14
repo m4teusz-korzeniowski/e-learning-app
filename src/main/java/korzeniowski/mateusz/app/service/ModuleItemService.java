@@ -1,11 +1,13 @@
 package korzeniowski.mateusz.app.service;
 
 import korzeniowski.mateusz.app.file.FileSystemStorageService;
+import korzeniowski.mateusz.app.file.StorageService;
 import korzeniowski.mateusz.app.model.course.module.ModuleItem;
 import korzeniowski.mateusz.app.model.course.module.dto.ModuleItemDisplayDto;
 import korzeniowski.mateusz.app.model.course.module.dto.ModuleItemEditDto;
 import korzeniowski.mateusz.app.repository.ModuleItemRepository;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,13 +18,13 @@ import java.util.Optional;
 public class ModuleItemService {
     private final ModuleItemRepository moduleItemRepository;
     private final ModuleService moduleService;
-    private final FileSystemStorageService fileSystemStorageService;
+    private final StorageService storageService;
     private final static String MODULE_ITEM_DIRECTORY = "module/item/";
 
-    public ModuleItemService(ModuleItemRepository moduleItemRepository, ModuleService moduleService, FileSystemStorageService fileSystemStorageService) {
+    public ModuleItemService(ModuleItemRepository moduleItemRepository, ModuleService moduleService, FileSystemStorageService storageService) {
         this.moduleItemRepository = moduleItemRepository;
         this.moduleService = moduleService;
-        this.fileSystemStorageService = fileSystemStorageService;
+        this.storageService = storageService;
     }
 
     @Transactional
@@ -62,10 +64,15 @@ public class ModuleItemService {
                 String extension = FilenameUtils.getExtension(file.getOriginalFilename());
                 String fileName = "item_" + moduleItem.getId() + "." + extension;
                 String path = MODULE_ITEM_DIRECTORY + fileName;
-                fileSystemStorageService.store(file, path);
-                item.get().setFileUrl(file.getOriginalFilename());
+                storageService.deleteAllStartsWith(MODULE_ITEM_DIRECTORY, "item_" + moduleItem.getId() + ".");
+                storageService.store(file, path);
+                item.get().setFileUrl(path);
             }
             moduleItemRepository.save(item.get());
         }
+    }
+
+    public Resource getFile(String fileName) {
+        return storageService.loadAsResource(fileName);
     }
 }

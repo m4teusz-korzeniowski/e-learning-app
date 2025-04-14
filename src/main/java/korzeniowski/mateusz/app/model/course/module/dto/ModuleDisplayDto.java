@@ -1,15 +1,21 @@
 package korzeniowski.mateusz.app.model.course.module.dto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import korzeniowski.mateusz.app.model.course.module.Module;
 import korzeniowski.mateusz.app.model.course.test.dto.TestNameIdDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModuleDisplayDto {
     private Long id;
+    @NotBlank(message = "*pole nie może być puste")
     private String name;
-    private List<ModuleItemDisplayDto> items;
-    private List<TestNameIdDto> tests;
+    @Valid
+    private List<ModuleItemDisplayDto> items = new ArrayList<>();
+    @Valid
+    private List<TestNameIdDto> tests = new ArrayList<>();
 
     public ModuleDisplayDto(Long id, String name, List<ModuleItemDisplayDto> items, List<TestNameIdDto> tests) {
         this.id = id;
@@ -17,7 +23,7 @@ public class ModuleDisplayDto {
         this.items = items;
         this.tests = tests;
     }
-    
+
 
     public String getName() {
         return name;
@@ -51,12 +57,13 @@ public class ModuleDisplayDto {
         this.id = id;
     }
 
+
     public static ModuleDisplayDto map(Module module) {
         return new ModuleDisplayDto(
                 module.getId(),
                 module.getName(),
                 module.getItems().stream().map(ModuleItemDisplayDto::map).toList(),
                 module.getTest().stream().map(TestNameIdDto::map).toList()
-                );
+        );
     }
 }

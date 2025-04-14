@@ -1,5 +1,6 @@
 package korzeniowski.mateusz.app.file;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -115,6 +116,24 @@ public class FileSystemStorageService implements StorageService {
             Files.deleteIfExists(file);
         } catch (IOException e) {
             throw new StorageException("Failed to delete file: " + filename, e);
+        }
+    }
+
+    @Override
+    public void deleteAllStartsWith(String directory, String prefix) {
+        Path path = rootLocation.resolve(directory).normalize().toAbsolutePath();
+        if (!path.startsWith(rootLocation.toAbsolutePath())) {
+            throw new StorageException("Cannot delete file outside current directory.");
+        }
+        File dir = path.toFile();
+        if (!dir.exists() || !dir.isDirectory()) {
+            return;
+        }
+        File[] matchingFiles = dir.listFiles((dir1, name) -> name.startsWith(prefix));
+        if (matchingFiles != null) {
+            for (File file : matchingFiles) {
+                file.delete();
+            }
         }
     }
 }

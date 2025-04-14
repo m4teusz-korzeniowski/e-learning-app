@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 
 @Entity
+@EntityListeners(ModuleItemListener.class)
 public class ModuleItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

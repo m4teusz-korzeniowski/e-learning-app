@@ -1,5 +1,6 @@
 package korzeniowski.mateusz.app.model.course.dto;
 
+import jakarta.validation.Valid;
 import korzeniowski.mateusz.app.model.course.Course;
 import korzeniowski.mateusz.app.model.course.module.Module;
 import korzeniowski.mateusz.app.model.course.module.ModuleItem;
@@ -15,6 +16,7 @@ public class CourseDisplayDto {
     private Long id;
     private String name;
     private String description;
+    @Valid
     private List<ModuleDisplayDto> modules = new ArrayList<>();
     private Long creatorId;
 
@@ -72,7 +74,8 @@ public class CourseDisplayDto {
             List<ModuleItemDisplayDto> moduleItems = new ArrayList<>();
             List<TestNameIdDto> tests = new ArrayList<>();
             for (ModuleItem item : module.getItems()) {
-                moduleItems.add(new ModuleItemDisplayDto(item.getId(), item.getName(), item.getDescription()));
+                moduleItems.add(new ModuleItemDisplayDto(item.getId(), item.getName(),
+                        item.getDescription(), item.getFileUrl()));
             }
             for (Test test : module.getTest()) {
                 tests.add(new TestNameIdDto(test.getId(), test.getName()));
@@ -89,4 +92,6 @@ public class CourseDisplayDto {
                 course.getCreatorId()
         );
     }
+
+
 }
