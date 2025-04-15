@@ -5,7 +5,7 @@ import korzeniowski.mateusz.app.model.course.module.ModuleItem;
 import korzeniowski.mateusz.app.model.course.module.dto.ModuleDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.Test;
 import korzeniowski.mateusz.app.repository.ModuleRepository;
-import korzeniowski.mateusz.app.repository.TestRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +16,7 @@ import java.util.Optional;
 public class ModuleService {
     private final ModuleRepository moduleRepository;
     private final CourseService courseService;
+    private final static int MAX_NAME_LENGTH = 60;
 
     public ModuleService(ModuleRepository moduleRepository, CourseService courseService) {
         this.moduleRepository = moduleRepository;
@@ -35,6 +36,9 @@ public class ModuleService {
     public void updateModule(Long moduleId, ModuleDisplayDto moduleDisplayDto) {
         Optional<Module> module = moduleRepository.findById(moduleId);
         if (module.isPresent()) {
+            if(moduleDisplayDto.getName().length() > MAX_NAME_LENGTH) {
+                throw new DataIntegrityViolationException("*przekroczono rozmiar dla nazwy modułu!");
+            }
             module.get().setName(moduleDisplayDto.getName());
             moduleRepository.save(module.get());
         }

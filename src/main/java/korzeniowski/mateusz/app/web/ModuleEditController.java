@@ -9,12 +9,14 @@ import korzeniowski.mateusz.app.service.CourseService;
 import korzeniowski.mateusz.app.service.ModuleItemService;
 import korzeniowski.mateusz.app.service.UserService;
 import org.springframework.core.io.Resource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -42,25 +44,40 @@ public class ModuleEditController {
     public String showEditModule(@PathVariable long courseId, @PathVariable long itemId,
                                  Model model, HttpSession session,
                                  @ModelAttribute("message") String message) {
-        Optional<ModuleItemEditDto> moduleItem = moduleItemService.findModuleItemById(itemId);
-        moduleItem.ifPresent(item -> {
-            model.addAttribute("moduleItem", item);
-            UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-            long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-            }
-        });
-        moduleItem.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        try {
+            Optional<ModuleItemEditDto> moduleItem = moduleItemService.findModuleItemById(itemId);
+            moduleItem.ifPresent(item -> {
+                model.addAttribute("moduleItem", item);
+                UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
+                long creatorId = courseService.findCreatorId(courseId);
+                if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+                }
+            });
+            moduleItem.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
 
+        return "module-item-edit";
+    }
+
+    private String returnEditForm(long courseId, long itemId, Model model, ModuleItemEditDto item) {
+        model.addAttribute("moduleItem", item);
+        model.addAttribute("courseId", courseId);
+        model.addAttribute("itemId", itemId);
         return "module-item-edit";
     }
 
     @PostMapping("/teacher/course/edit/{courseId}/edit-item/{itemId}")
     public String editModule(@PathVariable long courseId, @PathVariable long itemId,
                              @ModelAttribute("moduleItem") ModuleItemEditDto item,
+                             BindingResult bindingResult, Model model,
                              @RequestParam(value = "file", required = false) MultipartFile file,
                              HttpSession session, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return returnEditForm(courseId, itemId, model, item);
+        }
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
             long creatorId = courseService.findCreatorId(courseId);
@@ -68,8 +85,13 @@ public class ModuleEditController {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             moduleItemService.updateModuleItemEditDto(item, file);
+            redirectAttributes.addFlashAttribute("message", "Edycja zakończyła się powodzeniem!");
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (DataIntegrityViolationException e) {
+            bindingResult.rejectValue("description", "error.description",
+                    "*przekroczono maksymalnu rozmiar opisu");
+            return returnEditForm(courseId, itemId, model, item);
         }
         return "redirect:/teacher/course/edit/" + courseId + "/edit-item/" + itemId;
     }
@@ -94,7 +116,7 @@ public class ModuleEditController {
                 contentType = "application/octet-stream";
             }
             if (contentType.startsWith("image/") || contentType.equals("application/pdf")
-            || contentType.equals("text/plain") || contentType.equals("text/html")) {
+                    || contentType.equals("text/plain") || contentType.equals("text/html")) {
                 return ResponseEntity.ok()
                         .contentType(MediaType.parseMediaType(contentType))
                         .body(file);

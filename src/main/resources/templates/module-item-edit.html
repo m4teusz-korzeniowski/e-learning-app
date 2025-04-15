@@ -37,6 +37,7 @@
             <textarea id="description" style="display: none" th:field="*{description}"
                       name="description"></textarea>
             <div id="editor"></div>
+            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
             <br>
             <div th:if="*{fileUrl != null}">
                 <p>Aktualnie załączony plik:</p>

@@ -8,6 +8,7 @@ import korzeniowski.mateusz.app.model.course.module.dto.ModuleItemEditDto;
 import korzeniowski.mateusz.app.repository.ModuleItemRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.Resource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ public class ModuleItemService {
     private final ModuleService moduleService;
     private final StorageService storageService;
     private final static String MODULE_ITEM_DIRECTORY = "module/item/";
+    private final static int MAX_LENGTH_OF_ITEM_NAME = 60;
 
     public ModuleItemService(ModuleItemRepository moduleItemRepository, ModuleService moduleService, FileSystemStorageService storageService) {
         this.moduleItemRepository = moduleItemRepository;
@@ -47,6 +49,9 @@ public class ModuleItemService {
     public void updateModuleItem(ModuleItemDisplayDto moduleItem) {
         Optional<ModuleItem> item = moduleItemRepository.findById(moduleItem.getId());
         if (item.isPresent()) {
+            if(moduleItem.getName().length() > MAX_LENGTH_OF_ITEM_NAME) {
+                throw new DataIntegrityViolationException("*przekroczono rozmiar dla nazwy elementu modułu!");
+            }
             item.get().setName(moduleItem.getName());
             moduleItemRepository.save(item.get());
         }

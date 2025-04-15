@@ -27,12 +27,6 @@
         </div>
         <br>
     </div>
-    <div th:if="${error!=null} and ${!error.isBlank()}">
-        <div class="element">
-            <p th:text="${error}"></p>
-        </div>
-        <br>
-    </div>
     <form th:action="@{/teacher/course/edit/{id}(id=${id})}" method="post" th:object="${course}">
         <div class="element">
             <input type="hidden" th:field="*{creatorId}" th:value="*{creatorId}">

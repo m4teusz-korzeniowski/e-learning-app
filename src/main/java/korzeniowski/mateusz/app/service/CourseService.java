@@ -7,6 +7,7 @@ import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseDto;
 import korzeniowski.mateusz.app.model.course.module.Module;
 import korzeniowski.mateusz.app.repository.CourseRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import java.util.Optional;
 @Service
 public class CourseService {
     private final CourseRepository courseRepository;
+    private final static int MAX_LENGTH_OF_DESCRIPTION = 20000;
 
     public CourseService(CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
@@ -75,6 +77,10 @@ public class CourseService {
     public void editCourse(CourseDisplayDto courseDto) {
         Optional<Course> course = courseRepository.findById(courseDto.getId());
         if (course.isPresent()) {
+            if(courseDto.getDescription().length() > MAX_LENGTH_OF_DESCRIPTION) {
+                throw new DataIntegrityViolationException(
+                        "*przekroczono maksymalnu rozmiar opisu!");
+            }
             course.get().setDescription(courseDto.getDescription());
             courseRepository.save(course.get());
         }

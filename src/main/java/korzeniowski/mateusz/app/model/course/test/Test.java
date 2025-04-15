@@ -16,8 +16,8 @@ public class Test {
     private String description;
     private Integer numberOfQuestions;
     private Integer duration;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private Integer maxAttempts;
     @OneToMany(mappedBy = "test")
     private List<Attempt> attempts;
@@ -93,20 +93,20 @@ public class Test {
         this.duration = duration;
     }
 
-    public LocalDateTime getStart() {
-        return start;
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
-    public void setStart(LocalDateTime start) {
-        this.start = start;
+    public void setStartTime(LocalDateTime start) {
+        this.startTime = start;
     }
 
-    public LocalDateTime getEnd() {
-        return end;
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
+    public void setEndTime(LocalDateTime end) {
+        this.endTime = end;
     }
 
     public Integer getMaxAttempts() {

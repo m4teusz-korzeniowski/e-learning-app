@@ -2,18 +2,22 @@ package korzeniowski.mateusz.app.service;
 
 import korzeniowski.mateusz.app.model.course.test.Test;
 import korzeniowski.mateusz.app.model.course.test.dto.TestDisplayDto;
+import korzeniowski.mateusz.app.model.course.test.dto.TestEditDto;
 import korzeniowski.mateusz.app.model.course.test.dto.TestNameIdDto;
-import korzeniowski.mateusz.app.repository.ModuleRepository;
 import korzeniowski.mateusz.app.repository.TestRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
 public class TestService {
     private final TestRepository testRepository;
     private final ModuleService moduleService;
+    private final static int MAX_LENGTH_OF_TEST_NAME = 60;
 
     public TestService(TestRepository testRepository, ModuleService moduleService) {
         this.testRepository = testRepository;
@@ -27,6 +31,9 @@ public class TestService {
     public void updateTest(Long testId, TestNameIdDto testDto) {
         Optional<Test> test = testRepository.findTestById(testId);
         if (test.isPresent()) {
+            if(testDto.getName().length() > MAX_LENGTH_OF_TEST_NAME) {
+                throw new DataIntegrityViolationException("*przekroczono rozmiar dla nazwy testu!");
+            }
             test.get().setName(testDto.getName());
             testRepository.save(test.get());
         }
@@ -36,6 +43,7 @@ public class TestService {
     public void createTest(Long moduleId) {
         Test test = new Test();
         test.setName("Nazwa testu");
+        test.setNumberOfQuestions(1);
         moduleService.addTestToModule(moduleId, test);
         testRepository.save(test);
     }
@@ -47,5 +55,37 @@ public class TestService {
     @Transactional
     public void deleteTest(Long testId) {
         testRepository.findTestById(testId).ifPresent(testRepository::delete);
+    }
+
+    public Optional<TestEditDto> findTestEditById(Long id) {
+        return testRepository.findById(id).map(TestEditDto::map);
+    }
+
+    private void validateDates(LocalDateTime start, LocalDateTime end) {
+        if (start == null || end == null) {
+            return;
+        }
+        if (start.isAfter(end)) {
+            throw new IllegalArgumentException("*data otwarcia nie może późniejsza niż data zamknięcia!");
+        }
+        Duration duration = Duration.between(start, end);
+        if (duration.toMinutes() < 30) {
+            throw new IllegalArgumentException(
+                    "*róznica między otwarciem a zamknięciem musi wynosić co najmniej 30 minut!");
+        }
+    }
+
+    public void updateTestSettings(Long testId, TestEditDto dto) {
+        validateDates(dto.getStart(), dto.getEnd());
+        Optional<Test> testEdit = testRepository.findTestById(testId);
+        testEdit.ifPresent(test -> {
+            test.setDescription(dto.getDescription());
+            test.setNumberOfQuestions(dto.getNumberOfQuestions());
+            test.setMaxAttempts(dto.getMaxAttempts());
+            test.setDuration(dto.getDuration());
+            test.setStartTime(dto.getStart());
+            test.setEndTime(dto.getEnd());
+            testRepository.save(test);
+        });
     }
 }
