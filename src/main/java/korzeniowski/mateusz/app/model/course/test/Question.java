@@ -1,9 +1,6 @@
 package korzeniowski.mateusz.app.model.course.test;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 
 @Entity
@@ -15,6 +12,9 @@ public class Question {
     private Integer numberOfAnswers;
     private Integer correctAnswer;
     private Double score;
+    @ManyToOne
+    @JoinColumn(name = "test_id")
+    private Test test;
 
     public Long getId() {
         return id;
@@ -54,5 +54,13 @@ public class Question {
 
     public void setScore(Double score) {
         this.score = score;
+    }
+
+    public Test getTest() {
+        return test;
+    }
+
+    public void setTest(Test test) {
+        this.test = test;
     }
 }

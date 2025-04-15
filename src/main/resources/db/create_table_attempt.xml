@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+    <changeSet id="0001" author="mk">
+        <createTable tableName="attempt">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="test_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="started_at" type="timestamp">
+            </column>
+            <column name="ended_at" type="timestamp">
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="attempt" 
+                       columnNames="user_id,test_id"
+                       constraintName="pk_attempt"/>
+        <addForeignKeyConstraint baseTableName="attempt"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_attempt_user"
+                                 referencedTableName="application_user"
+                                 referencedColumnNames="id"
+                                 deleteCascade="true"
+        />
+        <addForeignKeyConstraint baseTableName="attempt"
+                                 baseColumnNames="test_id"
+                                 constraintName="fk_attempt_test"
+                                 referencedTableName="test"
+                                 referencedColumnNames="id"
+                                 deleteCascade="true"
+        />
+    </changeSet>
+</databaseChangeLog>

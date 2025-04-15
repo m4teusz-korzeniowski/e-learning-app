@@ -3,6 +3,7 @@ package korzeniowski.mateusz.app.model.user;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import korzeniowski.mateusz.app.model.course.Course;
+import korzeniowski.mateusz.app.model.course.test.Attempt;
 import korzeniowski.mateusz.app.model.course.test.Result;
 import org.hibernate.validator.constraints.pl.PESEL;
 
@@ -41,6 +42,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id")
     )
     private List<Course> courses = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<Attempt> attempts = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private List<Result> results = new ArrayList<>();
     @ManyToOne
@@ -120,11 +123,19 @@ public class User {
         this.group = group;
     }
 
-    public @PESEL String getPesel() {
+    public String getPesel() {
         return pesel;
     }
 
     public void setPesel(String pesel) {
         this.pesel = pesel;
+    }
+
+    public List<Attempt> getAttempts() {
+        return attempts;
+    }
+
+    public void setAttempts(List<Attempt> attempts) {
+        this.attempts = attempts;
     }
 }

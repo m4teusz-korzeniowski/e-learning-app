@@ -19,6 +19,10 @@
                 <constraints nullable="true"/>
             </column>
             <column name="module_id" type="bigint"/>
+            <column name="duration" type="integer"/>
+            <column name="max_attempts" type="integer"/>
+            <column name="start" type="timestamp"/>
+            <column name="end" type="timestamp"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="test" baseColumnNames="module_id"
                                  constraintName="fk_test_module"

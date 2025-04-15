@@ -3,6 +3,7 @@ package korzeniowski.mateusz.app.model.course.test;
 import jakarta.persistence.*;
 import korzeniowski.mateusz.app.model.course.module.Module;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +15,14 @@ public class Test {
     private String name;
     private String description;
     private Integer numberOfQuestions;
-    @OneToMany
-    @JoinColumn(name = "test_id")
-    private List<Question> questions = new ArrayList<Question>();
+    private Integer duration;
+    private LocalDateTime start;
+    private LocalDateTime end;
+    private Integer maxAttempts;
+    @OneToMany(mappedBy = "test")
+    private List<Attempt> attempts;
+    @OneToMany(mappedBy = "test")
+    private List<Question> questions = new ArrayList<>();
     @OneToMany(mappedBy = "test")
     private List<Result> results = new ArrayList<>();
     @ManyToOne
@@ -77,5 +83,45 @@ public class Test {
 
     public void setModule(Module module) {
         this.module = module;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStart() {
+        return start;
+    }
+
+    public void setStart(LocalDateTime start) {
+        this.start = start;
+    }
+
+    public LocalDateTime getEnd() {
+        return end;
+    }
+
+    public void setEnd(LocalDateTime end) {
+        this.end = end;
+    }
+
+    public Integer getMaxAttempts() {
+        return maxAttempts;
+    }
+
+    public void setMaxAttempts(Integer maxAttempts) {
+        this.maxAttempts = maxAttempts;
+    }
+
+    public List<Attempt> getAttempts() {
+        return attempts;
+    }
+
+    public void setAttempts(List<Attempt> attempts) {
+        this.attempts = attempts;
     }
 }
