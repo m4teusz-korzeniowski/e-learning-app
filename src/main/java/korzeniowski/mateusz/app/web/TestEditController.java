@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import korzeniowski.mateusz.app.model.course.test.dto.TestEditDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.app.service.CourseService;
+import korzeniowski.mateusz.app.service.QuestionService;
 import korzeniowski.mateusz.app.service.TestService;
 import korzeniowski.mateusz.app.service.UserService;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,10 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -28,11 +26,13 @@ public class TestEditController {
     private final TestService testService;
     private final CourseService courseService;
     private final UserService userService;
+    private final QuestionService questionService;
 
-    public TestEditController(TestService testService, CourseService courseService, UserService userService) {
+    public TestEditController(TestService testService, CourseService courseService, UserService userService, QuestionService questionService) {
         this.testService = testService;
         this.courseService = courseService;
         this.userService = userService;
+        this.questionService = questionService;
     }
 
     @GetMapping("/teacher/course/edit/{courseId}/edit-test/{testId}")
@@ -86,6 +86,36 @@ public class TestEditController {
             bindingResult.rejectValue("description", "error.description",
                     "*przekroczono maksymalnu rozmiar opisu");
             return returnToEditForm(model, courseId, testId);
+        }
+        return "redirect:/teacher/course/edit/" + courseId + "/edit-test/" + testId;
+    }
+
+    @PostMapping("/teacher/course/edit/{courseId}/edit-test/{testId}/create-questions")
+    public String createQuestion(@PathVariable long courseId, @PathVariable long testId,
+                                 @RequestParam(name = "numberOfQuestions", required = false) Integer numberOfQuestions,
+                                 @ModelAttribute("test") TestEditDto test,
+                                 RedirectAttributes redirectAttributes, HttpSession session) {
+        if (numberOfQuestions == null) {
+            redirectAttributes.addFlashAttribute("questionMessage",
+                    "*pole nie może być puste");
+            return "redirect:/teacher/course/edit/" + courseId + "/edit-test/" + testId;
+        } else if (numberOfQuestions < 1) {
+            redirectAttributes.addFlashAttribute("questionMessage",
+                    "*ilość pytań musi być równa co najmniej 1");
+            return "redirect:/teacher/course/edit/" + courseId + "/edit-test/" + testId;
+        }
+        try {
+            UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
+            long creatorId = courseService.findCreatorId(courseId);
+            if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
+            questionService.createQuestions(numberOfQuestions, testId);
+            String message = "Stworzono następująca ilość pytań: " + numberOfQuestions +
+                    ". Pamiętaj by je edytować w bazie pytań, zanim go udostępnisz!";
+            redirectAttributes.addFlashAttribute("questionMessage", message);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         return "redirect:/teacher/course/edit/" + courseId + "/edit-test/" + testId;
     }

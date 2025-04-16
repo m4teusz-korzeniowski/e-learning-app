@@ -69,13 +69,22 @@
           th:action="@{/teacher/course/edit/{courseId}/edit-test/{testId}/create-questions(courseId=${courseId},testId=${testId})}"
     >
         <div class="element">
-            <p>Formularz do stworzenia bazy pytań</p>
-            <p>Ilość pytań:</p>
+            <p>Ilość pytań do stworzenia:</p>
+            <input type="number" name="numberOfQuestions">
+            <div th:if="${questionMessage!=null} and ${!questionMessage.isBlank()}">
+                <p th:text="${questionMessage}"></p>
+            </div>
         </div>
+        <br>
+        <div class="submit-button">
+            <button type="submit">Stwórz bazę pytań</button>
+        </div>
+        <br>
+        <br>
         <br>
     </form>
     <div class="element">
-        <p>Baza pytań do naszego testu</p>
+        <p><a th:href="@{/teacher/course/edit/{courseId}/edit-test/{testId}/questions(courseId=${courseId},testId=${testId})}">Baza pytań</p>
     </div>
     <br>
 </div>

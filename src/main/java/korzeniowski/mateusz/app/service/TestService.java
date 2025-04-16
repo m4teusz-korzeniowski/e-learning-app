@@ -1,5 +1,7 @@
 package korzeniowski.mateusz.app.service;
 
+import korzeniowski.mateusz.app.model.course.module.Module;
+import korzeniowski.mateusz.app.model.course.test.Question;
 import korzeniowski.mateusz.app.model.course.test.Test;
 import korzeniowski.mateusz.app.model.course.test.dto.TestDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.dto.TestEditDto;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -87,5 +90,16 @@ public class TestService {
             test.setEndTime(dto.getEnd());
             testRepository.save(test);
         });
+    }
+
+    @Transactional
+    public void addQuestionToTest(Long testId, Question question) {
+        Optional<Test> test = testRepository.findTestById(testId);
+        if (test.isPresent()) {
+            question.setTest(test.get());
+            test.get().getQuestions().add(question);
+        } else {
+            throw new NoSuchElementException("Nie znaleziono testu!");
+        }
     }
 }

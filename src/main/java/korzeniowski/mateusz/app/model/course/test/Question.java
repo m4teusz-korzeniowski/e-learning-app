@@ -2,6 +2,9 @@ package korzeniowski.mateusz.app.model.course.test;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 public class Question {
@@ -9,12 +12,14 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
-    private Integer numberOfAnswers;
-    private Integer correctAnswer;
     private Double score;
+    @Enumerated(EnumType.STRING)
+    private QuestionType questionType;
     @ManyToOne
     @JoinColumn(name = "test_id")
     private Test test;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Answer> answers = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -32,22 +37,6 @@ public class Question {
         this.description = description;
     }
 
-    public Integer getNumberOfAnswers() {
-        return numberOfAnswers;
-    }
-
-    public void setNumberOfAnswers(Integer numberOfAnswers) {
-        this.numberOfAnswers = numberOfAnswers;
-    }
-
-    public Integer getCorrectAnswer() {
-        return correctAnswer;
-    }
-
-    public void setCorrectAnswer(Integer correctAnswer) {
-        this.correctAnswer = correctAnswer;
-    }
-
     public Double getScore() {
         return score;
     }
@@ -62,5 +51,21 @@ public class Question {
 
     public void setTest(Test test) {
         this.test = test;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
+
+    public QuestionType getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(QuestionType questionType) {
+        this.questionType = questionType;
     }
 }

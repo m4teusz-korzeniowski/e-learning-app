@@ -12,6 +12,7 @@ body {
     border-style: outset;
     padding: 10px;
     background: white;
+    overflow: auto;
 }
 
 #test-name {

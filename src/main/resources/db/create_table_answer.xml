@@ -5,28 +5,24 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
     <changeSet id="0001" author="mk">
-        <createTable tableName="question">
+        <createTable tableName="answer">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="score" type="float">
+            <column name="content" type="varchar(500)">
                 <constraints nullable="false"/>
             </column>
-            <column name="description" type="varchar(5000)">
+            <column name="correct" type="boolean">
                 <constraints nullable="false"/>
             </column>
-            <column name="question_type" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="test_id" type="bigint"/>
+            <column name="question_id" type="bigint"/>
         </createTable>
-        <addForeignKeyConstraint baseTableName="question"
-                                 baseColumnNames="test_id"
-                                 constraintName="fk_test_question"
-                                 referencedTableName="test"
+        <addForeignKeyConstraint baseTableName="answer"
+                                 baseColumnNames="question_id"
+                                 constraintName="fk_question_answer"
+                                 referencedTableName="question"
                                  referencedColumnNames="id"
                                  deleteCascade="true"
         />
-
     </changeSet>
 </databaseChangeLog>

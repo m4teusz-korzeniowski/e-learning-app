@@ -5,54 +5,5 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
     <changeSet id="0001" author="mk">
-        <insert tableName="question">
-            <column name="description" value="xyzv(a)"/>
-            <column name="number_of_answers" value="4"/>
-            <column name="correct_answer" value="1"/>
-            <column name="score" value="1.0"/>
-            <column name="test_id" value="1"/>
-        </insert>
-        <insert tableName="question">
-            <column name="description" value="xyz(a)"/>
-            <column name="number_of_answers" value="3"/>
-            <column name="correct_answer" value="1"/>
-            <column name="score" value="1.0"/>
-            <column name="test_id" value="2"/>
-        </insert>
-        <insert tableName="question">
-            <column name="description" value="xyz(b)"/>
-            <column name="number_of_answers" value="3"/>
-            <column name="correct_answer" value="2"/>
-            <column name="score" value="1.0"/>
-            <column name="test_id" value="3"/>
-        </insert>
-        <insert tableName="question">
-            <column name="description" value="xyz(a)"/>
-            <column name="number_of_answers" value="3"/>
-            <column name="correct_answer" value="1"/>
-            <column name="score" value="1.0"/>
-            <column name="test_id" value="3"/>
-        </insert>
-        <insert tableName="question">
-            <column name="description" value="xyz(a)"/>
-            <column name="number_of_answers" value="3"/>
-            <column name="correct_answer" value="1"/>
-            <column name="score" value="1.0"/>
-            <column name="test_id" value="4"/>
-        </insert>
-        <insert tableName="question">
-            <column name="description" value="xyz(a)"/>
-            <column name="number_of_answers" value="3"/>
-            <column name="correct_answer" value="1"/>
-            <column name="score" value="1.0"/>
-            <column name="test_id" value="4"/>
-        </insert>
-        <insert tableName="question">
-            <column name="description" value="xyz(c)"/>
-            <column name="number_of_answers" value="3"/>
-            <column name="correct_answer" value="3"/>
-            <column name="score" value="1.0"/>
-            <column name="test_id" value="4"/>
-        </insert>
     </changeSet>
 </databaseChangeLog>
