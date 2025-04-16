@@ -44,7 +44,7 @@ public class TestEditController {
                 model.addAttribute("test", t);
                 UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
                 long creatorId = courseService.findCreatorId(courseId);
-                if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+                if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
                     throw new ResponseStatusException(HttpStatus.FORBIDDEN);
                 }
             });
@@ -71,7 +71,7 @@ public class TestEditController {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
             long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             testService.updateTestSettings(testId, test);
@@ -107,7 +107,7 @@ public class TestEditController {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
             long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             questionService.createQuestions(numberOfQuestions, testId);

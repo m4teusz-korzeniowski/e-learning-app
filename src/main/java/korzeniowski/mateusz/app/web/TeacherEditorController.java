@@ -1,6 +1,5 @@
 package korzeniowski.mateusz.app.web;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
@@ -42,15 +41,15 @@ public class TeacherEditorController {
 
     @GetMapping("/teacher/course/edit/{id}")
     public String showEditableCourse(@PathVariable long id, Model model, HttpSession session) {
-        Optional<CourseDisplayDto> course = courseService.findCourseById(id);
-        course.ifPresent(courseDisplayDto -> {
-            model.addAttribute("course", courseDisplayDto);
+        Optional<CourseDisplayDto> foundCourse = courseService.findCourseById(id);
+        foundCourse.ifPresent(course -> {
+            model.addAttribute("course", course);
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-            if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(course.get().getCreatorId(), userInfo.getId())) {
+            if (!userService.isLoggenInTeacherOwnerOfTheCourse(foundCourse.get().getCreatorId(), userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
         });
-        course.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        foundCourse.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("maxModules", MAX_MODULES);
         model.addAttribute("maxNumberOfTests", MAX_NUMBER_OF_TESTS);
         model.addAttribute("maxNumberOfModuleItems", MAX_NUMBER_OF_MODULE_ITEMS);
@@ -68,7 +67,7 @@ public class TeacherEditorController {
         }
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-            if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(course.getCreatorId(), userInfo.getId())) {
+            if (!userService.isLoggenInTeacherOwnerOfTheCourse(course.getCreatorId(), userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             courseService.editCourse(course);
@@ -103,7 +102,7 @@ public class TeacherEditorController {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
             long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             if (courseService.maximumNumberOfModuleReached(courseId, MAX_MODULES)) {
@@ -124,7 +123,7 @@ public class TeacherEditorController {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
             long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             if (moduleService.moduleExist(moduleId)) {
@@ -145,7 +144,7 @@ public class TeacherEditorController {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
             long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             if (moduleService.maximumNumberOfTestReached(moduleId, MAX_NUMBER_OF_TESTS)) {
@@ -166,7 +165,7 @@ public class TeacherEditorController {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
             long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             if (testService.testExists(testId)) {
@@ -187,7 +186,7 @@ public class TeacherEditorController {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
             long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             if (moduleService.maximumNumberOfItemsReached(moduleId, MAX_NUMBER_OF_MODULE_ITEMS)) {
@@ -208,7 +207,7 @@ public class TeacherEditorController {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
             long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             if (moduleItemService.moduleItemExists(itemId)) {

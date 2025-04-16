@@ -1,7 +1,6 @@
 package korzeniowski.mateusz.app.web;
 
 import jakarta.servlet.http.HttpSession;
-import korzeniowski.mateusz.app.exceptions.StudentRoleMissingException;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.user.dto.UserDisplayDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
@@ -9,7 +8,6 @@ import korzeniowski.mateusz.app.service.CourseService;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseEnrollDto;
 import korzeniowski.mateusz.app.service.EnrollmentService;
 import korzeniowski.mateusz.app.service.UserService;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +42,7 @@ public class TeacherEnrollController {
         }
         UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
 
-        if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(courseNameById.getCreatorId(), userInfo.getId())) {
+        if (!userService.isLoggenInTeacherOwnerOfTheCourse(courseNameById.getCreatorId(), userInfo.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         List<UserDisplayDto> users = new ArrayList<>();

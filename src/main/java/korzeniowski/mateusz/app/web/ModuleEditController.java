@@ -50,7 +50,7 @@ public class ModuleEditController {
                 model.addAttribute("moduleItem", item);
                 UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
                 long creatorId = courseService.findCreatorId(courseId);
-                if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+                if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
                     throw new ResponseStatusException(HttpStatus.FORBIDDEN);
                 }
             });
@@ -81,7 +81,7 @@ public class ModuleEditController {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
             long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             moduleItemService.updateModuleItemEditDto(item, file);
@@ -103,7 +103,7 @@ public class ModuleEditController {
         try {
             UserSessionDto userInfo = (UserSessionDto) request.getSession().getAttribute("userInfo");
             long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.ifLoggedInTeacherIsOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             String filePath = request.getRequestURI().substring(("/teacher/" + courseId + "/files/").length());

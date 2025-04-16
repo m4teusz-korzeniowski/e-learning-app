@@ -1,7 +1,6 @@
 package korzeniowski.mateusz.app.web;
 
 import jakarta.validation.Valid;
-import korzeniowski.mateusz.app.exceptions.GroupNameAlreadyExistsException;
 import korzeniowski.mateusz.app.exceptions.NoSuchGroup;
 import korzeniowski.mateusz.app.model.user.dto.GroupDto;
 import korzeniowski.mateusz.app.model.user.dto.UserDisplayDto;
@@ -150,7 +149,7 @@ public class GroupController {
     public String deleteGroup(@PathVariable long id, RedirectAttributes redirectAttributes) {
         StringBuilder message = new StringBuilder();
         try {
-            if (!groupService.ifGroupExist(id)) {
+            if (!groupService.groupExist(id)) {
                 throw new NoSuchElementException("");
             }
             groupService.removeGroup(id);

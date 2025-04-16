@@ -92,3 +92,12 @@ body {
 #editor {
     min-height: 250px;
 }
+
+.answer-edit{
+    border-top: 1px solid;
+    padding: 10px 0;
+}
+
+.answer-edit input[type="text"] {
+    width: 100%;
+}

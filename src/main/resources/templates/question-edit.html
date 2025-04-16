@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edycja pytania</title>
+    <th:block th:replace="~{fragments :: head}"></th:block>
+</head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+<div class="info-bar">
+    <div>
+        <h2 th:text="'Edycja pytania o ID = ' + ${questionId}"></h2>
+    </div>
+</div>
+<div class="info-bar">
+    <a th:href="@{/teacher}">Strona główna</a>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/teacher/course}">Moje kursy</a>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/teacher/course/edit/{id}(id=${courseId})}">Edycja kursu</a>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/teacher/course/edit/{courseId}/edit-test/{testId}(courseId=${courseId},testId=${testId})}">Edycja
+        testu</a>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/teacher/course/edit/{courseId}/edit-test/{testId}/questions(courseId=${courseId},testId=${testId})}">Pytania</a>
+    <span>&nbsp>&nbsp</span>
+    <span>Edycja pytania</span>
+</div>
+<br><br>
+<div class="user-courses">
+    <form method="post" th:object="${question}"
+          th:action="@{/teacher/course/edit/{courseId}/edit-test/{testId}/questions/edit/{questionId}
+          (courseId=${courseId},testId=${testId},questionId=${questionId})}">
+        <div class="element">
+            <input type="hidden" th:field="*{id}">
+            <label for="description">Treść pytania:</label>
+            <p></p>
+            <textarea id="description" style="display: none" th:field="*{description}"
+                      name="description"></textarea>
+            <div id="editor"></div>
+            <p>Maksymalna ilość punktów za pytanie:</p>
+            <input type="number" th:field="*{score}">
+            <p>Wybierz typ pytania:</p>
+            <select th:field="*{type}" id="type">
+                <option th:value="'SINGLE_CHOICE'">Pojedyńczy wybór</option>
+                <option th:value="'MULTIPLE_CHOICE'">Wielokrotny wybór</option>
+            </select>
+        </div>
+        <br>
+        <div class="element">
+            <p>Odpowiedzi na pytanie:</p>
+            <div class="answer-edit" th:each="anwers,iter : *{answers}">
+                <span>Prawidłowa:</span>
+                <input type="checkbox" th:field="*{answers[__${iter.index}__].correct}">
+                <p></p>
+                <p>Treść odpowiedzi:</p>
+                <input type="text" th:field="*{answers[__${iter.index}__].content}"/>
+                <input type="hidden" th:field="*{answers[__${iter.index}__].id}"/>
+                <p></p>
+            </div>
+        </div>
+        <br>
+        <div class="submit-button">
+            <button type="submit">Zapisz zmiany</button>
+        </div>
+        <br>
+    </form>
+</div>
+<br><br>
+<script th:inline="javascript">
+    const quill = new Quill('#editor', {
+        modules: {
+            toolbar: false
+        },
+        theme: 'snow',
+    });
+
+    const description = /*[[${question.description}]]*/ '';
+    quill.setText(description);
+    document.querySelector('form').onsubmit = function (event) {
+        document.querySelector('#description').value = quill.getText();
+    };
+</script>
+</body>
+</html>

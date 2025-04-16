@@ -4,7 +4,7 @@ import korzeniowski.mateusz.app.model.course.test.Answer;
 import korzeniowski.mateusz.app.model.course.test.Question;
 import korzeniowski.mateusz.app.model.course.test.QuestionType;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionDisplayDto;
-import korzeniowski.mateusz.app.model.user.dto.UserDisplayDto;
+import korzeniowski.mateusz.app.model.course.test.dto.QuestionEditDto;
 import korzeniowski.mateusz.app.repository.AnswerRepository;
 import korzeniowski.mateusz.app.repository.QuestionRepository;
 import org.springframework.data.domain.Page;
@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class QuestionService {
@@ -67,6 +69,19 @@ public class QuestionService {
             users = questionRepository.findAllByTestId(testId, pageable).map(QuestionDisplayDto::map);
         }
         return users;
+    }
+
+    public boolean questionExists(Long questionId) {
+        return questionRepository.existsById(questionId);
+    }
+
+    @Transactional
+    public void removeQuestion(Long questionId) {
+        questionRepository.deleteById(questionId);
+    }
+
+    public Optional<QuestionEditDto> findQuestionById(Long questionId) {
+        return questionRepository.findById(questionId).map(QuestionEditDto::map);
     }
 
 }

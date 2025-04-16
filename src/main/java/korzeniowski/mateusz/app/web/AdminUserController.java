@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
 
 
 @Controller
@@ -69,8 +66,9 @@ public class AdminUserController {
         UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
         if (!userService.ifUserExists(userId)) {
             message.append(String.format("Użytkownik o ID %d nie istnieje!", userId));
-        } else if (checkIfUserIsNotOtherAdmin(userId, userInfo.getId())) {
-            if (checkIfUserIsCourseCreator(userId)) {
+        } else if (isUserNotOtherAdmin(userId, userInfo.getId())) {
+            if (isUserCourseCreator(userId)) {
+                //usuwanie wszystkich kursów usuwanego nauczyciela ?!
                 courseService.removeCoursesByCreatorId(userId);
             }
             userService.removeUser(userId);
@@ -82,16 +80,13 @@ public class AdminUserController {
         return "redirect:/admin/users";
     }
 
-    public String editUser() {
-        return "user-edit";
-    }
 
-    private boolean checkIfUserIsNotOtherAdmin(long userId, long authenticatedUserId) {
+    private boolean isUserNotOtherAdmin(long userId, long authenticatedUserId) {
         Optional<User> user = userService.findUserById(userId);
         return user.map(value -> !value.getId().equals(authenticatedUserId)).orElse(false);
     }
 
-    private boolean checkIfUserIsCourseCreator(long userId) {
+    private boolean isUserCourseCreator(long userId) {
         Optional<User> user = userService.findUserById(userId);
         if (user.isPresent()) {
             UserRole role = user.get().getUserRoles().stream().toList().get(0);

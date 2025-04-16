@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -267,7 +266,7 @@ public class UserService {
         }
     }
 
-    public boolean ifLoggedInTeacherIsOwnerOfTheCourse(Long creatorId, Long teacherId) {
+    public boolean isLoggenInTeacherOwnerOfTheCourse(Long creatorId, Long teacherId) {
         return creatorId.equals(teacherId);
     }
 }

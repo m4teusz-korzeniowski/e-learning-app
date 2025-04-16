@@ -52,7 +52,7 @@ public class GroupService {
         groupRepository.deleteById(id);
     }
 
-    public boolean ifGroupExist(long id) {
+    public boolean groupExist(long id) {
         return groupRepository.existsById(id);
     }
 
