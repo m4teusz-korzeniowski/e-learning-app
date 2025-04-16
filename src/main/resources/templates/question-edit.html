@@ -17,20 +17,20 @@
     <span>&nbsp>&nbsp</span>
     <a th:href="@{/teacher/course}">Moje kursy</a>
     <span>&nbsp>&nbsp</span>
-    <a th:href="@{/teacher/course/edit/{id}(id=${courseId})}">Edycja kursu</a>
+    <a th:href="@{/teacher/course/edit/{id}(id=${question.courseId})}">Edycja kursu</a>
     <span>&nbsp>&nbsp</span>
-    <a th:href="@{/teacher/course/edit/{courseId}/edit-test/{testId}(courseId=${courseId},testId=${testId})}">Edycja
-        testu</a>
+    <a th:href="@{/teacher/course/edit/{courseId}/edit-test/{testId}
+    (courseId=${question.courseId},testId=${question.testId})}">Edycja testu</a>
     <span>&nbsp>&nbsp</span>
-    <a th:href="@{/teacher/course/edit/{courseId}/edit-test/{testId}/questions(courseId=${courseId},testId=${testId})}">Pytania</a>
+    <a th:href="@{/teacher/course/edit/{courseId}/edit-test/{testId}/questions
+    (courseId=${question.courseId},testId=${question.testId})}">Pytania</a>
     <span>&nbsp>&nbsp</span>
     <span>Edycja pytania</span>
 </div>
 <br><br>
 <div class="user-courses">
     <form method="post" th:object="${question}"
-          th:action="@{/teacher/course/edit/{courseId}/edit-test/{testId}/questions/edit/{questionId}
-          (courseId=${courseId},testId=${testId},questionId=${questionId})}">
+          th:action="@{/teacher/questions/edit/{questionId}(questionId=${questionId})}">
         <div class="element">
             <input type="hidden" th:field="*{id}">
             <label for="description">Treść pytania:</label>

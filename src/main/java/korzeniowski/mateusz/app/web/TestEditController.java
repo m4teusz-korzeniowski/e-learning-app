@@ -4,10 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import korzeniowski.mateusz.app.model.course.test.dto.TestEditDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
-import korzeniowski.mateusz.app.service.CourseService;
-import korzeniowski.mateusz.app.service.QuestionService;
-import korzeniowski.mateusz.app.service.TestService;
-import korzeniowski.mateusz.app.service.UserService;
+import korzeniowski.mateusz.app.service.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -24,15 +21,13 @@ import java.util.Optional;
 public class TestEditController {
 
     private final TestService testService;
-    private final CourseService courseService;
-    private final UserService userService;
     private final QuestionService questionService;
+    private final AccessService accessService;
 
-    public TestEditController(TestService testService, CourseService courseService, UserService userService, QuestionService questionService) {
+    public TestEditController(TestService testService, QuestionService questionService, AccessService accessService) {
         this.testService = testService;
-        this.courseService = courseService;
-        this.userService = userService;
         this.questionService = questionService;
+        this.accessService = accessService;
     }
 
     @GetMapping("/teacher/course/edit/{courseId}/edit-test/{testId}")
@@ -43,8 +38,7 @@ public class TestEditController {
             test.ifPresent(t -> {
                 model.addAttribute("test", t);
                 UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-                long creatorId = courseService.findCreatorId(courseId);
-                if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
+                if (accessService.hasLoggedInTeacherAccessToTheTest(testId, userInfo.getId())) {
                     throw new ResponseStatusException(HttpStatus.FORBIDDEN);
                 }
             });
@@ -70,8 +64,7 @@ public class TestEditController {
         }
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-            long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            if (accessService.hasLoggedInTeacherAccessToTheTest(testId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             testService.updateTestSettings(testId, test);
@@ -106,8 +99,7 @@ public class TestEditController {
         }
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-            long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            if (accessService.hasLoggedInTeacherAccessToTheTest(testId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             questionService.createQuestions(numberOfQuestions, testId);

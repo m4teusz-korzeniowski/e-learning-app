@@ -27,7 +27,7 @@
 <br><br>
 <div class="user-courses">
     <div class="element">
-        <form th:action="@{/teacher/course/edit/{courseId}/edit-test/{testId}/questions(courseId=${courseId},testId=${testId})}"
+        <form th:action="@{/teacher/course/{courseId}/test/{testId}/questions(courseId=${courseId},testId=${testId})}"
               method="get">
             <input name="keyword" type="text" th:value="${keyword}" placeholder="Wyszukaj...">
             <button type="submit"><i class="fa fa-search"></i></button>
@@ -49,9 +49,9 @@
                 <td th:text="${question.description}"></td>
                 <td th:text="${question.type}"></td>
                 <td>
-                    <a th:href="@{/teacher/course/edit/{courseId}/edit-test/{testId}/questions/edit/{questionId}
-                    (courseId=${courseId},testId=${testId},questionId=${question.id})}"><i class="fa-solid fa-file-pen"></i></a>
-                    <a th:href="@{/teacher/course/edit/{courseId}/edit-test/{testId}/questions/remove/{questionId}
+                    <a th:href="@{/teacher/questions/edit/{questionId}
+                    (questionId=${question.id})}"><i class="fa-solid fa-file-pen"></i></a>
+                    <a th:href="@{/teacher/course/{courseId}/test/{testId}/questions/remove/{questionId}
                     (courseId=${courseId},testId=${testId},questionId=${question.id})}"><i class="fa-solid fa-remove"></i></a>
                 </td>
             </tr>
@@ -68,7 +68,7 @@
         <a class="page-span"
            th:each="pageElem: ${#numbers.sequence(1,totalPages)}"
            th:if="${pageElem > 0}"
-           th:href="@{/teacher/course/edit/{courseId}/edit-test/{testId}/questions
+           th:href="@{/teacher/course/{courseId}/test/{testId}/questions
            (courseId=${courseId},testId=${testId},keyword=${keyword},page=${pageElem}-1)}"
            th:text="${pageElem}"
         ></a>

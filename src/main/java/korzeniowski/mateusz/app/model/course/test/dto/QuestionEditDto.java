@@ -12,13 +12,17 @@ public class QuestionEditDto {
     private Double score;
     private String type;
     private List<AnswerEditDto> answers;
+    private Long courseId;
+    private Long testId;
 
-    public QuestionEditDto(Long id, String description, Double score, String type, List<AnswerEditDto> answers) {
+    public QuestionEditDto(Long id, String description, Double score, String type, List<AnswerEditDto> answers, Long courseId, Long testId) {
         this.id = id;
         this.description = description;
         this.score = score;
         this.type = type;
         this.answers = answers;
+        this.courseId = courseId;
+        this.testId = testId;
     }
 
     public Long getId() {
@@ -61,6 +65,22 @@ public class QuestionEditDto {
         this.answers = answers;
     }
 
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
+
+    public Long getTestId() {
+        return testId;
+    }
+
+    public void setTestId(Long testId) {
+        this.testId = testId;
+    }
+
     public static QuestionEditDto map(Question question) {
         List<AnswerEditDto> answers = new ArrayList<>();
         for (Answer answer : question.getAnswers()) {
@@ -70,6 +90,8 @@ public class QuestionEditDto {
                 question.getDescription(),
                 question.getScore(),
                 question.getQuestionType().name(),
-                answers);
+                answers,
+                question.getTest().getId(),
+                question.getTest().getModule().getCourse().getId());
     }
 }

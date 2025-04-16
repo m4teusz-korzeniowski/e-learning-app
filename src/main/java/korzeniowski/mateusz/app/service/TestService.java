@@ -52,6 +52,8 @@ public class TestService {
     }
 
     public boolean testExists(Long testId) {
+        System.out.println("test");
+        System.out.println(testRepository.existsById(testId));
         return testRepository.existsById(testId);
     }
 

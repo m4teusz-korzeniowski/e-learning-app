@@ -66,8 +66,8 @@
         <br>
     </form>
     <form id="questions-add-form" method="post" action="#"
-          th:action="@{/teacher/course/edit/{courseId}/edit-test/{testId}/create-questions(courseId=${courseId},testId=${testId})}"
-    >
+          th:action="@{/teacher/course/edit/{courseId}/edit-test/{testId}/create-questions
+          (courseId=${courseId},testId=${testId})}">
         <div class="element">
             <p>Ilość pytań do stworzenia:</p>
             <input type="number" name="numberOfQuestions">
@@ -84,7 +84,9 @@
         <br>
     </form>
     <div class="element">
-        <p><a th:href="@{/teacher/course/edit/{courseId}/edit-test/{testId}/questions(courseId=${courseId},testId=${testId})}">Baza pytań</p>
+        <p><a th:href="@{/teacher/course/{courseId}/test/{testId}/questions(courseId=${courseId},testId=${testId})}">Baza
+            pytań
+        </p>
     </div>
     <br>
 </div>

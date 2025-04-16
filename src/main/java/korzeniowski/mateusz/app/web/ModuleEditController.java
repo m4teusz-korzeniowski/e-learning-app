@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.exceptions.StorageFileNotFoundException;
 import korzeniowski.mateusz.app.model.course.module.dto.ModuleItemEditDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
+import korzeniowski.mateusz.app.service.AccessService;
 import korzeniowski.mateusz.app.service.CourseService;
 import korzeniowski.mateusz.app.service.ModuleItemService;
 import korzeniowski.mateusz.app.service.UserService;
@@ -32,12 +33,12 @@ public class ModuleEditController {
 
     private final ModuleItemService moduleItemService;
     private final CourseService courseService;
-    private final UserService userService;
+    private final AccessService accessService;
 
-    public ModuleEditController(ModuleItemService moduleItemService, CourseService courseService, UserService userService) {
+    public ModuleEditController(ModuleItemService moduleItemService, CourseService courseService, AccessService accessService) {
         this.moduleItemService = moduleItemService;
         this.courseService = courseService;
-        this.userService = userService;
+        this.accessService = accessService;
     }
 
     @GetMapping("/teacher/course/edit/{courseId}/edit-item/{itemId}")
@@ -49,8 +50,7 @@ public class ModuleEditController {
             moduleItem.ifPresent(item -> {
                 model.addAttribute("moduleItem", item);
                 UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-                long creatorId = courseService.findCreatorId(courseId);
-                if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
+                if (accessService.hasLoggedInTeacherAccessToModuleItem(itemId, userInfo.getId())) {
                     throw new ResponseStatusException(HttpStatus.FORBIDDEN);
                 }
             });
@@ -80,8 +80,7 @@ public class ModuleEditController {
         }
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-            long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            if (accessService.hasLoggedInTeacherAccessToModuleItem(itemId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             moduleItemService.updateModuleItemEditDto(item, file);
@@ -103,7 +102,7 @@ public class ModuleEditController {
         try {
             UserSessionDto userInfo = (UserSessionDto) request.getSession().getAttribute("userInfo");
             long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            if (accessService.hasLoggedInTeacherAccessToTheCourse(creatorId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             String filePath = request.getRequestURI().substring(("/teacher/" + courseId + "/files/").length());

@@ -4,17 +4,12 @@ import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionEditDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
-import korzeniowski.mateusz.app.service.CourseService;
-import korzeniowski.mateusz.app.service.QuestionService;
-import korzeniowski.mateusz.app.service.UserService;
+import korzeniowski.mateusz.app.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -26,25 +21,24 @@ public class QuestionController {
 
     private final QuestionService questionService;
     private final static int PAGE_SIZE = 20;
-    private final CourseService courseService;
-    private final UserService userService;
     private final static int MAX_NUMBER_OF_ANSWERS = 10;
+    private final AccessService accessService;
+    private final TestService testService;
 
-    public QuestionController(QuestionService questionService, CourseService courseService, UserService userService) {
+    public QuestionController(QuestionService questionService, AccessService accessService, TestService testService) {
         this.questionService = questionService;
-        this.courseService = courseService;
-        this.userService = userService;
+        this.accessService = accessService;
+        this.testService = testService;
     }
 
-    @GetMapping("/teacher/course/edit/{courseId}/edit-test/{testId}/questions")
+    @GetMapping("/teacher/course/{courseId}/test/{testId}/questions")
     public String showQuestions(@PathVariable long courseId, @PathVariable long testId,
                                 @RequestParam(value = "keyword", required = false) String keyword,
                                 @RequestParam(value = "page", required = false) Integer currentPage,
                                 Model model, HttpSession session) {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-            long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            if (accessService.hasLoggedInTeacherAccessToTheTest(testId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             Page<QuestionDisplayDto> page;
@@ -75,13 +69,12 @@ public class QuestionController {
         return "questions";
     }
 
-    @GetMapping("/teacher/course/edit/{courseId}/edit-test/{testId}/questions/remove/{questionId}")
+    @GetMapping("/teacher/course/{courseId}/test/{testId}/questions/remove/{questionId}")
     public String removeQuestion(@PathVariable long courseId, @PathVariable long testId
             , @PathVariable long questionId, HttpSession session, RedirectAttributes redirectAttributes) {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-            long creatorId = courseService.findCreatorId(courseId);
-            if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
+            if (accessService.hasLoggedInTeacherAccessToQuestion(questionId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             if (!questionService.questionExists(questionId)) {
@@ -95,20 +88,17 @@ public class QuestionController {
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return "redirect:/teacher/course/edit/" + courseId + "/edit-test/" + testId + "/questions";
+        return "redirect:/teacher/course/" + courseId + "/test/" + testId + "/questions";
     }
 
-    @GetMapping("/teacher/course/edit/{courseId}/edit-test/{testId}/questions/edit/{questionId}")
-    public String showEditableQuestion(@PathVariable long courseId, @PathVariable long testId
-            , @PathVariable long questionId, HttpSession session, Model model) {
+    @GetMapping("/teacher/questions/edit/{questionId}")
+    public String showEditableQuestion(@PathVariable long questionId, HttpSession session, Model model) {
         Optional<QuestionEditDto> foundQuestion = questionService.findQuestionById(questionId);
         foundQuestion.ifPresent(question -> {
             model.addAttribute("question", question);
-            System.out.println("Typ: " + question.getType());
             try {
                 UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-                long creatorId = courseService.findCreatorId(courseId);
-                if (!userService.isLoggenInTeacherOwnerOfTheCourse(creatorId, userInfo.getId())) {
+                if (accessService.hasLoggedInTeacherAccessToQuestion(questionId, userInfo.getId())) {
                     throw new ResponseStatusException(HttpStatus.FORBIDDEN);
                 }
             } catch (NoSuchElementException e) {
@@ -120,9 +110,9 @@ public class QuestionController {
         return "question-edit";
     }
 
-    @PostMapping("/teacher/course/edit/{courseId}/edit-test/{testId}/questions/edit/{questionId}")
-    public String editQuestion(@PathVariable long courseId, @PathVariable long testId
-            , @PathVariable long questionId, HttpSession session, Model model) {
+    @PostMapping("/teacher/questions/edit/{questionId}")
+    public String editQuestion(@PathVariable long questionId, HttpSession session, Model model,
+                               @ModelAttribute QuestionEditDto questionEditDto) {
 
         return "question-edit";
     }

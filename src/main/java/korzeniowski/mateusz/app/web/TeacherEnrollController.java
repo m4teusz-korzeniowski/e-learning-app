@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.user.dto.UserDisplayDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
+import korzeniowski.mateusz.app.service.AccessService;
 import korzeniowski.mateusz.app.service.CourseService;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseEnrollDto;
 import korzeniowski.mateusz.app.service.EnrollmentService;
@@ -25,11 +26,13 @@ public class TeacherEnrollController {
     private final EnrollmentService enrollmentService;
     private final CourseService courseService;
     private final UserService userService;
+    private final AccessService accessService;
 
-    public TeacherEnrollController(EnrollmentService enrollmentService, CourseService courseService, UserService userService) {
+    public TeacherEnrollController(EnrollmentService enrollmentService, CourseService courseService, UserService userService, AccessService accessService) {
         this.enrollmentService = enrollmentService;
         this.courseService = courseService;
         this.userService = userService;
+        this.accessService = accessService;
     }
 
     @GetMapping("/teacher/course-enroll/{id}")
@@ -42,7 +45,7 @@ public class TeacherEnrollController {
         }
         UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
 
-        if (!userService.isLoggenInTeacherOwnerOfTheCourse(courseNameById.getCreatorId(), userInfo.getId())) {
+        if (accessService.hasLoggedInTeacherAccessToTheCourse(courseNameById.getCreatorId(), userInfo.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         List<UserDisplayDto> users = new ArrayList<>();
