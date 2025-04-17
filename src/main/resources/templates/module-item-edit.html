@@ -17,7 +17,7 @@
     <span>&nbsp>&nbsp</span>
     <a th:href="@{/teacher/course}">Moje kursy</a>
     <span>&nbsp>&nbsp</span>
-    <a th:href="@{/teacher/course/edit/{id}(id=${courseId})}">Edycja kursu</a>
+    <a th:href="@{/teacher/course/edit/{id}(id=${moduleItem.courseId})}">Edycja kursu</a>
     <span>&nbsp>&nbsp</span>
     <span>Edycja elementu</span>
 </div>
@@ -29,7 +29,7 @@
         </div>
         <br>
     </div>
-    <form th:action="@{/teacher/course/edit/{courseId}/edit-item/{itemId}(courseId=${courseId},itemId=${itemId})}"
+    <form th:action="@{/teacher/module-item/{itemId}/edit(itemId=${itemId})}"
           th:object="${moduleItem}" method="post" enctype="multipart/form-data">
         <div class="element">
             <input type="hidden" th:field="*{id}" th:value="*{id}">
@@ -42,7 +42,7 @@
             <div th:if="*{fileUrl != null}">
                 <p>Aktualnie załączony plik:</p>
                 <div>
-                    <a th:href="@{/teacher/{courseId}/files/{filename}(filename=*{fileUrl},courseId=${courseId})}"
+                    <a th:href="@{/teacher/{courseId}/files/{filename}(filename=*{fileUrl},courseId=*{courseId})}"
                        th:text="*{fileUrl}" target="_blank">Plik</a>
                 </div>
                 <br>

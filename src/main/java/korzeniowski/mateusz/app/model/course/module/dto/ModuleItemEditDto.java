@@ -7,12 +7,14 @@ public class ModuleItemEditDto {
     private String description;
     private String fileUrl;
     private String name;
+    private Long courseId;
 
-    public ModuleItemEditDto(Long id, String description, String fileUrl, String name) {
+    public ModuleItemEditDto(Long id, String description, String fileUrl, String name, Long courseId) {
         this.id = id;
         this.description = description;
         this.fileUrl = fileUrl;
         this.name = name;
+        this.courseId = courseId;
     }
 
     public Long getId() {
@@ -47,7 +49,16 @@ public class ModuleItemEditDto {
         this.name = name;
     }
 
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
+
     public static ModuleItemEditDto map(ModuleItem item) {
-        return new ModuleItemEditDto(item.getId(), item.getDescription(), item.getFileUrl(), item.getName());
+        return new ModuleItemEditDto(item.getId(), item.getDescription(),
+                item.getFileUrl(), item.getName(), item.getModule().getCourse().getId());
     }
 }

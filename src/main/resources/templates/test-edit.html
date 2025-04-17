@@ -17,7 +17,7 @@
     <span>&nbsp>&nbsp</span>
     <a th:href="@{/teacher/course}">Moje kursy</a>
     <span>&nbsp>&nbsp</span>
-    <a th:href="@{/teacher/course/edit/{id}(id=${courseId})}">Edycja kursu</a>
+    <a th:href="@{/teacher/course/edit/{id}(id=${test.getCourseId()})}">Edycja kursu</a>
     <span>&nbsp>&nbsp</span>
     <span>Edycja testu</span>
 </div>
@@ -30,7 +30,7 @@
         <br>
     </div>
     <form id="test-update-form" method="post"
-          th:action="@{/teacher/course/edit/{courseId}/edit-test/{testId}(courseId=${courseId},testId=${testId})}"
+          th:action="@{/teacher/test/{testId}/edit(testId=${testId})}"
           th:object="${test}"
     >
         <div class="element">
@@ -66,8 +66,7 @@
         <br>
     </form>
     <form id="questions-add-form" method="post" action="#"
-          th:action="@{/teacher/course/edit/{courseId}/edit-test/{testId}/create-questions
-          (courseId=${courseId},testId=${testId})}">
+          th:action="@{/teacher/test/{testId}/create-questions(testId=${testId})}">
         <div class="element">
             <p>Ilość pytań do stworzenia:</p>
             <input type="number" name="numberOfQuestions">
@@ -84,9 +83,7 @@
         <br>
     </form>
     <div class="element">
-        <p><a th:href="@{/teacher/course/{courseId}/test/{testId}/questions(courseId=${courseId},testId=${testId})}">Baza
-            pytań
-        </p>
+        <p><a th:href="@{/teacher/test/{testId}/questions(testId=${testId})}">Baza pytań</a></p>
     </div>
     <br>
 </div>

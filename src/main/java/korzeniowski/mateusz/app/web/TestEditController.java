@@ -30,8 +30,8 @@ public class TestEditController {
         this.accessService = accessService;
     }
 
-    @GetMapping("/teacher/course/edit/{courseId}/edit-test/{testId}")
-    public String showTest(@PathVariable long courseId, @PathVariable long testId, Model model,
+    @GetMapping("/teacher/test/{testId}/edit")
+    public String showTest(@PathVariable long testId, Model model,
                            HttpSession session) {
         try {
             Optional<TestEditDto> test = testService.findTestEditById(testId);
@@ -49,18 +49,17 @@ public class TestEditController {
         return "test-edit";
     }
 
-    private String returnToEditForm(Model model, long courseId, long testId) {
-        model.addAttribute("courseId", courseId);
+    private String returnToEditForm(Model model, long testId) {
         model.addAttribute("testId", testId);
         return "test-edit";
     }
 
-    @PostMapping("/teacher/course/edit/{courseId}/edit-test/{testId}")
-    public String editTest(@PathVariable long courseId, @PathVariable long testId, Model model,
+    @PostMapping("/teacher/test/{testId}/edit")
+    public String editTest(@PathVariable long testId, Model model,
                            HttpSession session, @ModelAttribute("test") @Valid TestEditDto test,
                            BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return returnToEditForm(model, courseId, testId);
+            return returnToEditForm(model, testId);
         }
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
@@ -74,28 +73,28 @@ public class TestEditController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         } catch (IllegalArgumentException e) {
             bindingResult.rejectValue("start", "error.start", e.getMessage());
-            return returnToEditForm(model, courseId, testId);
+            return returnToEditForm(model, testId);
         } catch (DataIntegrityViolationException e) {
             bindingResult.rejectValue("description", "error.description",
                     "*przekroczono maksymalnu rozmiar opisu");
-            return returnToEditForm(model, courseId, testId);
+            return returnToEditForm(model, testId);
         }
-        return "redirect:/teacher/course/edit/" + courseId + "/edit-test/" + testId;
+        return "redirect:/teacher/test/" + testId + "/edit";
     }
 
-    @PostMapping("/teacher/course/edit/{courseId}/edit-test/{testId}/create-questions")
-    public String createQuestion(@PathVariable long courseId, @PathVariable long testId,
+    @PostMapping("/teacher/test/{testId}/create-questions")
+    public String createQuestion(@PathVariable long testId,
                                  @RequestParam(name = "numberOfQuestions", required = false) Integer numberOfQuestions,
                                  @ModelAttribute("test") TestEditDto test,
                                  RedirectAttributes redirectAttributes, HttpSession session) {
         if (numberOfQuestions == null) {
             redirectAttributes.addFlashAttribute("questionMessage",
                     "*pole nie może być puste");
-            return "redirect:/teacher/course/edit/" + courseId + "/edit-test/" + testId;
+            return "redirect:/teacher/test/" + testId + "/edit";
         } else if (numberOfQuestions < 1) {
             redirectAttributes.addFlashAttribute("questionMessage",
                     "*ilość pytań musi być równa co najmniej 1");
-            return "redirect:/teacher/course/edit/" + courseId + "/edit-test/" + testId;
+            return "redirect:/teacher/test/" + testId + "/edit";
         }
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
@@ -109,6 +108,6 @@ public class TestEditController {
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return "redirect:/teacher/course/edit/" + courseId + "/edit-test/" + testId;
+        return "redirect:/teacher/test/" + testId + "/edit";
     }
 }

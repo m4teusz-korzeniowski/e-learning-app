@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -49,7 +50,7 @@ public class ModuleItemService {
     public void updateModuleItem(ModuleItemDisplayDto moduleItem) {
         Optional<ModuleItem> item = moduleItemRepository.findById(moduleItem.getId());
         if (item.isPresent()) {
-            if(moduleItem.getName().length() > MAX_LENGTH_OF_ITEM_NAME) {
+            if (moduleItem.getName().length() > MAX_LENGTH_OF_ITEM_NAME) {
                 throw new DataIntegrityViolationException("*przekroczono rozmiar dla nazwy elementu modułu!");
             }
             item.get().setName(moduleItem.getName());
@@ -79,5 +80,14 @@ public class ModuleItemService {
 
     public Resource getFile(String fileName) {
         return storageService.loadAsResource(fileName);
+    }
+
+    public Long findCourseIdFromModuleItem(Long moduleItemId) {
+        Optional<ModuleItem> item = moduleItemRepository.findById(moduleItemId);
+        if (item.isPresent()) {
+            return item.get().getModule().getCourse().getId();
+        } else {
+            throw new NoSuchElementException("Nie znaleziono elementu o id " + moduleItemId);
+        }
     }
 }

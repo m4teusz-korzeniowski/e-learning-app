@@ -55,7 +55,7 @@
                         <input type="text" th:field="*{modules[__${iter.index}__].items[__${iter3.index}__].name}">
                         <input type="hidden" th:field="*{modules[__${iter.index}__].items[__${iter3.index}__].id}">
                         <span class="action-button">
-                            <a th:href="@{/teacher/course/edit/{id}/edit-item/{itemId}(id=${id},itemId=${item.id})}">
+                            <a th:href="@{/teacher/module-item/{itemId}/edit(itemId=${item.id})}">
                                 <button type="button">Edytuj</button>
                             </a>
                             <a th:href="@{/teacher/course/edit/{id}/remove-item/{itemId}(id=${id},itemId=${item.id})}">
@@ -71,7 +71,7 @@
                         <input type="text" th:field="*{modules[__${iter.index}__].tests[__${iter2.index}__].name}">
                         <input type="hidden" th:field="*{modules[__${iter.index}__].tests[__${iter2.index}__].id}">
                         <span class="action-button">
-                            <a th:href="@{/teacher/course/edit/{id}/edit-test/{testId}(id=${id},testId=${test.id})}">
+                            <a th:href="@{/teacher/test/{testId}/edit(testId=${test.id})}">
                                 <button type="button">Edytuj</button>
                             </a>
                             <a th:href="@{/teacher/course/edit/{id}/remove-test/{testId}(id=${id},testId=${test.id})}">

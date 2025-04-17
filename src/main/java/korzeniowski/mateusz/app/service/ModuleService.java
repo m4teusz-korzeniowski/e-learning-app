@@ -111,4 +111,13 @@ public class ModuleService {
             throw new NoSuchElementException("Nie znaleziono modułu!");
         }
     }
+
+    public Long findCourseIdFromModule(Long moduleId) {
+        Optional<Module> module = moduleRepository.findById(moduleId);
+        if (module.isPresent()) {
+            return module.get().getCourse().getId();
+        } else {
+            throw new NoSuchElementException("Module with id " + moduleId + " not found");
+        }
+    }
 }

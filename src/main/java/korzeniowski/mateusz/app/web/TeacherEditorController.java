@@ -117,6 +117,7 @@ public class TeacherEditorController {
         return "redirect:/teacher/course/edit/" + courseId;
     }
 
+    //TO DO usunąć courseId i pobrać courseId z modułu
     @GetMapping("/teacher/course/edit/{courseId}/remove-module/{moduleId}")
     public String removeModule(@PathVariable long courseId, @PathVariable long moduleId,
                                HttpSession session) {
@@ -136,6 +137,7 @@ public class TeacherEditorController {
         return "redirect:/teacher/course/edit/" + courseId;
     }
 
+    //TO DO usunąć courseId i pobrać courseId z modułu
     @GetMapping("/teacher/course/edit/{courseId}/{moduleId}/create-test")
     public String addTest(@PathVariable long courseId, @PathVariable long moduleId,
                           RedirectAttributes redirectAttributes,
@@ -157,6 +159,7 @@ public class TeacherEditorController {
         return "redirect:/teacher/course/edit/" + courseId;
     }
 
+    //TO DO usunąć courseId i pobrać courseId z testu
     @GetMapping("/teacher/course/edit/{courseId}/remove-test/{testId}")
     public String removeTest(@PathVariable long courseId, @PathVariable long testId,
                              HttpSession session) {
@@ -176,6 +179,7 @@ public class TeacherEditorController {
         }
     }
 
+    //TO DO usunąć courseId i pobrać courseId z modułu
     @GetMapping("/teacher/course/edit/{courseId}/{moduleId}/create-item")
     public String addItem(@PathVariable long courseId, @PathVariable long moduleId,
                           RedirectAttributes redirectAttributes,
@@ -197,6 +201,7 @@ public class TeacherEditorController {
         return "redirect:/teacher/course/edit/" + courseId;
     }
 
+    //TO DO usunąć courseId i pobrać courseId z item module
     @GetMapping("/teacher/course/edit/{courseId}/remove-item/{itemId}")
     public String removeItem(@PathVariable long courseId, @PathVariable long itemId,
                              HttpSession session) {

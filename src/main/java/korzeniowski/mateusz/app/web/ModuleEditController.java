@@ -41,8 +41,9 @@ public class ModuleEditController {
         this.accessService = accessService;
     }
 
-    @GetMapping("/teacher/course/edit/{courseId}/edit-item/{itemId}")
-    public String showEditModule(@PathVariable long courseId, @PathVariable long itemId,
+    //TO DO usunąć courseId i pobrać courseId z itemModule
+    @GetMapping("/teacher/module-item/{itemId}/edit")
+    public String showEditModule(@PathVariable long itemId,
                                  Model model, HttpSession session,
                                  @ModelAttribute("message") String message) {
         try {
@@ -62,21 +63,21 @@ public class ModuleEditController {
         return "module-item-edit";
     }
 
-    private String returnEditForm(long courseId, long itemId, Model model, ModuleItemEditDto item) {
+    private String returnEditForm(long itemId, Model model, ModuleItemEditDto item) {
         model.addAttribute("moduleItem", item);
-        model.addAttribute("courseId", courseId);
         model.addAttribute("itemId", itemId);
         return "module-item-edit";
     }
 
-    @PostMapping("/teacher/course/edit/{courseId}/edit-item/{itemId}")
-    public String editModule(@PathVariable long courseId, @PathVariable long itemId,
+    //TO DO usunąć courseId i pobrać courseId z moduleItem
+    @PostMapping("/teacher/module-item/{itemId}/edit")
+    public String editModule(@PathVariable long itemId,
                              @ModelAttribute("moduleItem") ModuleItemEditDto item,
                              BindingResult bindingResult, Model model,
                              @RequestParam(value = "file", required = false) MultipartFile file,
                              HttpSession session, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return returnEditForm(courseId, itemId, model, item);
+            return returnEditForm(itemId, model, item);
         }
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
@@ -90,9 +91,9 @@ public class ModuleEditController {
         } catch (DataIntegrityViolationException e) {
             bindingResult.rejectValue("description", "error.description",
                     "*przekroczono maksymalnu rozmiar opisu");
-            return returnEditForm(courseId, itemId, model, item);
+            return returnEditForm(itemId, model, item);
         }
-        return "redirect:/teacher/course/edit/" + courseId + "/edit-item/" + itemId;
+        return "redirect:/teacher/module-item/" + itemId + "/edit";
     }
 
     @GetMapping("/teacher/{courseId}/files/**")

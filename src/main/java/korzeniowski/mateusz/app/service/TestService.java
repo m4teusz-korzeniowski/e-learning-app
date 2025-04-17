@@ -34,7 +34,7 @@ public class TestService {
     public void updateTest(Long testId, TestNameIdDto testDto) {
         Optional<Test> test = testRepository.findTestById(testId);
         if (test.isPresent()) {
-            if(testDto.getName().length() > MAX_LENGTH_OF_TEST_NAME) {
+            if (testDto.getName().length() > MAX_LENGTH_OF_TEST_NAME) {
                 throw new DataIntegrityViolationException("*przekroczono rozmiar dla nazwy testu!");
             }
             test.get().setName(testDto.getName());
@@ -100,6 +100,15 @@ public class TestService {
         if (test.isPresent()) {
             question.setTest(test.get());
             test.get().getQuestions().add(question);
+        } else {
+            throw new NoSuchElementException("Nie znaleziono testu!");
+        }
+    }
+
+    public Long findCourseIdFromTest(Long testId) {
+        Optional<Test> test = testRepository.findTestById(testId);
+        if (test.isPresent()) {
+            return test.get().getModule().getCourse().getId();
         } else {
             throw new NoSuchElementException("Nie znaleziono testu!");
         }

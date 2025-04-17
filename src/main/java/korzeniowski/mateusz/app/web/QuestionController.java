@@ -31,8 +31,8 @@ public class QuestionController {
         this.testService = testService;
     }
 
-    @GetMapping("/teacher/course/{courseId}/test/{testId}/questions")
-    public String showQuestions(@PathVariable long courseId, @PathVariable long testId,
+    @GetMapping("/teacher/test/{testId}/questions")
+    public String showQuestions(@PathVariable long testId,
                                 @RequestParam(value = "keyword", required = false) String keyword,
                                 @RequestParam(value = "page", required = false) Integer currentPage,
                                 Model model, HttpSession session) {
@@ -58,6 +58,8 @@ public class QuestionController {
                     page = questionService.findQuestionsPage(0, PAGE_SIZE, testId);
                 }
             }
+            long courseId = testService.findCourseIdFromTest(testId);
+            model.addAttribute("courseId", courseId);
             model.addAttribute("questions", page.getContent());
             model.addAttribute("keyword", keyword);
             model.addAttribute("currentPage", currentPage);
@@ -69,8 +71,8 @@ public class QuestionController {
         return "questions";
     }
 
-    @GetMapping("/teacher/course/{courseId}/test/{testId}/questions/remove/{questionId}")
-    public String removeQuestion(@PathVariable long courseId, @PathVariable long testId
+    @GetMapping("/teacher/test/{testId}/questions/remove/{questionId}")
+    public String removeQuestion(@PathVariable long testId
             , @PathVariable long questionId, HttpSession session, RedirectAttributes redirectAttributes) {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
@@ -88,7 +90,7 @@ public class QuestionController {
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return "redirect:/teacher/course/" + courseId + "/test/" + testId + "/questions";
+        return "redirect:/teacher/test/" + testId + "/questions";
     }
 
     @GetMapping("/teacher/questions/edit/{questionId}")

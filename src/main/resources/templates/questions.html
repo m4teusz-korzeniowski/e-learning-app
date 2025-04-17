@@ -19,15 +19,15 @@
     <span>&nbsp>&nbsp</span>
     <a th:href="@{/teacher/course/edit/{id}(id=${courseId})}">Edycja kursu</a>
     <span>&nbsp>&nbsp</span>
-    <a th:href="@{/teacher/course/edit/{courseId}/edit-test/{testId}(courseId=${courseId},testId=${testId})}">Edycja
-        testu</a>
+    <a th:href="@{/teacher/course/edit/{courseId}/edit-test/{testId}
+    (courseId=${courseId},testId=${testId})}">Edycja testu</a>
     <span>&nbsp>&nbsp</span>
     <span>Baza pytań</span>
 </div>
 <br><br>
 <div class="user-courses">
     <div class="element">
-        <form th:action="@{/teacher/course/{courseId}/test/{testId}/questions(courseId=${courseId},testId=${testId})}"
+        <form th:action="@{/teacher/test/{testId}/questions(testId=${testId})}"
               method="get">
             <input name="keyword" type="text" th:value="${keyword}" placeholder="Wyszukaj...">
             <button type="submit"><i class="fa fa-search"></i></button>
@@ -51,8 +51,8 @@
                 <td>
                     <a th:href="@{/teacher/questions/edit/{questionId}
                     (questionId=${question.id})}"><i class="fa-solid fa-file-pen"></i></a>
-                    <a th:href="@{/teacher/course/{courseId}/test/{testId}/questions/remove/{questionId}
-                    (courseId=${courseId},testId=${testId},questionId=${question.id})}"><i class="fa-solid fa-remove"></i></a>
+                    <a th:href="@{/teacher/test/{testId}/questions/remove/{questionId}
+                    (testId=${testId},questionId=${question.id})}"><i class="fa-solid fa-remove"></i></a>
                 </td>
             </tr>
         </table>
@@ -68,8 +68,8 @@
         <a class="page-span"
            th:each="pageElem: ${#numbers.sequence(1,totalPages)}"
            th:if="${pageElem > 0}"
-           th:href="@{/teacher/course/{courseId}/test/{testId}/questions
-           (courseId=${courseId},testId=${testId},keyword=${keyword},page=${pageElem}-1)}"
+           th:href="@{/teacher/test/{testId}/questions
+           (testId=${testId},keyword=${keyword},page=${pageElem}-1)}"
            th:text="${pageElem}"
         ></a>
     </div>

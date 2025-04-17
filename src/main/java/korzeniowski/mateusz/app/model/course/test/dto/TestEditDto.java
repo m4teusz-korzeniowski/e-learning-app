@@ -24,10 +24,11 @@ public class TestEditDto {
     private LocalDateTime end;
     @Min(value = 1, message = "*jeżeli pole nie jest puste, wymagane jest co najmniej jedno podejście!")
     private Integer maxAttempts;
+    private Long courseId;
 
     public TestEditDto(Long id, String name, String description,
                        Integer numberOfQuestions, Integer duration,
-                       LocalDateTime start, LocalDateTime end, Integer maxAttempts) {
+                       LocalDateTime start, LocalDateTime end, Integer maxAttempts, Long courseId) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -36,6 +37,7 @@ public class TestEditDto {
         this.start = start;
         this.end = end;
         this.maxAttempts = maxAttempts;
+        this.courseId = courseId;
     }
 
     public Long getId() {
@@ -102,6 +104,14 @@ public class TestEditDto {
         this.maxAttempts = maxAttempts;
     }
 
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
+
     public static TestEditDto map(Test test) {
         return new TestEditDto(
                 test.getId(),
@@ -111,7 +121,8 @@ public class TestEditDto {
                 test.getDuration(),
                 test.getStartTime(),
                 test.getEndTime(),
-                test.getMaxAttempts()
+                test.getMaxAttempts(),
+                test.getModule().getCourse().getId()
         );
     }
 }
