@@ -1,6 +1,7 @@
 package korzeniowski.mateusz.app.service;
 
 import korzeniowski.mateusz.app.model.course.test.Answer;
+import korzeniowski.mateusz.app.model.course.test.dto.AnswerEditDto;
 import korzeniowski.mateusz.app.repository.AnswerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +44,17 @@ public class AnswerService {
     @Transactional
     public void deleteAnswer(Long answerId) {
         answerRepository.findById(answerId).ifPresent(answerRepository::delete);
+    }
+
+    public void updateAnswer(AnswerEditDto dto) {
+        Optional<Answer> answer = answerRepository.findById(dto.getId());
+        if (answer.isPresent()) {
+            answer.get().setContent(dto.getContent());
+            answer.get().setCorrect(dto.getCorrect());
+            answerRepository.save(answer.get());
+        } else {
+            throw new NoSuchElementException("Answer with id " + dto.getId() + " not found");
+        }
     }
 
 }

@@ -1,6 +1,8 @@
 package korzeniowski.mateusz.app.web;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import korzeniowski.mateusz.app.model.course.test.dto.AnswerEditDto;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionEditDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -115,15 +118,46 @@ public class QuestionController {
         });
         foundQuestion.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("maxNumberOfAnswers", MAX_NUMBER_OF_ANSWERS);
-        model.addAttribute("minNumberOfAnswers", MIN_NUMBER_OF_ANSWERS);
+        return "question-edit";
+    }
+
+    private String returnQuestionEditForm(long questionId, Model model,
+                                          QuestionEditDto questionEditDto) {
+        model.addAttribute("question", questionEditDto);
+        model.addAttribute("questionId", questionId);
+        model.addAttribute("maxNumberOfAnswers", MAX_NUMBER_OF_ANSWERS);
         return "question-edit";
     }
 
     @PostMapping("/teacher/questions/edit/{questionId}")
     public String editQuestion(@PathVariable long questionId, HttpSession session, Model model,
-                               @ModelAttribute QuestionEditDto questionEditDto) {
-
-        return "question-edit";
+                               @ModelAttribute("question") @Valid QuestionEditDto question,
+                               BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return returnQuestionEditForm(questionId, model, question);
+        }
+        try {
+            UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
+            if (accessService.hasLoggedInTeacherAccessToQuestion(questionId, userInfo.getId())) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
+            if (questionService.isQuestionTypeOk(question)) {
+                questionService.editQuestion(question);
+                if (question.getAnswers() != null) {
+                    for (AnswerEditDto answer : question.getAnswers()) {
+                        answerService.updateAnswer(answer);
+                    }
+                }
+                redirectAttributes.addFlashAttribute("message",
+                        "Edycja zakończyła się sukcesem");
+            } else {
+                redirectAttributes.addFlashAttribute("message",
+                        "*dla testu jednokrotnego wyboru, zaznacz tylko jedną poprawną odpowiedź!");
+            }
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return "redirect:/teacher/questions/edit/" + questionId;
     }
 
     @GetMapping("teacher/question/{questionId}/add-answer")
@@ -158,11 +192,11 @@ public class QuestionController {
             }
             if (answerService.answerExist(answerId)) {
                 questionId = answerService.findQuestionId(answerId);
-                if(questionService.minimumNumberOfQuestionReached(MIN_NUMBER_OF_ANSWERS, questionId)) {
+                if (questionService.minimumNumberOfQuestionReached(MIN_NUMBER_OF_ANSWERS, questionId)) {
                     String message = String.format("*ilość odpowiedzi musi wynosić co najmniej %s!",
                             MIN_NUMBER_OF_ANSWERS);
                     redirectAttributes.addFlashAttribute("message", message);
-                }else{
+                } else {
                     answerService.deleteAnswer(answerId);
                 }
             } else {

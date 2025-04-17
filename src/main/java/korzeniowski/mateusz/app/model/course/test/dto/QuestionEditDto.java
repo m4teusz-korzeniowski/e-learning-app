@@ -1,5 +1,10 @@
 package korzeniowski.mateusz.app.model.course.test.dto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import korzeniowski.mateusz.app.model.course.test.Answer;
 import korzeniowski.mateusz.app.model.course.test.Question;
 
@@ -8,9 +13,15 @@ import java.util.List;
 
 public class QuestionEditDto {
     private Long id;
+    @NotBlank(message = "*pole ni może być puste!")
+    @Size(max = 5000, message = "*przekroczono maksymalny rozmiar opisu!")
     private String description;
+    @NotNull(message = "*pole nie może być puste!")
+    @Min(value = 1, message = "*ilość punktów musi wynosić co najmniej 1!")
     private Double score;
+    @NotBlank(message = "*pole nie może być puste!")
     private String type;
+    @Valid
     private List<AnswerEditDto> answers;
     private Long courseId;
     private Long testId;

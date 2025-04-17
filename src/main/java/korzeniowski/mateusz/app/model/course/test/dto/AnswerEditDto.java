@@ -1,9 +1,13 @@
 package korzeniowski.mateusz.app.model.course.test.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import korzeniowski.mateusz.app.model.course.test.Answer;
 
 public class AnswerEditDto {
     private Long id;
+    @NotBlank(message = "*pole nie może być puste!")
+    @Size(max = 500, message = "*przekroczono maksymalny rozmiar pytania!")
     private String content;
     private Boolean correct;
 

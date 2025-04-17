@@ -3,6 +3,7 @@ package korzeniowski.mateusz.app.service;
 import korzeniowski.mateusz.app.model.course.test.Answer;
 import korzeniowski.mateusz.app.model.course.test.Question;
 import korzeniowski.mateusz.app.model.course.test.QuestionType;
+import korzeniowski.mateusz.app.model.course.test.dto.AnswerEditDto;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionEditDto;
 import korzeniowski.mateusz.app.repository.AnswerRepository;
@@ -123,6 +124,34 @@ public class QuestionService {
             question.get().getAnswers().add(answer);
         } else {
             throw new NoSuchElementException("Nie znaleziono pytania!");
+        }
+    }
+
+    public void editQuestion(QuestionEditDto dto) {
+        Optional<Question> question = questionRepository.findById(dto.getId());
+        if (question.isPresent()) {
+            question.get().setDescription(dto.getDescription());
+            question.get().setScore(dto.getScore());
+            question.get().setQuestionType(QuestionType.valueOf(dto.getType()));
+        } else {
+            throw new NoSuchElementException("Nie znaleziono pytania!");
+        }
+    }
+
+    public boolean isQuestionTypeOk(QuestionEditDto question) {
+        if (QuestionType.valueOf(question.getType()) == QuestionType.SINGLE_CHOICE) {
+            int counter = 0;
+            for (AnswerEditDto answer : question.getAnswers()) {
+                if (answer.getCorrect()) {
+                    counter++;
+                }
+                if (counter >= 2) {
+                    return false;
+                }
+            }
+            return counter == 1;
+        } else {
+            return true;
         }
     }
 }

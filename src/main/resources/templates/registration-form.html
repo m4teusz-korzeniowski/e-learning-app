@@ -22,27 +22,27 @@
             <label>
                 <p>Imię:</p>
                 <input type="text" th:field="*{firstName}" placeholder="Imię">
-                <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" Błędne imię></p>
+                <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
             </label>
             <label>
                 <p>Nazwisko:</p>
                 <input type="text" th:field="*{lastName}" placeholder="Nazwisko">
-                <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" Błędne nazwisko></p>
+                <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
             </label>
             <label>
                 <p>E-mail:</p>
                 <input th:field="*{email}" placeholder="e-mail">
-                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Błędny email></p>
+                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
             </label>
             <label>
                 <p>Hasło:</p>
                 <input th:field="*{password}" placeholder="Hasło" type="password">
-                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Błędne hasło></p>
+                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
             </label>
             <label>
                 <p>Nr. Pesel:</p>
                 <input th:field="*{pesel}" placeholder="02070803628" type="text">
-                <p th:if="${#fields.hasErrors('pesel')}" th:errors="*{pesel}">Błędny pesel</p>
+                <p th:if="${#fields.hasErrors('pesel')}" th:errors="*{pesel}"></p>
             </label>
             <label>
                 <p>Wybierz rolę:</p>
