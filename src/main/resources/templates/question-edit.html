@@ -19,11 +19,9 @@
     <span>&nbsp>&nbsp</span>
     <a th:href="@{/teacher/course/edit/{id}(id=${question.courseId})}">Edycja kursu</a>
     <span>&nbsp>&nbsp</span>
-    <a th:href="@{/teacher/course/edit/{courseId}/edit-test/{testId}
-    (courseId=${question.courseId},testId=${question.testId})}">Edycja testu</a>
+    <a th:href="@{/teacher/test/{testId}/edit(testId=${question.testId})}">Edycja testu</a>
     <span>&nbsp>&nbsp</span>
-    <a th:href="@{/teacher/course/edit/{courseId}/edit-test/{testId}/questions
-    (courseId=${question.courseId},testId=${question.testId})}">Pytania</a>
+    <a th:href="@{/teacher/test/{testId}/questions(testId=${question.testId})}">Pytania</a>
     <span>&nbsp>&nbsp</span>
     <span>Edycja pytania</span>
 </div>
@@ -56,10 +54,27 @@
                 <p>Treść odpowiedzi:</p>
                 <input type="text" th:field="*{answers[__${iter.index}__].content}"/>
                 <input type="hidden" th:field="*{answers[__${iter.index}__].id}"/>
+                <p>
+                    <a th:href="@{/teacher/answer/{id}/remove-answer(id=*{answers[__${iter.index}__].id})}">
+                        <button type="button">Usuń</button>
+                    </a>
+                </p>
                 <p></p>
             </div>
+            <div th:if="${question.answers.size() < maxNumberOfAnswers}">
+                <a th:href="@{/teacher/question/{id}/add-answer(id=${question.id})}">
+                    <button type="button">Dodaj odpowiedź</button>
+                </a>
+            </div>
+            <br>
         </div>
         <br>
+        <div th:if="${message!=null} and ${!message.isBlank()}">
+            <div class="element">
+                <p th:text="${message}"></p>
+            </div>
+            <br>
+        </div>
         <div class="submit-button">
             <button type="submit">Zapisz zmiany</button>
         </div>

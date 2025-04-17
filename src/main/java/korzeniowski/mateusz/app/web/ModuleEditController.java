@@ -41,7 +41,6 @@ public class ModuleEditController {
         this.accessService = accessService;
     }
 
-    //TO DO usunąć courseId i pobrać courseId z itemModule
     @GetMapping("/teacher/module-item/{itemId}/edit")
     public String showEditModule(@PathVariable long itemId,
                                  Model model, HttpSession session,
@@ -69,7 +68,6 @@ public class ModuleEditController {
         return "module-item-edit";
     }
 
-    //TO DO usunąć courseId i pobrać courseId z moduleItem
     @PostMapping("/teacher/module-item/{itemId}/edit")
     public String editModule(@PathVariable long itemId,
                              @ModelAttribute("moduleItem") ModuleItemEditDto item,

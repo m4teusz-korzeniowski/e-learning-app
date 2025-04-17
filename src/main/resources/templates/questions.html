@@ -19,8 +19,7 @@
     <span>&nbsp>&nbsp</span>
     <a th:href="@{/teacher/course/edit/{id}(id=${courseId})}">Edycja kursu</a>
     <span>&nbsp>&nbsp</span>
-    <a th:href="@{/teacher/course/edit/{courseId}/edit-test/{testId}
-    (courseId=${courseId},testId=${testId})}">Edycja testu</a>
+    <a th:href="@{/teacher/test/{testId}/edit(testId=${testId})}">Edycja testu</a>
     <span>&nbsp>&nbsp</span>
     <span>Baza pytań</span>
 </div>
@@ -64,6 +63,10 @@
         </div>
         <br>
     </div>
+    <div class="element">
+        <span th:text="'Ilość pytań w bazie: ' + ${totalItems}"></span>
+    </div>
+    <br>
     <div class="element">
         <a class="page-span"
            th:each="pageElem: ${#numbers.sequence(1,totalPages)}"

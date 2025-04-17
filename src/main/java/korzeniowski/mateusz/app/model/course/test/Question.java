@@ -18,7 +18,7 @@ public class Question {
     @ManyToOne
     @JoinColumn(name = "test_id")
     private Test test;
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "question")
     private List<Answer> answers = new ArrayList<>();
 
     public Long getId() {

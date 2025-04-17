@@ -91,7 +91,7 @@ public class QuestionEditDto {
                 question.getScore(),
                 question.getQuestionType().name(),
                 answers,
-                question.getTest().getId(),
-                question.getTest().getModule().getCourse().getId());
+                question.getTest().getModule().getCourse().getId(),
+                question.getTest().getId());
     }
 }

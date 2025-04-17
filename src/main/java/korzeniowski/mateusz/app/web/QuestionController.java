@@ -4,7 +4,10 @@ import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionEditDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
-import korzeniowski.mateusz.app.service.*;
+import korzeniowski.mateusz.app.service.AccessService;
+import korzeniowski.mateusz.app.service.AnswerService;
+import korzeniowski.mateusz.app.service.QuestionService;
+import korzeniowski.mateusz.app.service.TestService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -22,13 +25,16 @@ public class QuestionController {
     private final QuestionService questionService;
     private final static int PAGE_SIZE = 20;
     private final static int MAX_NUMBER_OF_ANSWERS = 10;
+    private final static int MIN_NUMBER_OF_ANSWERS = 2;
     private final AccessService accessService;
     private final TestService testService;
+    private final AnswerService answerService;
 
-    public QuestionController(QuestionService questionService, AccessService accessService, TestService testService) {
+    public QuestionController(QuestionService questionService, AccessService accessService, TestService testService, AnswerService answerService) {
         this.questionService = questionService;
         this.accessService = accessService;
         this.testService = testService;
+        this.answerService = answerService;
     }
 
     @GetMapping("/teacher/test/{testId}/questions")
@@ -87,10 +93,10 @@ public class QuestionController {
                 redirectAttributes.addFlashAttribute("message",
                         String.format("Usunięto pytanie o ID %s", questionId));
             }
+            return "redirect:/teacher/test/" + testId + "/questions";
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return "redirect:/teacher/test/" + testId + "/questions";
     }
 
     @GetMapping("/teacher/questions/edit/{questionId}")
@@ -109,6 +115,7 @@ public class QuestionController {
         });
         foundQuestion.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("maxNumberOfAnswers", MAX_NUMBER_OF_ANSWERS);
+        model.addAttribute("minNumberOfAnswers", MIN_NUMBER_OF_ANSWERS);
         return "question-edit";
     }
 
@@ -117,5 +124,54 @@ public class QuestionController {
                                @ModelAttribute QuestionEditDto questionEditDto) {
 
         return "question-edit";
+    }
+
+    @GetMapping("teacher/question/{questionId}/add-answer")
+    public String addAnswer(@PathVariable long questionId, HttpSession session,
+                            RedirectAttributes redirectAttributes) {
+        try {
+            UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
+            if (accessService.hasLoggedInTeacherAccessToQuestion(questionId, userInfo.getId())) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
+            if (questionService.maximumNumberOfQuestionReached(MAX_NUMBER_OF_ANSWERS, questionId)) {
+                String message = String.format("*ilość odpowiedzi nie może przekraczać %s!",
+                        MAX_NUMBER_OF_ANSWERS);
+                redirectAttributes.addFlashAttribute("message", message);
+            } else {
+                answerService.createAnswer(questionId);
+            }
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return "redirect:/teacher/questions/edit/" + questionId;
+    }
+
+    @GetMapping("teacher/answer/{answerId}/remove-answer")
+    public String removeAnswer(@PathVariable long answerId, HttpSession session,
+                               RedirectAttributes redirectAttributes) {
+        long questionId;
+        try {
+            UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
+            if (accessService.hasLoggedInTeacherAccessToAnswer(answerId, userInfo.getId())) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
+            if (answerService.answerExist(answerId)) {
+                questionId = answerService.findQuestionId(answerId);
+                if(questionService.minimumNumberOfQuestionReached(MIN_NUMBER_OF_ANSWERS, questionId)) {
+                    String message = String.format("*ilość odpowiedzi musi wynosić co najmniej %s!",
+                            MIN_NUMBER_OF_ANSWERS);
+                    redirectAttributes.addFlashAttribute("message", message);
+                }else{
+                    answerService.deleteAnswer(answerId);
+                }
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return "redirect:/teacher/questions/edit/" + questionId;
     }
 }

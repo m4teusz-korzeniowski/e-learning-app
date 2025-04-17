@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -84,4 +86,43 @@ public class QuestionService {
         return questionRepository.findById(questionId).map(QuestionEditDto::map);
     }
 
+    public Long findTestIdFromQuestion(Long questionId) {
+        Optional<Question> question = questionRepository.findById(questionId);
+        if (question.isPresent()) {
+            return question.get().getTest().getId();
+        } else {
+            throw new NoSuchElementException("Question not found");
+        }
+    }
+
+    public boolean maximumNumberOfQuestionReached(int max, long questionId) {
+        Optional<Question> question = questionRepository.findById(questionId);
+        if (question.isPresent()) {
+            List<Answer> answers = question.get().getAnswers();
+            return answers.size() >= max;
+        } else {
+            throw new NoSuchElementException("Question not found");
+        }
+    }
+
+    public boolean minimumNumberOfQuestionReached(int min, long questionId) {
+        Optional<Question> question = questionRepository.findById(questionId);
+        if (question.isPresent()) {
+            List<Answer> answers = question.get().getAnswers();
+            return answers.size() < min + 1;
+        } else {
+            throw new NoSuchElementException("Question not found");
+        }
+    }
+
+    @Transactional
+    public void addAnswerToQuestion(Answer answer, Long questionId) {
+        Optional<Question> question = questionRepository.findById(questionId);
+        if (question.isPresent()) {
+            answer.setQuestion(question.get());
+            question.get().getAnswers().add(answer);
+        } else {
+            throw new NoSuchElementException("Nie znaleziono pytania!");
+        }
+    }
 }
