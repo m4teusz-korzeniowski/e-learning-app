@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -211,14 +212,16 @@ public class UserService {
     @Transactional
     public void addUserToGroup(String userEmail, String groupName) {
         Optional<User> user = userRepository.findByEmail(userEmail);
-        Group group = groupRepository.findByName(groupName);
-        if (group == null) {
-            throw new NoSuchGroup("Grupa, do której chcesz zapisać użytkowników nie istnieje!");
+        Optional<Group> group = groupRepository.findByName(groupName);
+        if (group.isEmpty()) {
+            throw new NoSuchElementException("*grupa, do której chcesz zapisać użytkowników nie istnieje!");
         }
-        if (user.isPresent()) {
-            user.get().setGroup(group);
-            userRepository.save(user.get());
+        if (user.isEmpty()) {
+            throw new NoSuchElementException("*wybierz co najmniej jednego użytkownika!");
         }
+        user.get().setGroup(group.get());
+        userRepository.save(user.get());
+
     }
 
     public UserSettingsDto findUserSettingsById(Long userId) {

@@ -80,14 +80,14 @@ public class QuestionController {
         return "questions";
     }
 
-    @GetMapping("/teacher/test/{testId}/questions/remove/{questionId}")
-    public String removeQuestion(@PathVariable long testId
-            , @PathVariable long questionId, HttpSession session, RedirectAttributes redirectAttributes) {
+    @GetMapping("/teacher/questions/remove/{questionId}")
+    public String removeQuestion(@PathVariable long questionId, HttpSession session, RedirectAttributes redirectAttributes) {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
             if (accessService.hasLoggedInTeacherAccessToQuestion(questionId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
+            long testId = questionService.findTestIdFromQuestion(questionId);
             if (!questionService.questionExists(questionId)) {
                 redirectAttributes.addFlashAttribute("message",
                         String.format("Pytanie o ID %s nie istnieje!", questionId));

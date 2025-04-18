@@ -50,8 +50,8 @@
                 <td>
                     <a th:href="@{/teacher/questions/edit/{questionId}
                     (questionId=${question.id})}"><i class="fa-solid fa-file-pen"></i></a>
-                    <a th:href="@{/teacher/test/{testId}/questions/remove/{questionId}
-                    (testId=${testId},questionId=${question.id})}"><i class="fa-solid fa-remove"></i></a>
+                    <a th:href="@{/teacher/questions/remove/{questionId}
+                    (questionId=${question.id})}"><i class="fa-solid fa-remove"></i></a>
                 </td>
             </tr>
         </table>

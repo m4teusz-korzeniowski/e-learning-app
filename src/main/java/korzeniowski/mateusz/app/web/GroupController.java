@@ -70,7 +70,7 @@ public class GroupController {
 
     @GetMapping("/admin/groups/add")
     public String groupEnrollmentForm(@ModelAttribute("enroll") UserGroupEnrollmentDto enroll,
-                                      @RequestParam(name = "keyword", required = false) @ModelAttribute("keyword") String keyword,
+                                      @RequestParam(name = "keyword", required = false) String keyword,
                                       Model model) {
         List<UserDisplayDto> users = new ArrayList<>();
         if (keyword != null) {
@@ -94,16 +94,20 @@ public class GroupController {
         try {
             StringBuilder message = new StringBuilder(
                     String.format("Do grupy %s zapisano następujących użytkowników: ", enroll.getGroupName()));
-            for (String email : enroll.getUserEmails()) {
-                userService.addUserToGroup(email, enroll.getGroupName());
-                message.append(email).append(", ");
+            if (!enroll.getUserEmails().isEmpty()) {
+                for (String email : enroll.getUserEmails()) {
+                    userService.addUserToGroup(email, enroll.getGroupName());
+                    message.append(email).append(", ");
+                }
+            } else {
+                throw new NoSuchElementException("*wybierz co najmniej jednego użytkownika!");
             }
             redirectAttributes.addFlashAttribute("message", message.substring(0, message.length() - 2));
         } catch (NullPointerException e) {
             bindingResult.rejectValue("userEmails", "userEmails.error",
-                    "Wybierz co najmniej jednego użytkownika!");
+                    "*wybierz co najmniej jednego użytkownika!");
             return groupEnrollmentForm(enroll, keyword, model);
-        } catch (NoSuchGroup e) {
+        } catch (NoSuchGroup | NoSuchElementException e) {
             bindingResult.rejectValue("userEmails", "userEmails.error",
                     e.getMessage());
             return groupEnrollmentForm(enroll, keyword, model);
