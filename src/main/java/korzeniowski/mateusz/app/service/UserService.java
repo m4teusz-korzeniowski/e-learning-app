@@ -274,5 +274,22 @@ public class UserService {
             userRepository.save(user.get());
         }
     }
+
+    public List<String> findUsersEmailsByCourseId(Long courseId) {
+        return userRepository.findALlByCourseId(courseId).stream().map(User::getEmail).toList();
+    }
+
+    public List<String> findAllUserEmails() {
+        return userRepository.findAll().stream().map(User::getEmail).toList();
+    }
+
+    public List<String> findUserEmailById(Long userId) {
+        return userRepository.findById(userId).stream().map(User::getEmail).toList();
+    }
+
+    public List<String> findUserEmailsByGroupId(Long groupId) {
+        return userRepository.findAllByGroupId(groupId).stream().map(User::getEmail).toList();
+    }
+
 }
 

@@ -54,4 +54,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
             " upper(user.email) like upper(concat('%', :keyword,'%')))")
     List<User> findAllTeachersWithKeyword(@Param("keyword") String keyword);
 
+    @Query("select user from User user join Enrollment enroll on user.id = enroll.user_id" +
+            " where enroll.course_id = :courseId")
+    List<User> findALlByCourseId(@Param("courseId") Long courseId);
+
+    @Query("select user from User user where user.group.id = :groupId")
+    List<User> findAllByGroupId(@Param("groupId") Long groupId);
+
 }

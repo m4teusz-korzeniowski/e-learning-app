@@ -21,6 +21,9 @@ public class SecurityConfig {
                 .requestMatchers("/course/**").hasAnyRole("STUDENT")
                 .requestMatchers("/module/quiz/**").hasAnyRole("STUDENT")
                 .requestMatchers("/settings").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+                .requestMatchers("/email/prepare-user").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+                .requestMatchers("/email").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+                .requestMatchers("/email/**").hasAnyRole("TEACHER", "ADMIN")
                 .anyRequest().authenticated());
         http.formLogin(login -> login.loginPage("/login")
                 .successHandler(customAuthenticationSuccessHandler())

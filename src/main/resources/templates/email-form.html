@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>E-mail</title>
+    <th:block th:replace="~{fragments :: head}"></th:block>
+</head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+<div class="info-bar">
+    <div>
+        <h2>Wysyłanie wiadomości:</h2>
+    </div>
+</div>
+<div class="info-bar">
+    <a sec:authorize="hasAnyRole('ADMIN')" th:href="@{/admin}">Strona główna</a>
+    <a sec:authorize="hasAnyRole('STUDENT')" th:href="@{/}">Strona główna</a>
+    <a sec:authorize="hasAnyRole('TEACHER')" th:href="@{/teacher}">Strona główna</a>
+    <span>&nbsp>&nbsp</span>
+    <span>E-mail</span>
+</div>
+<br><br>
+<div class="user-courses">
+    <form th:action="@{/email}" method="post" th:object="${email}">
+        <div class="element">
+            <span>Do:</span>
+            <input class="email-input" type="text" th:field="*{to}">
+            <p></p>
+            <p th:if="${#fields.hasErrors('to')}" th:errors="*{to}"></p>
+            <span>Temat:</span>
+            <input class="email-input" type="text" th:field="*{subject}">
+            <p></p>
+            <p th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}"></p>
+            <label for="description">Treść:</label>
+            <p></p>
+            <textarea id="description" style="display: none" th:field="*{text}"
+                      name="description"></textarea>
+            <div id="editor"></div>
+            <p th:if="${#fields.hasErrors('text')}" th:errors="*{text}"></p>
+        </div>
+        <br>
+        <div class="submit-button">
+            <button type="submit">Wyślij wiadomość</button>
+        </div>
+    </form>
+</div>
+<br><br>
+<script th:inline="javascript">
+    const quill = new Quill('#editor', {
+        modules: {
+            toolbar: [
+                ['bold', 'italic'],
+                ['link'],
+            ],
+        },
+        theme: 'snow',
+    });
+
+    const text = /*[[${email.text}]]*/ '';
+    quill.root.innerHTML = text;
+    document.querySelector('form').onsubmit = function (event) {
+        document.querySelector('#description').value = quill.root.innerHTML;
+    };
+</script>
+</body>
+</html>

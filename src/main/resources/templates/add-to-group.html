@@ -33,8 +33,7 @@
             <p>Wybierz użytkowników:</p>
             <div th:each="user: ${users}" th:if="${user.role.equals('STUDENT')}">
                 <input type="checkbox" th:field="*{userEmails}" th:value="${user.email}">
-                <label th:text="${user.lastName +' '+ user.firstName +' ' + user.email}">
-                </label>
+                <label th:text="${user.lastName +' '+ user.firstName +' ' + user.email}"></label>
                 <br>
             </div>
         </div>

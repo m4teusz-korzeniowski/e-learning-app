@@ -101,3 +101,7 @@ body {
 .answer-edit input[type="text"] {
     width: 100%;
 }
+
+.email-input{
+    width: 100%;
+}
