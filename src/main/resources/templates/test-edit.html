@@ -42,7 +42,7 @@
             <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
             <br>
             <p>Ilość pytań:</p>
-            <input type="text" th:field="*{numberOfQuestions}">
+            <input type="number" th:field="*{numberOfQuestions}">
             <p th:if="${#fields.hasErrors('numberOfQuestions')}" th:errors="*{numberOfQuestions}"></p>
             <p>Czas trwania(w minutach):</p>
             <input type="number" th:field="*{duration}">
@@ -65,11 +65,14 @@
         <br>
         <br>
     </form>
-    <form id="questions-add-form" method="post" action="#"
+    <form id="questions-add-form" method="post" action="#" th:object="${question}"
           th:action="@{/teacher/test/{testId}/create-questions(testId=${testId})}">
         <div class="element">
             <p>Ilość pytań do stworzenia:</p>
-            <input type="number" name="numberOfQuestions">
+            <input type="number" th:field="*{numberOfQuestions}">
+            <div th:if="${error!=null} and ${!error.isBlank()}">
+                <p th:text="${error}"></p>
+            </div>
             <div th:if="${questionMessage!=null} and ${!questionMessage.isBlank()}">
                 <p th:text="${questionMessage}"></p>
             </div>

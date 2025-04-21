@@ -2,6 +2,7 @@ package korzeniowski.mateusz.app.web;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import korzeniowski.mateusz.app.model.course.test.dto.QuestionsCreationDto;
 import korzeniowski.mateusz.app.model.course.test.dto.TestEditDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.app.service.*;
@@ -30,19 +31,24 @@ public class TestEditController {
         this.accessService = accessService;
     }
 
+    private void addTestToModel(long testId, Model model, HttpSession session) {
+        model.addAttribute("question", new QuestionsCreationDto());
+        Optional<TestEditDto> test = testService.findTestEditById(testId);
+        test.ifPresent(t -> {
+            model.addAttribute("test", t);
+            UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
+            if (accessService.hasLoggedInTeacherAccessToTheTest(testId, userInfo.getId())) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
+        });
+        test.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
     @GetMapping("/teacher/test/{testId}/edit")
     public String showTest(@PathVariable long testId, Model model,
                            HttpSession session) {
         try {
-            Optional<TestEditDto> test = testService.findTestEditById(testId);
-            test.ifPresent(t -> {
-                model.addAttribute("test", t);
-                UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-                if (accessService.hasLoggedInTeacherAccessToTheTest(testId, userInfo.getId())) {
-                    throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-                }
-            });
-            test.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+            addTestToModel(testId, model, session);
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
@@ -50,6 +56,7 @@ public class TestEditController {
     }
 
     private String returnToEditForm(Model model, long testId) {
+        model.addAttribute("question", new QuestionsCreationDto());
         model.addAttribute("testId", testId);
         return "test-edit";
     }
@@ -84,16 +91,12 @@ public class TestEditController {
 
     @PostMapping("/teacher/test/{testId}/create-questions")
     public String createQuestion(@PathVariable long testId,
-                                 @RequestParam(name = "numberOfQuestions", required = false) Integer numberOfQuestions,
-                                 @ModelAttribute("test") TestEditDto test,
+                                 @ModelAttribute("question") @Valid QuestionsCreationDto question,
+                                 BindingResult bindingResult, Model model,
                                  RedirectAttributes redirectAttributes, HttpSession session) {
-        if (numberOfQuestions == null) {
-            redirectAttributes.addFlashAttribute("questionMessage",
-                    "*pole nie może być puste");
-            return "redirect:/teacher/test/" + testId + "/edit";
-        } else if (numberOfQuestions < 1) {
-            redirectAttributes.addFlashAttribute("questionMessage",
-                    "*ilość pytań musi być równa co najmniej 1");
+        if (bindingResult.hasErrors()) {;
+            String error = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            redirectAttributes.addFlashAttribute("error", error);
             return "redirect:/teacher/test/" + testId + "/edit";
         }
         try {
@@ -101,8 +104,8 @@ public class TestEditController {
             if (accessService.hasLoggedInTeacherAccessToTheTest(testId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
-            questionService.createQuestions(numberOfQuestions, testId);
-            String message = "Stworzono następująca ilość pytań: " + numberOfQuestions +
+            questionService.createQuestions(question.getNumberOfQuestions(), testId);
+            String message = "Stworzono następująca ilość pytań: " + question.getNumberOfQuestions() +
                     ". Pamiętaj by je edytować w bazie pytań, zanim go udostępnisz!";
             redirectAttributes.addFlashAttribute("questionMessage", message);
         } catch (NoSuchElementException e) {

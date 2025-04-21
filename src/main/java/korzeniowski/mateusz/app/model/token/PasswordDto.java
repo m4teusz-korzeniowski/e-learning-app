@@ -21,11 +21,11 @@ public class PasswordDto {
         this.password = password;
     }
 
-    public @NotBlank String getConfirmedPassword() {
+    public String getConfirmedPassword() {
         return confirmedPassword;
     }
 
-    public void setConfirmedPassword(@NotBlank String confirmedPassword) {
+    public void setConfirmedPassword(String confirmedPassword) {
         this.confirmedPassword = confirmedPassword;
     }
 }
