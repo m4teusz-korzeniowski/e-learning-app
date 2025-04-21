@@ -1,13 +1,15 @@
 package korzeniowski.mateusz.app.service;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
+import korzeniowski.mateusz.app.email.EmailService;
 import korzeniowski.mateusz.app.exceptions.EmailAlreadyInUseException;
-import korzeniowski.mateusz.app.exceptions.NoSuchGroup;
+import korzeniowski.mateusz.app.exceptions.PasswordsNotMatchException;
 import korzeniowski.mateusz.app.exceptions.PeselAlreadyInUseException;
 import korzeniowski.mateusz.app.model.course.Course;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.course.module.Module;
-import korzeniowski.mateusz.app.model.course.module.ModuleItem;
+import korzeniowski.mateusz.app.model.token.PasswordToken;
 import korzeniowski.mateusz.app.model.user.Group;
 import korzeniowski.mateusz.app.model.user.User;
 import korzeniowski.mateusz.app.model.user.UserCredentialsDtoMapper;
@@ -20,14 +22,11 @@ import korzeniowski.mateusz.util.CreatePasswordHash;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -39,18 +38,16 @@ public class UserService {
     private final UserRoleRepository userRoleRepository;
     private final ResultRepository resultRepository;
     private final GroupRepository groupRepository;
-    private final TestRepository testRepository;
-    private final ModuleItemRepository moduleItemRepository;
-    private final ModuleRepository moduleRepository;
+    private final EmailService emailService;
+    private final PasswordTokenService passwordTokenService;
 
-    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, ResultRepository resultRepository, GroupRepository groupRepository, TestRepository testRepository, ModuleItemRepository moduleItemRepository, ModuleRepository moduleRepository) {
+    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, ResultRepository resultRepository, GroupRepository groupRepository, EmailService emailService, PasswordTokenService passwordTokenService) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.resultRepository = resultRepository;
         this.groupRepository = groupRepository;
-        this.testRepository = testRepository;
-        this.moduleItemRepository = moduleItemRepository;
-        this.moduleRepository = moduleRepository;
+        this.emailService = emailService;
+        this.passwordTokenService = passwordTokenService;
     }
 
     public Optional<User> findUserById(Long id) {
@@ -87,13 +84,12 @@ public class UserService {
     }
 
     @Transactional
-    public void registerAppUser(UserRegistrationDto userRegistrationDto) {
+    public void registerAppUser(UserRegistrationDto userRegistrationDto, String principalEmail) {
         User user = new User();
         user.setFirstName(userRegistrationDto.getFirstName());
         user.setLastName(userRegistrationDto.getLastName());
         user.setEmail(userRegistrationDto.getEmail());
-        String password = CreatePasswordHash.createHashBCrypt(userRegistrationDto.getPassword());
-        user.setPassword(password);
+        user.setEnabled(false);
         user.setPesel(userRegistrationDto.getPesel());
         Optional<UserRole> userRole = userRoleRepository.findByName(userRegistrationDto.getRole());
         userRole.ifPresentOrElse(
@@ -103,13 +99,42 @@ public class UserService {
                 }
         );
         if (isEmailInUse(user.getEmail())) {
-            throw new EmailAlreadyInUseException(String.format("e-mail %s już istnieje", user.getEmail()));
+            throw new EmailAlreadyInUseException(String.format("*e-mail %s już istnieje", user.getEmail()));
         } else if (isPeselInUse(user.getPesel())) {
-            throw new PeselAlreadyInUseException(String.format("pesel %s już istnieje", user.getPesel()));
+            throw new PeselAlreadyInUseException(String.format("*pesel %s już istnieje", user.getPesel()));
         } else {
             userRepository.save(user);
+            PasswordToken token = passwordTokenService.generatePasswordTokenForUser(user);
+            String registerConfirmationLink =
+                    "<a href=\"http://localhost:8080/register?token=" +
+                            token.getToken() + "\">Dokończ rejestrację</a>";
+            try {
+                emailService.sendHtmlMessage(
+                        user.getEmail(),
+                        "Dokończenie rejestracji",
+                        registerConfirmationLink,
+                        principalEmail
+                );
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
+
+    private boolean passwordsMatch(String password, String confirmedPassword) {
+        return password.equals(confirmedPassword);
+    }
+
+    @Transactional
+    public void setUserPassword(User user, String password, String confirmedPassword) {
+        if (!passwordsMatch(password, confirmedPassword)) {
+            throw new PasswordsNotMatchException("*hasła muszą być takie same!");
+        }
+        user.setPassword(CreatePasswordHash.createHashBCrypt(password));
+        user.setEnabled(true);
+        userRepository.save(user);
+    }
+
 
     public boolean ifUserHasAccessToCourse(Long userId, Long courseId) {
         Optional<User> user = userRepository.findById(userId);

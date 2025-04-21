@@ -6,11 +6,13 @@ public class UserCredentialsDto {
     private final String email;
     private final String password;
     private final Set<String> roles;
+    private final Boolean enabled;
 
-    public UserCredentialsDto(String email, String password, Set<String> roles) {
+    public UserCredentialsDto(String email, String password, Set<String> roles, Boolean enabled) {
         this.email = email;
         this.password = password;
         this.roles = roles;
+        this.enabled = enabled;
     }
 
     public String getEmail() {
@@ -23,5 +25,9 @@ public class UserCredentialsDto {
 
     public Set<String> getRoles() {
         return roles;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
     }
 }

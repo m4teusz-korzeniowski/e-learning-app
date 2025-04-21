@@ -30,6 +30,18 @@ public class EmailService {
         mailSender.send(message);
     }
 
+
+    public void sendHtmlMessage(String to, String subject,
+                                String htmlText) throws MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        helper.setFrom(from);
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(htmlText, true);
+        mailSender.send(message);
+    }
+
     public void sendHtmlMessage(String to, String subject,
                                 String htmlText, String replyTo) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();

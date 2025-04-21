@@ -1,5 +1,6 @@
 package korzeniowski.mateusz.app.config;
 
+import korzeniowski.mateusz.app.exceptions.UserDisabledException;
 import korzeniowski.mateusz.app.service.UserService;
 import korzeniowski.mateusz.app.model.user.dto.UserCredentialsDto;
 import org.springframework.security.core.userdetails.User;
@@ -21,14 +22,17 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserCredentialsDto> credentialsByEmail = userService.findCredentialsByEmail(username);
-        if (credentialsByEmail.isPresent()) {
+        Optional<UserCredentialsDto> credentials = userService.findCredentialsByEmail(username);
+        if (credentials.isPresent()) {
+            if (!credentials.get().getEnabled() || credentials.get().getPassword() == null) {
+                throw new UserDisabledException("*konto użytkownika jest nieaktywne!");
+            }
             return User.builder()
-                    .username(credentialsByEmail.get().getEmail())
-                    .password(credentialsByEmail.get().getPassword())
-                    .roles(credentialsByEmail.get().getRoles().toArray(String[]::new))
+                    .username(credentials.get().getEmail())
+                    .password(credentials.get().getPassword())
+                    .roles(credentials.get().getRoles().toArray(String[]::new))
                     .build();
-        }else {
+        } else {
             throw new UsernameNotFoundException(String.format("Username with email %s not found", username));
         }
 

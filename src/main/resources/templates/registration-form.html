@@ -35,11 +35,6 @@
                 <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
             </label>
             <label>
-                <p>Hasło:</p>
-                <input th:field="*{password}" placeholder="Hasło" type="password">
-                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
-            </label>
-            <label>
                 <p>Nr. Pesel:</p>
                 <input th:field="*{pesel}" placeholder="02070803628" type="text">
                 <p th:if="${#fields.hasErrors('pesel')}" th:errors="*{pesel}"></p>

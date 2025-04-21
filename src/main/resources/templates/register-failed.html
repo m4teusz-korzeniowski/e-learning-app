@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Logowanie</title>
+    <th:block th:replace="~{fragments :: head}"></th:block>
+</head>
+<body>
+<div class="info-bar">
+    <h2>Błąd rejestracji!</h2>
+</div>
+<br><br>
+<div class="user-courses">
+    <div th:if="${message != null}">
+        <div class="element">
+            <p th:text="${message}"></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rejestracja</title>
+    <th:block th:replace="~{fragments :: head}"></th:block>
+</head>
+<body>
+<div class="info-bar">
+    <h2>Rejestracja - wprowadzenie hasła:</h2>
+</div>
+<br><br>
+<div class="user-courses">
+    <form th:action="@{/register}" method="post" th:object="${pass}">
+        <div class="element">
+            <input type="hidden" name="token" th:value="${token}">
+            <p>Hasło:</p>
+            <input type="password" th:field="*{password}">
+            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+            <p>Powtórz hasło:</p>
+            <input type="password" th:field="*{confirmedPassword}">
+            <p th:if="${#fields.hasErrors('confirmedPassword')}" th:errors="*{confirmedPassword}"></p>
+        </div>
+        <br>
+        <div class="submit-button">
+            <button type="submit">Dokończ rejestrację</button>
+        </div>
+        <br>
+    </form>
+</div>
+</body>
+</html>

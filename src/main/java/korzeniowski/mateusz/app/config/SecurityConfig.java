@@ -24,6 +24,8 @@ public class SecurityConfig {
                 .requestMatchers("/email/prepare-user").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
                 .requestMatchers("/email").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
                 .requestMatchers("/email/**").hasAnyRole("TEACHER", "ADMIN")
+                .requestMatchers("/styles/**", "/scripts/**", "/images/**").permitAll()
+                .requestMatchers("/register").permitAll()
                 .anyRequest().authenticated());
         http.formLogin(login -> login.loginPage("/login")
                 .successHandler(customAuthenticationSuccessHandler())

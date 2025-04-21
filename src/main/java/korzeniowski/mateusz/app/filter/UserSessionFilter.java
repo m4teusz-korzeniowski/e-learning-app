@@ -35,16 +35,19 @@ public class UserSessionFilter implements Filter {
         }
 
         HttpSession session = request.getSession(false);
-        if (session != null) {
-            Object userInfo = session.getAttribute("userInfo");
-            if (userInfo == null) {
-                if (SecurityContextHolder.getContext().getAuthentication() != null) {
-                    User user = (User) SecurityContextHolder
-                            .getContext().getAuthentication().getPrincipal();
+        if (session != null && session.getAttribute("userInfo") == null) {
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.isAuthenticated()) {
+                Object principal = authentication.getPrincipal();
+
+                if (principal instanceof org.springframework.security.core.userdetails.User user) {
                     userService.addUserInfoToSession(user.getUsername(), session);
+                } else if (principal instanceof String username) {
+                    userService.addUserInfoToSession(username, session);
                 }
             }
         }
+
         filterChain.doFilter(request, response);
     }
 }

@@ -25,9 +25,9 @@ public class User {
     private String lastName;
     @NotBlank
     private String email;
-    @NotBlank
     private String password;
     private String pesel;
+    private Boolean enabled;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
@@ -137,5 +137,13 @@ public class User {
 
     public void setAttempts(List<Attempt> attempts) {
         this.attempts = attempts;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 }

@@ -12,6 +12,7 @@
             <column name="password" value="{bcrypt}$2a$10$MNHdRKDbOZUj7b9.c0PNTeVbhBl4Gvjewj3Q5n.RFG87eDEqW7GGm"/>
             <column name="group_id" value="1"/>
             <column name="pesel" value="04242676128"/>
+            <column name="enabled" value="true"/>
         </insert>
         <insert tableName="application_user">
             <column name="first_name" value="Ania"/>
@@ -20,6 +21,7 @@
             <column name="password" value="{bcrypt}$2a$10$/H43V41I6FwR1QsafTRB.e7MyIOZPGJElZIe6DxQBdoO8yHPj1Lpq"/>
             <column name="pesel" value="91092753002"/>
             <column name="group_id" value="1"/>
+            <column name="enabled" value="true"/>
         </insert>
         <insert tableName="application_user">
             <column name="first_name" value="Jan"/>
@@ -27,6 +29,7 @@
             <column name="email" value="jkotlet@gmail.com"/>
             <column name="password" value="{bcrypt}$2a$10$vp8srk.HyseNBND48LyfduAXHIhlz2d0y6ESZamVX5ieKmkXoCnRG"/>
             <column name="pesel" value="07321046106"/>
+            <column name="enabled" value="true"/>
         </insert>
         <insert tableName="application_user">
             <column name="first_name" value="Mateusz"/>
@@ -34,6 +37,7 @@
             <column name="email" value="mk@gmail.com"/>
             <column name="password" value="{bcrypt}$2a$10$PitQ7QfE5bkHL9.XDeQZjeFHmTjEofRwK7qb5dQEe.PGx0JL7lk5e"/>
             <column name="pesel" value="04250113002"/>
+            <column name="enabled" value="true"/>
         </insert>
         <insert tableName="application_user">
             <column name="first_name" value="Mateusz"/>
@@ -42,6 +46,7 @@
             <column name="password" value="{bcrypt}$2a$10$PitQ7QfE5bkHL9.XDeQZjeFHmTjEofRwK7qb5dQEe.PGx0JL7lk5e"/>
             <column name="group_id" value="1"/>
             <column name="pesel" value="17292771712"/>
+            <column name="enabled" value="true"/>
         </insert>
         <insert tableName="application_user">
             <column name="first_name" value="Tadeusz"/>
@@ -50,6 +55,7 @@
             <column name="password" value="{bcrypt}$2a$10$PitQ7QfE5bkHL9.XDeQZjeFHmTjEofRwK7qb5dQEe.PGx0JL7lk5e"/>
             <column name="group_id" value="1"/>
             <column name="pesel" value="26070762877"/>
+            <column name="enabled" value="true"/>
         </insert>
         <insert tableName="application_user">
             <column name="first_name" value="Irena"/>
@@ -58,6 +64,7 @@
             <column name="password" value="{bcrypt}$2a$10$PitQ7QfE5bkHL9.XDeQZjeFHmTjEofRwK7qb5dQEe.PGx0JL7lk5e"/>
             <column name="group_id" value="2"/>
             <column name="pesel" value="41110762204"/>
+            <column name="enabled" value="true"/>
         </insert>
         <insert tableName="application_user">
             <column name="first_name" value="Mateusz"/>
@@ -66,6 +73,7 @@
             <column name="password" value="{bcrypt}$2a$10$PitQ7QfE5bkHL9.XDeQZjeFHmTjEofRwK7qb5dQEe.PGx0JL7lk5e"/>
             <column name="group_id" value="2"/>
             <column name="pesel" value="44082576712"/>
+            <column name="enabled" value="true"/>
         </insert>
         <insert tableName="application_user">
             <column name="first_name" value="Witold"/>
@@ -74,6 +82,7 @@
             <column name="password" value="{bcrypt}$2a$10$PitQ7QfE5bkHL9.XDeQZjeFHmTjEofRwK7qb5dQEe.PGx0JL7lk5e"/>
             <column name="group_id" value="2"/>
             <column name="pesel" value="72060737084"/>
+            <column name="enabled" value="true"/>
         </insert>
         <insert tableName="application_user">
             <column name="first_name" value="Joanna"/>
@@ -82,6 +91,7 @@
             <column name="password" value="{bcrypt}$2a$10$PitQ7QfE5bkHL9.XDeQZjeFHmTjEofRwK7qb5dQEe.PGx0JL7lk5e"/>
             <column name="group_id" value="2"/>
             <column name="pesel" value="04012647695"/>
+            <column name="enabled" value="true"/>
         </insert>
         <insert tableName="application_user">
             <column name="first_name" value="Witold"/>
@@ -90,6 +100,7 @@
             <column name="password" value="{bcrypt}$2a$10$PitQ7QfE5bkHL9.XDeQZjeFHmTjEofRwK7qb5dQEe.PGx0JL7lk5e"/>
             <column name="group_id" value="3"/>
             <column name="pesel" value="65092246435"/>
+            <column name="enabled" value="true"/>
         </insert>
         <insert tableName="application_user">
             <column name="first_name" value="Adrianna"/>
@@ -97,6 +108,7 @@
             <column name="email" value="chlor@gmail.com"/>
             <column name="password" value="{bcrypt}$2a$10$PitQ7QfE5bkHL9.XDeQZjeFHmTjEofRwK7qb5dQEe.PGx0JL7lk5e"/>
             <column name="pesel" value="72101854936"/>
+            <column name="enabled" value="true"/>
         </insert>
         <insert tableName="application_user">
             <column name="first_name" value="Iwona"/>
@@ -104,6 +116,7 @@
             <column name="email" value="wieprz@gmail.com"/>
             <column name="password" value="{bcrypt}$2a$10$PitQ7QfE5bkHL9.XDeQZjeFHmTjEofRwK7qb5dQEe.PGx0JL7lk5e"/>
             <column name="pesel" value="54091705340"/>
+            <column name="enabled" value="true"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

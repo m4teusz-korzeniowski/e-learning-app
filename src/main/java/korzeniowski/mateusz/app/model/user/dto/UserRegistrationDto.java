@@ -2,7 +2,6 @@ package korzeniowski.mateusz.app.model.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.pl.PESEL;
 
@@ -12,12 +11,12 @@ public class UserRegistrationDto {
     @Size(min = 2, max = 50, message = "pole musi mieć od 2 do 50 znaków")
     private String firstName;
     @NotBlank(message = "pole nie może być puste")
+    @Size(min = 2, max = 50, message = "pole musi mieć od 2 do 50 znaków")
     private String lastName;
     @Email(message = "niepoprawny format adresu e-mail")
     @NotBlank(message = "pole nie może być puste")
     private String email;
-    @NotBlank(message = "pole nie może być puste")
-    private String password;
+    private Boolean enabled;
     //private String confirmPassword;
     @PESEL
     private String pesel;
@@ -47,14 +46,6 @@ public class UserRegistrationDto {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getRole() {
         return role;
     }
@@ -69,5 +60,13 @@ public class UserRegistrationDto {
 
     public void setPesel(String pesel) {
         this.pesel = pesel;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 }
