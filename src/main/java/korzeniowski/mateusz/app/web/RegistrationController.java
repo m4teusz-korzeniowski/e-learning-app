@@ -96,6 +96,7 @@ public class RegistrationController {
         }
         try {
             userService.setUserPassword(user.get(), pass.getPassword(), pass.getConfirmedPassword());
+            user.get().setEnabled(true);
             passwordTokenService.deleteToken(token);
         } catch (PasswordsNotMatchException e) {
             bindingResult.rejectValue("confirmedPassword", "error.confirmedPassword", e.getMessage());

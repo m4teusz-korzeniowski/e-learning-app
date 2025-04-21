@@ -135,7 +135,6 @@ public class UserService {
             throw new PasswordsNotMatchException("*hasła muszą być takie same!");
         }
         user.setPassword(CreatePasswordHash.createHashBCrypt(password));
-        user.setEnabled(true);
         userRepository.save(user);
     }
 

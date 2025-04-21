@@ -22,23 +22,30 @@
 </div>
 <br><br>
 <div class="user-courses">
+    <div th:if="${message != null}">
+        <div class="element">
+            <p th:text="${message}"></p>
+        </div>
+    </div>
+    <br>
     <div class="element" th:object="${user}">
         <p>Imię:</p>
-        <p class="user-settings-label" th:text="*{firstName}"></p>
+        <input disabled th:field="*{firstName}">
         <p>Nazwisko:</p>
-        <p class="user-settings-label" th:text="*{lastName}"></p>
+        <input disabled th:field="*{lastName}">
         <p>E-mail:</p>
-        <p class="user-settings-label" th:text="*{email}"></p>
+        <input disabled th:field="*{email}">
         <p>Pesel:</p>
-        <p class="user-settings-label" th:text="*{pesel}"></p>
+        <input disabled th:field="*{pesel}">
         <p>Grupa:</p>
-        <p class="user-settings-label" th:text="*{group}"></p>
+        <input disabled th:field="*{group}">
         <p>Uprawnienia:</p>
-        <p th:if="*{role.equals('STUDENT')}" class="user-settings-label">Uczeń</p>
-        <p th:if="*{role.equals('TEACHER')}" class="user-settings-label">Nauczyciel</p>
-        <p th:if="*{role.equals('ADMIN')}" class="user-settings-label">Admin</p>
+        <input th:if="*{role.equals('STUDENT')}" disabled th:value="'Uczeń'">
+        <input th:if="*{role.equals('TEACHER')}" disabled th:value="'Nauczyciel'">
+        <input th:if="*{role.equals('ADMIN')}" disabled th:value="'Admin'">
+        <p></p>
         <br>
-        <a th:href="@{/password-change}"><button type="button">Zmiana hasła</button></a>
+        <a th:href="@{/change-password}"><button type="button">Zmiana hasła</button></a>
     </div>
 </div>
 <br><br>
