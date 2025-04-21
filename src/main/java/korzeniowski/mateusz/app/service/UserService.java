@@ -4,10 +4,7 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.config.AppProperties;
 import korzeniowski.mateusz.app.email.EmailService;
-import korzeniowski.mateusz.app.exceptions.EmailAlreadyInUseException;
-import korzeniowski.mateusz.app.exceptions.PasswordsNotMatchException;
-import korzeniowski.mateusz.app.exceptions.PeselAlreadyInUseException;
-import korzeniowski.mateusz.app.exceptions.UserEnabledException;
+import korzeniowski.mateusz.app.exceptions.*;
 import korzeniowski.mateusz.app.model.course.Course;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.course.module.Module;
@@ -247,6 +244,9 @@ public class UserService {
         if (user.isEmpty()) {
             throw new NoSuchElementException("*wybierz co najmniej jednego użytkownika!");
         }
+        if (!user.get().getEnabled()) {
+            throw new UserDisabledException("*użytkownik, którego chcesz zapisać jest nieaktywny!");
+        }
         user.get().setGroup(group.get());
         userRepository.save(user.get());
 
@@ -288,7 +288,7 @@ public class UserService {
         if (!user.getPesel().equals(userDto.getPesel()) && isPeselInUse(userDto.getPesel())) {
             throw new PeselAlreadyInUseException("*numer PESEL jest już w użyciu");
         }
-        if(userDto.getEnabled() && user.getPassword() == null){
+        if (userDto.getEnabled() && user.getPassword() == null) {
             throw new UserEnabledException("*nie możesz aktywować użytkownika, który nie ma ustawionego hasła!");
         }
         user.setFirstName(userDto.getFirstName());

@@ -2,11 +2,13 @@ package korzeniowski.mateusz.app.model.user.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import korzeniowski.mateusz.app.model.user.Group;
 
 public class GroupDto {
-    @NotBlank(message = "*pole nie może być puste")
-    @NotNull(message = "*pole nie może być puste")
+    @NotBlank(message = "*pole nie może być puste!")
+    @NotNull(message = "*pole nie może być puste!")
+    @Size(max = 60, message = "*nazwa może składać się maksymalnie z 60 znaków!")
     private String name;
     private Long id;
 

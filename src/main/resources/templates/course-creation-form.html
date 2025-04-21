@@ -43,6 +43,7 @@
             <label for="description">Opis</label>
             <textarea id="description" style="display: none" th:field="*{description}" name="description"></textarea>
             <div id="editor"></div>
+            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
         </div>
         <br>
         <div class="submit-button">

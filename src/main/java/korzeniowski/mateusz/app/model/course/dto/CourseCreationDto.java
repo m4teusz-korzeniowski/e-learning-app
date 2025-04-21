@@ -1,13 +1,14 @@
 package korzeniowski.mateusz.app.model.course.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import korzeniowski.mateusz.app.model.course.Course;
 
 public class CourseCreationDto {
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "*pole nie może być puste!")
+    @Size(max = 60, message = "*nazwa nie może przekraczać 60 znaków!")
     private String name;
+    @Size(max = 20000, message = "*przekroczono limit opisu!")
     private String description;
     private Long creatorId;
 

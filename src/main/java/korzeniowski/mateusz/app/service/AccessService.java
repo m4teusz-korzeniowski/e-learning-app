@@ -5,6 +5,7 @@ import korzeniowski.mateusz.app.model.course.module.ModuleItem;
 import korzeniowski.mateusz.app.model.course.test.Answer;
 import korzeniowski.mateusz.app.model.course.test.Question;
 import korzeniowski.mateusz.app.model.course.test.Test;
+import korzeniowski.mateusz.app.model.user.User;
 import korzeniowski.mateusz.app.repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,13 +20,15 @@ public class AccessService {
     private final ModuleRepository moduleRepository;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
+    private final UserRepository userRepository;
 
-    public AccessService(TestRepository testRepository, ModuleItemRepository moduleItemRepository, ModuleRepository moduleRepository, QuestionRepository questionRepository, AnswerRepository answerRepository) {
+    public AccessService(TestRepository testRepository, ModuleItemRepository moduleItemRepository, ModuleRepository moduleRepository, QuestionRepository questionRepository, AnswerRepository answerRepository, UserRepository userRepository) {
         this.testRepository = testRepository;
         this.moduleItemRepository = moduleItemRepository;
         this.moduleRepository = moduleRepository;
         this.questionRepository = questionRepository;
         this.answerRepository = answerRepository;
+        this.userRepository = userRepository;
     }
 
     public boolean hasLoggedInTeacherAccessToTheCourse(Long creatorId, Long teacherId) {
@@ -75,5 +78,14 @@ public class AccessService {
             return !creatorId.equals(teacherId);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+
+    public boolean isUserEnabled(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            return user.get().getEnabled();
+        } else {
+            return false;
+        }
     }
 }

@@ -2,6 +2,7 @@ package korzeniowski.mateusz.app.web;
 
 import jakarta.validation.Valid;
 import korzeniowski.mateusz.app.exceptions.NoSuchGroup;
+import korzeniowski.mateusz.app.exceptions.UserDisabledException;
 import korzeniowski.mateusz.app.model.user.dto.GroupDto;
 import korzeniowski.mateusz.app.model.user.dto.UserDisplayDto;
 import korzeniowski.mateusz.app.model.user.dto.UserGroupEnrollmentDto;
@@ -57,7 +58,7 @@ public class GroupController {
                     String.format("Stworzono grupę: %s", group.getName()));
         } catch (DataIntegrityViolationException e) {
             bindingResult.rejectValue("name", "group.name.exists",
-                    String.format("Grupa %s już istnieje!", group.getName()));
+                    String.format("*grupa %s już istnieje!", group.getName()));
             return groupCreation(group);
         }
         return "redirect:/admin/groups/create/confirmation";
@@ -85,8 +86,9 @@ public class GroupController {
 
     @PostMapping("/admin/groups/add")
     public String enrollUsersToGroup(@ModelAttribute("enroll") UserGroupEnrollmentDto enroll,
-                                     @RequestParam(name = "keyword", required = false) @ModelAttribute String keyword,
-                                     Model model, BindingResult bindingResult,
+                                     BindingResult bindingResult,
+                                     @ModelAttribute("keyword") String keyword,
+                                     Model model,
                                      RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return groupEnrollmentForm(enroll, keyword, model);
@@ -107,7 +109,7 @@ public class GroupController {
             bindingResult.rejectValue("userEmails", "userEmails.error",
                     "*wybierz co najmniej jednego użytkownika!");
             return groupEnrollmentForm(enroll, keyword, model);
-        } catch (NoSuchGroup | NoSuchElementException e) {
+        } catch (NoSuchGroup | NoSuchElementException | UserDisabledException e) {
             bindingResult.rejectValue("userEmails", "userEmails.error",
                     e.getMessage());
             return groupEnrollmentForm(enroll, keyword, model);

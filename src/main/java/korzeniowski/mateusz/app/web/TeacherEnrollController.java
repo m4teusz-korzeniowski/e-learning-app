@@ -1,6 +1,7 @@
 package korzeniowski.mateusz.app.web;
 
 import jakarta.servlet.http.HttpSession;
+import korzeniowski.mateusz.app.exceptions.UserDisabledException;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.user.dto.UserDisplayDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
@@ -58,14 +59,20 @@ public class TeacherEnrollController {
         return "user-enroll";
     }
 
-    private boolean ifLoggedInTeacherIsOwnerOfTheCourse(Long creatorId, Long teacherId) {
-        return creatorId.equals(teacherId);
+    private boolean areUsersEnabled(List<String> emails) {
+        for (String email : emails) {
+            Long userId = userService.findUserIdByEmail(email);
+            if (!accessService.isUserEnabled(userId)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @PostMapping("/teacher/course-enroll/{id}")
     public String enrollUser(@PathVariable long id, @ModelAttribute("enroll") TeacherCourseEnrollDto enroll,
                              BindingResult bindingResult, RedirectAttributes redirectAttributes,
-                             @RequestParam(name = "keyword", required = false) @ModelAttribute("keyword") String keyword,
+                             @ModelAttribute("keyword") String keyword,
                              Model model, HttpSession session) {
         if (bindingResult.hasErrors()) {
             return enrollUserForm(id, enroll, keyword, model, session);
@@ -73,10 +80,14 @@ public class TeacherEnrollController {
         try {
             StringBuilder builder = new StringBuilder
                     (String.format("Na kurs %s zapisano następujących użytkowników: ", enroll.getCourseName()));
+            if (areUsersEnabled(enroll.getEmails())) {
+                throw new UserDisabledException("*jeden z użytkowników, którego próbujesz zapisać na kurs jest nieaktywny!");
+            }
             for (String email : enroll.getEmails()) {
                 Long userId = userService.findUserIdByEmail(email);
                 enrollmentService.enrollUserToCourse(userId, id);
                 builder.append(email).append(", ");
+
             }
             if (builder.toString().equals(
                     String.format("Na kurs %s zapisano następujących użytkowników: ", enroll.getCourseName()))) {
@@ -84,12 +95,12 @@ public class TeacherEnrollController {
             }
             redirectAttributes.addFlashAttribute(
                     "message", builder.substring(0, builder.length() - 2));
-        } catch (UsernameNotFoundException e) {
+        } catch (UsernameNotFoundException | UserDisabledException e) {
             bindingResult.rejectValue("emails", "error.emails", e.getMessage());
             return enrollUserForm(id, enroll, keyword, model, session);
         } catch (NullPointerException e) {
             bindingResult.rejectValue("emails", "error.emails",
-                    "Wybierz co najmniej jednego użytkownika!");
+                    "*wybierz co najmniej jednego użytkownika!");
             return enrollUserForm(id, enroll, keyword, model, session);
         }
         return "redirect:/teacher/course-enroll/confirmation";

@@ -54,7 +54,7 @@ public class CourseCreationController {
         try {
             courseService.createCourse(course);
         } catch (DataIntegrityViolationException e) {
-            bindingResult.rejectValue("name", "error.name", "Kurs już istnieje!");
+            bindingResult.rejectValue("name", "error.name", "*kurs już istnieje!");
             return courseCreation(course, keyword, model);
         }
         redirectAttributes.addFlashAttribute(
