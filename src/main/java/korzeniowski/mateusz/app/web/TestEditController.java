@@ -55,9 +55,10 @@ public class TestEditController {
         return "test-edit";
     }
 
-    private String returnToEditForm(Model model, long testId) {
+    private String returnToEditForm(Model model, long testId, TestEditDto test) {
         model.addAttribute("question", new QuestionsCreationDto());
         model.addAttribute("testId", testId);
+        model.addAttribute("test", test);
         return "test-edit";
     }
 
@@ -66,7 +67,7 @@ public class TestEditController {
                            HttpSession session, @ModelAttribute("test") @Valid TestEditDto test,
                            BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return returnToEditForm(model, testId);
+            return returnToEditForm(model, testId, test);
         }
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
@@ -80,11 +81,11 @@ public class TestEditController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         } catch (IllegalArgumentException e) {
             bindingResult.rejectValue("start", "error.start", e.getMessage());
-            return returnToEditForm(model, testId);
+            return returnToEditForm(model, testId, test);
         } catch (DataIntegrityViolationException e) {
             bindingResult.rejectValue("description", "error.description",
                     "*przekroczono maksymalnu rozmiar opisu");
-            return returnToEditForm(model, testId);
+            return returnToEditForm(model, testId, test);
         }
         return "redirect:/teacher/test/" + testId + "/edit";
     }
@@ -94,7 +95,8 @@ public class TestEditController {
                                  @ModelAttribute("question") @Valid QuestionsCreationDto question,
                                  BindingResult bindingResult, Model model,
                                  RedirectAttributes redirectAttributes, HttpSession session) {
-        if (bindingResult.hasErrors()) {;
+        if (bindingResult.hasErrors()) {
+            ;
             String error = bindingResult.getAllErrors().get(0).getDefaultMessage();
             redirectAttributes.addFlashAttribute("error", error);
             return "redirect:/teacher/test/" + testId + "/edit";

@@ -2,10 +2,12 @@ package korzeniowski.mateusz.app.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
+import korzeniowski.mateusz.app.config.AppProperties;
 import korzeniowski.mateusz.app.email.EmailService;
 import korzeniowski.mateusz.app.exceptions.EmailAlreadyInUseException;
 import korzeniowski.mateusz.app.exceptions.PasswordsNotMatchException;
 import korzeniowski.mateusz.app.exceptions.PeselAlreadyInUseException;
+import korzeniowski.mateusz.app.exceptions.UserEnabledException;
 import korzeniowski.mateusz.app.model.course.Course;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.course.module.Module;
@@ -40,14 +42,16 @@ public class UserService {
     private final GroupRepository groupRepository;
     private final EmailService emailService;
     private final PasswordTokenService passwordTokenService;
+    private final AppProperties appProperties;
 
-    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, ResultRepository resultRepository, GroupRepository groupRepository, EmailService emailService, PasswordTokenService passwordTokenService) {
+    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, ResultRepository resultRepository, GroupRepository groupRepository, EmailService emailService, PasswordTokenService passwordTokenService, AppProperties appProperties) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.resultRepository = resultRepository;
         this.groupRepository = groupRepository;
         this.emailService = emailService;
         this.passwordTokenService = passwordTokenService;
+        this.appProperties = appProperties;
     }
 
     public Optional<User> findUserById(Long id) {
@@ -106,7 +110,7 @@ public class UserService {
             userRepository.save(user);
             PasswordToken token = passwordTokenService.generatePasswordTokenForUser(user);
             String registerConfirmationLink =
-                    "<a href=\"http://localhost:8080/register?token=" +
+                    "<a href=\"" + appProperties.getUrl() + "/register?token=" +
                             token.getToken() + "\">Dokończ rejestrację</a>";
             try {
                 emailService.sendHtmlMessage(
@@ -280,15 +284,19 @@ public class UserService {
 
     private void updateUserData(User user, UserSettingsDto userDto) {
         if (!user.getEmail().equals(userDto.getEmail()) && isEmailInUse(userDto.getEmail())) {
-            throw new EmailAlreadyInUseException("e-mail jest już w użyciu");
+            throw new EmailAlreadyInUseException("*e-mail jest już w użyciu");
         }
         if (!user.getPesel().equals(userDto.getPesel()) && isPeselInUse(userDto.getPesel())) {
-            throw new PeselAlreadyInUseException("numer PESEL jest już w użyciu");
+            throw new PeselAlreadyInUseException("*numer PESEL jest już w użyciu");
+        }
+        if(userDto.getEnabled() && user.getPassword() == null){
+            throw new UserEnabledException("*nie możesz aktywować użytkownika, który nie ma ustawionego hasła!");
         }
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
         user.setPesel(userDto.getPesel());
+        user.setEnabled(userDto.getEnabled());
     }
 
     @Transactional

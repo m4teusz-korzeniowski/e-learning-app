@@ -3,11 +3,13 @@ package korzeniowski.mateusz.app.web;
 import jakarta.validation.Valid;
 import korzeniowski.mateusz.app.exceptions.EmailAlreadyInUseException;
 import korzeniowski.mateusz.app.exceptions.PeselAlreadyInUseException;
+import korzeniowski.mateusz.app.exceptions.UserEnabledException;
 import korzeniowski.mateusz.app.model.user.User;
 import korzeniowski.mateusz.app.model.user.dto.UserSettingsDto;
 import korzeniowski.mateusz.app.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,6 +35,7 @@ public class AdminUserEditController {
         user.setFirstName(userData.getFirstName());
         user.setLastName(userData.getLastName());
         user.setPesel(userData.getPesel());
+        user.setEnabled(userData.getEnabled());
         if (userData.getGroup() != null) {
             user.setGroup(userData.getGroup().getName());
         } else {
@@ -42,8 +45,7 @@ public class AdminUserEditController {
     }
 
     @GetMapping("/admin/users/edit/{id}")
-    public String showUserEditForm(@PathVariable long id, @ModelAttribute("user") UserSettingsDto user,
-                                   @ModelAttribute("message") String message) {
+    public String showUserEditForm(@PathVariable long id, @ModelAttribute("user") UserSettingsDto user) {
         Optional<User> userData = userService.findUserById(id);
         if (userData.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -53,11 +55,17 @@ public class AdminUserEditController {
         return "user-edit";
     }
 
+    private String returnUserEditForm(Model model, UserSettingsDto user, long userId) {
+        model.addAttribute("user", user);
+        model.addAttribute("id", userId);
+        return "user-edit";
+    }
+
     @PostMapping("/admin/users/edit/{id}")
     public String editUser(@PathVariable long id, @ModelAttribute("user") @Valid UserSettingsDto user,
                            BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return showUserEditForm(id, user, null);
+            return showUserEditForm(id, user);
         }
         try {
             userService.updateUser(user);
@@ -65,10 +73,13 @@ public class AdminUserEditController {
                     "Zmiana zakończyła się sukcesem");
         } catch (EmailAlreadyInUseException e) {
             bindingResult.rejectValue("email", "error.email", e.getMessage());
-            return showUserEditForm(id, user, null);
+            return showUserEditForm(id, user);
         } catch (PeselAlreadyInUseException e) {
             bindingResult.rejectValue("pesel", "error.pesel", e.getMessage());
-            return showUserEditForm(id, user, null);
+            return showUserEditForm(id, user);
+        } catch (UserEnabledException e) {
+            bindingResult.rejectValue("enabled", "error.user.enabled", e.getMessage());
+            return showUserEditForm(id, user);
         }
         return "redirect:/admin/users/edit/" + id;
     }

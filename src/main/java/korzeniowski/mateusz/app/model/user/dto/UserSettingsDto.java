@@ -10,20 +10,21 @@ import java.util.List;
 
 public class UserSettingsDto {
     private Long id;
-    @NotBlank(message = "pole nie może być puste")
+    @NotBlank(message = "*pole nie może być puste")
     private String firstName;
-    @NotBlank(message = "pole nie może być puste")
+    @NotBlank(message = "*pole nie może być puste")
     private String lastName;
-    @Email(message = "niepoprawny format adresu e-mail")
-    @NotBlank(message = "pole nie może być puste")
+    @Email(message = "*niepoprawny format adresu e-mail")
+    @NotBlank(message = "*pole nie może być puste")
     private String email;
-    @PESEL(message = "niepoprawny numer PESEL")
+    @PESEL(message = "*niepoprawny numer PESEL")
     private String pesel;
     private String group;
     private String role;
+    private Boolean enabled;
 
     public UserSettingsDto(Long id, String firstName, String lastName,
-                           String email, String pesel, String group, String role) {
+                           String email, String pesel, String group, String role, Boolean enabled) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -31,6 +32,7 @@ public class UserSettingsDto {
         this.pesel = pesel;
         this.group = group;
         this.role = role;
+        this.enabled = enabled;
     }
 
     public Long getId() {
@@ -89,6 +91,14 @@ public class UserSettingsDto {
         this.role = role;
     }
 
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public static UserSettingsDto map(User user) {
         String groupName;
         if (user.getGroup() == null) {
@@ -98,6 +108,6 @@ public class UserSettingsDto {
         }
         List<String> role = user.getUserRoles().stream().map(UserRole::getName).toList();
         return new UserSettingsDto(user.getId(), user.getFirstName(), user.getLastName(),
-                user.getEmail(), user.getPesel(), groupName, role.get(0));
+                user.getEmail(), user.getPesel(), groupName, role.get(0), user.getEnabled());
     }
 }

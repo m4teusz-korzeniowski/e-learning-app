@@ -59,6 +59,19 @@
             </label>
         </div>
         <br>
+        <div class="element">
+            <label>
+                <p>Status:</p>
+                <input disabled type="text" th:value="${user.enabled ? 'Aktywny' : 'Nieaktywny'}">
+                <p>Zmień status:</p>
+                <select th:field="*{enabled}">
+                    <option th:value="true">Aktywny</option>
+                    <option th:value="false">Nieaktywny</option>
+                </select>
+                <p th:if="${#fields.hasErrors('enabled')}" th:errors="*{enabled}">Błędna nazwa</p>
+            </label>
+        </div>
+        <br>
         <div class="submit-button">
             <button type="submit">Zatwierdź zmiany</button>
         </div>
