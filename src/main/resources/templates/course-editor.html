@@ -38,6 +38,9 @@
         <br>
         <div th:each="courseModule,iter : *{modules}">
             <div class="element">
+                <span>Widoczność modułu:</span>
+                <input type="checkbox" th:field="*{modules[__${iter.index}__].visible}">
+                <p></p>
                 <div class="module-row">
                     <span>Nazwa modułu:</span>
                     <input type="text" th:field="*{modules[__${iter.index}__].name}"/>

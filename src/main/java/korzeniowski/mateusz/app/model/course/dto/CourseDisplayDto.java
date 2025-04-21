@@ -81,7 +81,7 @@ public class CourseDisplayDto {
                 tests.add(new TestNameIdDto(test.getId(), test.getName()));
             }
             modules.add(new ModuleDisplayDto(
-                    module.getId(), module.getName(), moduleItems, tests
+                    module.getId(), module.getName(), moduleItems, tests, module.getVisible()
             ));
         }
         return new CourseDisplayDto(

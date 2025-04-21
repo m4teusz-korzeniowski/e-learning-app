@@ -13,6 +13,7 @@ public class Module {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private Boolean visible;
     @OneToMany(mappedBy = "module")
     private List<ModuleItem> items = new ArrayList<>();
     @OneToMany(mappedBy = "module")
@@ -61,5 +62,11 @@ public class Module {
         this.course = course;
     }
 
+    public Boolean getVisible() {
+        return visible;
+    }
 
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
 }

@@ -36,10 +36,11 @@ public class ModuleService {
     public void updateModule(Long moduleId, ModuleDisplayDto moduleDisplayDto) {
         Optional<Module> module = moduleRepository.findById(moduleId);
         if (module.isPresent()) {
-            if(moduleDisplayDto.getName().length() > MAX_NAME_LENGTH) {
+            if (moduleDisplayDto.getName().length() > MAX_NAME_LENGTH) {
                 throw new DataIntegrityViolationException("*przekroczono rozmiar dla nazwy modułu!");
             }
             module.get().setName(moduleDisplayDto.getName());
+            module.get().setVisible(moduleDisplayDto.getVisible());
             moduleRepository.save(module.get());
         }
     }
@@ -48,6 +49,7 @@ public class ModuleService {
     public void createModule(Long courseId) {
         Module module = new Module();
         module.setName("Nazwa modułu");
+        module.setVisible(false);
         courseService.addModuleToCourse(module, courseId);
         moduleRepository.save(module);
     }

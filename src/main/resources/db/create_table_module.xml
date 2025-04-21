@@ -12,6 +12,9 @@
             <column name="name" type="varchar(60)">
                 <constraints nullable="false"/>
             </column>
+            <column name="visible" type="boolean">
+                <constraints nullable="false"/>
+            </column>
             <column name="course_id" type="bigint"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="module" baseColumnNames="course_id" constraintName="fk_module_course"
