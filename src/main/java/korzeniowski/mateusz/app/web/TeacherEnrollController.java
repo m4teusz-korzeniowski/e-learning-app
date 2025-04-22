@@ -80,7 +80,7 @@ public class TeacherEnrollController {
         try {
             StringBuilder builder = new StringBuilder
                     (String.format("Na kurs %s zapisano następujących użytkowników: ", enroll.getCourseName()));
-            if (areUsersEnabled(enroll.getEmails())) {
+            if (!areUsersEnabled(enroll.getEmails())) {
                 throw new UserDisabledException("*jeden z użytkowników, którego próbujesz zapisać na kurs jest nieaktywny!");
             }
             for (String email : enroll.getEmails()) {
