@@ -6,16 +6,15 @@ import jakarta.validation.Valid;
 import korzeniowski.mateusz.app.email.EmailRecipientCacheService;
 import korzeniowski.mateusz.app.email.EmailService;
 import korzeniowski.mateusz.app.model.email.dto.EmailSendingDto;
-import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.app.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -82,14 +81,14 @@ public class EmailController {
 
     @PostMapping("/email")
     public String sendEmail(@ModelAttribute(name = "email") @Valid EmailSendingDto email, BindingResult bindingResult,
-                            Principal principal, Model model) {
+                            Principal principal, Model model, RedirectAttributes redirectAttributes) {
         boolean hasEmailErrors = bindingResult.getFieldErrors().stream()
                 .anyMatch(error -> error.getField().startsWith("to[") && "Email".equals(error.getCode()));
         if (hasEmailErrors) {
             bindingResult.rejectValue("to", "error.to",
                     "*co najmniej jeden z podanych adresów e-mail, jest niepoprawny!");
         }
-        if(email.getText().equals("<p><br></p>")){
+        if (email.getText().equals("<p><br></p>")) {
             bindingResult.rejectValue("text", "error.text",
                     "*wiadomość nie może być pusta!");
         }
@@ -107,7 +106,15 @@ public class EmailController {
         } catch (MessagingException e) {
             bindingResult.rejectValue("to", "error.to", e.getMessage());
         }
-        return "redirect:/email/success";
+        if (!email.getTo().isEmpty()) {
+            StringBuilder message = new StringBuilder("Poprawnie wysłano wiadomość do: ");
+            for (String recipient : email.getTo()) {
+                message.append(recipient).append(", ");
+            }
+            message.setLength(message.length() - 2);
+            redirectAttributes.addFlashAttribute("message", message.toString());
+        }
+        return "redirect:/email-confirmation";
     }
 
     @GetMapping("/email/success")

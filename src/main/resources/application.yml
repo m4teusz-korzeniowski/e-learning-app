@@ -1,4 +1,7 @@
 spring:
+  messages:
+      basename: messages
+      encoding: UTF-8
   profiles:
     active: dev
   liquibase:
@@ -19,3 +22,6 @@ spring:
           starttls:
             enable: true
     default-encoding: UTF-8
+  web:
+    locale: pl_PL
+    locale-resolver: fixed

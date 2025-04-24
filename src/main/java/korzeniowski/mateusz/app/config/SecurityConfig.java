@@ -1,16 +1,23 @@
 package korzeniowski.mateusz.app.config;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 public class SecurityConfig {
+    ;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> request
@@ -27,9 +34,15 @@ public class SecurityConfig {
                 .requestMatchers("/styles/**", "/scripts/**", "/images/**").permitAll()
                 .requestMatchers("/register").permitAll()
                 .anyRequest().authenticated());
-        http.formLogin(login -> login.loginPage("/login")
-                .successHandler(customAuthenticationSuccessHandler())
-                .permitAll());
+        http.formLogin(login ->
+                        login.loginPage("/login")
+                                .successHandler(customAuthenticationSuccessHandler())
+                                .failureHandler(customAuthenticationFailureHandler())
+                                .permitAll())
+                .sessionManagement(session -> session
+                        .sessionFixation().newSession()
+                        .invalidSessionUrl("/login")
+                );
         http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
         http.logout(logout -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout/**", HttpMethod.GET.name()))
@@ -44,4 +57,19 @@ public class SecurityConfig {
     public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
         return new CustomAuthenticationSuccessHandler();
     }
+
+    @Bean
+    public AuthenticationFailureHandler customAuthenticationFailureHandler() {
+        return (request, response, exception) -> {
+            HttpSession session = request.getSession();
+            if (exception instanceof DisabledException) {
+                session.setAttribute("DISABLED_ERROR", "*twoje konto jest nieaktywne!");
+            } else if (exception instanceof BadCredentialsException) {
+                session.setAttribute("BAD_CREDENTIALS_ERROR", "*nieprawidłowy login lub hasło!");
+            }
+
+            response.sendRedirect("/login");
+        };
+    }
+
 }
