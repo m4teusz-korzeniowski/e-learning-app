@@ -42,7 +42,7 @@
             <div th:if="*{fileUrl != null}">
                 <p>Aktualnie załączony plik:</p>
                 <div>
-                    <a th:href="@{/teacher/{courseId}/files/{filename}(filename=*{fileUrl},courseId=*{courseId})}"
+                    <a th:href="@{/resource/{filename}(filename=*{fileUrl})}"
                        th:text="*{fileUrl}" target="_blank">Plik</a>
                 </div>
                 <br>

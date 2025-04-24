@@ -9,12 +9,17 @@ import korzeniowski.mateusz.app.repository.ModuleItemRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class ModuleItemService {
@@ -81,6 +86,18 @@ public class ModuleItemService {
     public Resource getFile(String fileName) {
         return storageService.loadAsResource(fileName);
     }
+
+    public Long extractItemIdFromFileName(String filePath) {
+        String fileName = Paths.get(filePath).getFileName().toString();
+        Pattern pattern = Pattern.compile(".*_(\\d+)\\.[^.]+$");
+        Matcher matcher = pattern.matcher(fileName);
+
+        if (matcher.matches()) {
+            return Long.parseLong(matcher.group(1));
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+
 
     public Long findCourseIdFromModuleItem(Long moduleItemId) {
         Optional<ModuleItem> item = moduleItemRepository.findById(moduleItemId);

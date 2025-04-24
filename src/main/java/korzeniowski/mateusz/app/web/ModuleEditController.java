@@ -22,8 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -31,12 +29,10 @@ import java.util.Optional;
 public class ModuleEditController {
 
     private final ModuleItemService moduleItemService;
-    private final CourseService courseService;
     private final AccessService accessService;
 
-    public ModuleEditController(ModuleItemService moduleItemService, CourseService courseService, AccessService accessService) {
+    public ModuleEditController(ModuleItemService moduleItemService , AccessService accessService) {
         this.moduleItemService = moduleItemService;
-        this.courseService = courseService;
         this.accessService = accessService;
     }
 
@@ -91,41 +87,5 @@ public class ModuleEditController {
             return returnEditForm(itemId, model, item);
         }
         return "redirect:/teacher/module-item/" + itemId + "/edit";
-    }
-
-    @GetMapping("/teacher/{courseId}/files/**")
-    @ResponseBody
-    public ResponseEntity<Resource> serveFile(HttpServletRequest request, @PathVariable long courseId) {
-
-        try {
-            UserSessionDto userInfo = (UserSessionDto) request.getSession().getAttribute("userInfo");
-            long creatorId = courseService.findCreatorId(courseId);
-            if (accessService.hasLoggedInTeacherAccessToTheCourse(creatorId, userInfo.getId())) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-            }
-            String filePath = request.getRequestURI().substring(("/teacher/" + courseId + "/files/").length());
-            Resource file = moduleItemService.getFile(filePath);
-            if (file == null)
-                return ResponseEntity.notFound().build();
-
-            String contentType = Files.probeContentType(file.getFile().toPath());
-            if (contentType == null) {
-                contentType = "application/octet-stream";
-            }
-            if (contentType.startsWith("image/") || contentType.equals("application/pdf")
-                    || contentType.equals("text/plain") || contentType.equals("text/html")) {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.parseMediaType(contentType))
-                        .body(file);
-            } else {
-                return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_DISPOSITION,
-                                "attachment; filename=\"" + file.getFilename() + "\"")
-                        .contentType(MediaType.parseMediaType(contentType))
-                        .body(file);
-            }
-        } catch (StorageFileNotFoundException | NoSuchElementException | IOException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
     }
 }
