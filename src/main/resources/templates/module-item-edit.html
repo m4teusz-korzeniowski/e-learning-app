@@ -33,7 +33,7 @@
           th:object="${moduleItem}" method="post" enctype="multipart/form-data">
         <div class="element">
             <input type="hidden" th:field="*{id}" th:value="*{id}">
-            <label for="description">Opis kursu:</label>
+            <label for="description">Opis modułu:</label>
             <textarea id="description" style="display: none" th:field="*{description}"
                       name="description"></textarea>
             <div id="editor"></div>

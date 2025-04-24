@@ -85,6 +85,25 @@ public class UserService {
     }
 
     @Transactional
+    public void sendActivationEmail(User user, String principalEmail) {
+        userRepository.save(user);
+        PasswordToken token = passwordTokenService.generatePasswordTokenForUser(user);
+        String registerConfirmationLink =
+                "<a href=\"" + appProperties.getUrl() + "/register?token=" +
+                        token.getToken() + "\">Dokończ rejestrację</a>";
+        try {
+            emailService.sendHtmlMessage(
+                    user.getEmail(),
+                    "Dokończenie rejestracji",
+                    registerConfirmationLink,
+                    principalEmail
+            );
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Transactional
     public void registerAppUser(UserRegistrationDto userRegistrationDto, String principalEmail) {
         User user = new User();
         user.setFirstName(userRegistrationDto.getFirstName());
@@ -104,7 +123,8 @@ public class UserService {
         } else if (isPeselInUse(user.getPesel())) {
             throw new PeselAlreadyInUseException(String.format("*pesel %s już istnieje", user.getPesel()));
         } else {
-            userRepository.save(user);
+            sendActivationEmail(user, principalEmail);
+            /*userRepository.save(user);
             PasswordToken token = passwordTokenService.generatePasswordTokenForUser(user);
             String registerConfirmationLink =
                     "<a href=\"" + appProperties.getUrl() + "/register?token=" +
@@ -118,7 +138,7 @@ public class UserService {
                 );
             } catch (MessagingException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
         }
     }
 

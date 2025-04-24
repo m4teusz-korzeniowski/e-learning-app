@@ -75,6 +75,34 @@
         <div class="submit-button">
             <button type="submit">Zatwierdź zmiany</button>
         </div>
+        <br><br><br>
+    </form>
+    <form method="post" th:action="@{/admin/users/resend-token}" th:object="${token}">
+        <div class="element">
+            <p>Token rejestracyjny:</p>
+            <div th:if="*{expiryDate == null}">
+                <input disabled value="Nieaktywny">
+                <p></p>
+            </div>
+            <div th:if="*{expiryDate != null}">
+                <input type="hidden" name="userId" th:value="${id}">
+                <input disabled value="Aktywny">
+                <p></p>
+                <span>Data wygaśnięcia tokenu: </span>
+                <span th:text="*{expiryDate}"></span>
+                <p></p>
+                <div>
+                    <button type="submit">Wyślij ponownie</button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="element" th:if="${message != null}">
+            <p th:text="${message}"></p>
+        </div>
+        <div class="element" th:if="${error != null}">
+            <p th:text="${error}"></p>
+        </div>
     </form>
 </div>
 <br><br>

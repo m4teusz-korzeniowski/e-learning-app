@@ -8,7 +8,6 @@ import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.app.service.AccessService;
 import korzeniowski.mateusz.app.service.CourseService;
 import korzeniowski.mateusz.app.service.ModuleItemService;
-import korzeniowski.mateusz.app.service.UserService;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;

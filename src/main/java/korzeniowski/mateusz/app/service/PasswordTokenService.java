@@ -1,6 +1,7 @@
 package korzeniowski.mateusz.app.service;
 
 import korzeniowski.mateusz.app.model.token.PasswordToken;
+import korzeniowski.mateusz.app.model.token.TokenExpiryDateDto;
 import korzeniowski.mateusz.app.model.user.User;
 import korzeniowski.mateusz.app.repository.PasswordTokenRepository;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,12 @@ public class PasswordTokenService {
 
     public PasswordToken generatePasswordTokenForUser(User user) {
         PasswordToken token = new PasswordToken();
+        passwordTokenRepository.findByUserId(user.getId()).ifPresent(passwordToken -> {
+            token.setId(passwordToken.getId());
+        });
         token.setToken(UUID.randomUUID().toString());
         token.setUser(user);
-        token.setExpiryDate(LocalDateTime.now().plusMinutes(7 * 60 * 24));
+        token.setExpiryDate(LocalDateTime.now().plusMinutes(60 * 24 * 28));
         return passwordTokenRepository.save(token);
     }
 
@@ -33,5 +37,13 @@ public class PasswordTokenService {
 
     public void deleteToken(String token) {
         passwordTokenRepository.findByToken(token).ifPresent(passwordTokenRepository::delete);
+    }
+
+    public Optional<TokenExpiryDateDto> findTokenExpiryDateByUserId(Long userId) {
+        return passwordTokenRepository.findByUserId(userId).map(TokenExpiryDateDto::map);
+    }
+
+    public boolean tokenExists(Long userId) {
+        return passwordTokenRepository.findByUserId(userId).isPresent();
     }
 }

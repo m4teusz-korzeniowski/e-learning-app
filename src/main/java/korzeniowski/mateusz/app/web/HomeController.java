@@ -21,8 +21,8 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model, HttpSession session) {
         UserSessionDto user = (UserSessionDto) session.getAttribute("userInfo");
-        Long idOfAuthenticatedUser = user.getId();
-        List<CourseNameDto> courses = userService.findCoursesByUserId(idOfAuthenticatedUser);
+        Long userId = user.getId();
+        List<CourseNameDto> courses = userService.findCoursesByUserId(userId);
         addCreatorNameToCourse(courses);
         model.addAttribute("courses", courses);
         return "index";
