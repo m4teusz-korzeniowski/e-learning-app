@@ -12,6 +12,6 @@ public interface ModuleItemRepository extends CrudRepository<ModuleItem, Long> {
             " join item.module module" +
             " join module.course course" +
             " join course.users user" +
-            " where item.id = :itemId and user.id = :userId")
+            " where item.id = :itemId and user.id = :userId and module.visible = true")
     Boolean hasUserAccessToResourceFile(@Param("itemId") Long itemId, @Param("userId") Long userId);
 }

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Podgląd kursu</title>
+    <th:block th:replace="~{fragments :: head}"></th:block>
+</head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+<div class="info-bar">
+    <div>
+        <h2 th:text="${'Podgląd kursu: ' + course.name}"></h2>
+    </div>
+</div>
+<div class="info-bar">
+    <a th:href="@{/teacher}">Strona główna</a>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/teacher/course}">Moje kursy</a>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/teacher/course/{id}/display(id=${course.id})}" th:text="${course.name}">Nazwa kursu</a>
+</div>
+<br><br>
+<div class="user-courses">
+    <div class="element">
+        <a th:href="@{/teacher/course/{id}/users(id=${course.id})}">Uczestnicy kursu</a>
+    </div>
+    <br>
+    <div th:if="${!course.description.equals('<p><br></p>')}">
+        <div class="element">
+            <p th:utext="${course.description}">Opis kursu</p>
+        </div>
+        <br>
+    </div>
+    <div th:each="courseModule : ${course.modules}">
+        <div class="element">
+            <h3 th:text="${courseModule.name}">Nazwa modułu</h3>
+            <div th:each="item : ${courseModule.items}">
+                <p th:if="${!item.description.equals('<p><br></p>')}" th:utext="${item.description}">Element modułu</p>
+                <div th:if="${item.filePath != null}">
+                    <div>
+                        <a th:href="@{/resource/{filename}(filename=${item.filePath})}"
+                           th:text="${item.name}" target="_blank">Plik</a>
+                    </div>
+                </div>
+            </div>
+            <div th:each="test : ${courseModule.tests}">
+                <p><a href="#" th:href="@{/module/quiz/{id}(id=${test.getId()})}" th:text="${test.name}">Nazwa Testu</a>
+                </p>
+            </div>
+        </div>
+        <br>
+    </div>
+</div>
+<br><br>
+</body>
+</html>

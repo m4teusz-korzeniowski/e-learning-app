@@ -343,5 +343,26 @@ public class UserService {
         return userRepository.findAllByGroupId(groupId).stream().map(User::getEmail).toList();
     }
 
+    public Page<UserDisplayDto> findCourseParticipants(int pageNumber, int pageSize, long courseId) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return userRepository.findAllByCourseIdPageable(pageable, courseId).map(UserDisplayDto::map);
+    }
+
+    public Page<UserDisplayDto> findCourseParticipantsContainKeyword(int pageNumber,
+                                                                     int pageSize,
+                                                                     String keyword,
+                                                                     long courseId) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<UserDisplayDto> users;
+        if (!keyword.isBlank()) {
+            users = userRepository.findAllByCourseIdPageableWithKeyword(
+                            pageable, courseId, keyword)
+                    .map(UserDisplayDto::map);
+        } else {
+            users = userRepository.findAllByCourseIdPageable(pageable, courseId).map(UserDisplayDto::map);
+        }
+        return users;
+    }
+
 }
 

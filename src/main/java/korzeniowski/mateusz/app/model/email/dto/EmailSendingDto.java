@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
@@ -12,8 +13,10 @@ public class EmailSendingDto {
     @NotEmpty(message = "*pole nie może być puste!")
     private List<@Email String> to;
     @NotBlank(message = "*pole nie może być puste!")
+    @Size(max = 500, message = "*przekroczono maksymalny rozmiar tematu!")
     private String subject;
     @NotBlank(message = "*pole nie może być puste!")
+    @Size(max = 75000, message = "*przekroczono maksymalny rozmiar wiadomości!")
     private String text;
 
     public List<String> getTo() {

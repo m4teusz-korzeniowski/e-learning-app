@@ -58,6 +58,22 @@ public interface UserRepository extends JpaRepository<User, Long> {
             " where enroll.course_id = :courseId")
     List<User> findALlByCourseId(@Param("courseId") Long courseId);
 
+    @Query(value = "select user from User user join Enrollment enroll on user.id = enroll.user_id" +
+            " where enroll.course_id = :courseId",
+            countQuery = "select count(user) from User user join Enrollment enroll on user.id = enroll.user_id" +
+                    " where enroll.course_id = :courseId")
+    Page<User> findAllByCourseIdPageable(Pageable pageable, @Param("courseId") Long courseId);
+
+    @Query(value = "select user from User user join Enrollment enroll on user.id = enroll.user_id" +
+            " where enroll.course_id = :courseId and" +
+            " (upper(user.firstName) like upper(concat('%', :keyword,'%')) or" +
+            " upper(user.lastName) like upper(concat('%', :keyword,'%')))",
+            countQuery = "select count(user) from User user join Enrollment enroll on user.id = enroll.user_id" +
+                    " where enroll.course_id = :courseId and" +
+                    " (upper(user.firstName) like upper(concat('%', :keyword,'%')) or" +
+                    " upper(user.lastName) like upper(concat('%', :keyword,'%')))")
+    Page<User> findAllByCourseIdPageableWithKeyword(Pageable pageable, @Param("courseId") Long courseId, @Param("keyword") String keyword);
+
     @Query("select user from User user where user.group.id = :groupId")
     List<User> findAllByGroupId(@Param("groupId") Long groupId);
 

@@ -40,7 +40,7 @@ public class CourseService {
         return courseRepository.findById(id).map(CourseDisplayDto::map);
     }
 
-    public CourseNameDto findCourseNameById(Long id) {
+    public CourseNameDto findCourseNameAndCreatorNameById(Long id) {
         return courseRepository.findById(id).map(CourseNameDto::map).orElse(null);
     }
 
@@ -77,14 +77,13 @@ public class CourseService {
     public void editCourse(CourseDisplayDto courseDto) {
         Optional<Course> course = courseRepository.findById(courseDto.getId());
         if (course.isPresent()) {
-            if(courseDto.getDescription().length() > MAX_LENGTH_OF_DESCRIPTION) {
+            if (courseDto.getDescription().length() > MAX_LENGTH_OF_DESCRIPTION) {
                 throw new DataIntegrityViolationException(
                         "*przekroczono maksymalnu rozmiar opisu!");
             }
             course.get().setDescription(courseDto.getDescription());
             courseRepository.save(course.get());
-        }
-        else {
+        } else {
             throw new NoSuchElementException("Nie znaleziono kursu!");
         }
     }
@@ -105,8 +104,7 @@ public class CourseService {
         if (course.isPresent()) {
             int size = course.get().getModules().size();
             return size >= maxSize;
-        }
-        else {
+        } else {
             throw new NoSuchElementException("Nie znaleziono kursu!");
         }
     }
@@ -115,9 +113,16 @@ public class CourseService {
         Optional<Course> course = courseRepository.findById(courseId);
         if (course.isPresent()) {
             return course.get().getCreatorId();
-        }
-        else {
+        } else {
             throw new NoSuchElementException("Nie znaleziono kursu!");
         }
+    }
+
+    public String findCourseNameById(Long courseId) {
+        return courseRepository.findCourseNameById(courseId);
+    }
+
+    public Long findCreatorIdById(Long courseId) {
+        return courseRepository.findCreatorIdByCourseId(courseId);
     }
 }

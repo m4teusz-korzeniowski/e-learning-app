@@ -4,6 +4,7 @@
     z-index: 1000;
     background-color: lightskyblue;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    min-width: 580px;
 }
 
 .navbar-wrapper {

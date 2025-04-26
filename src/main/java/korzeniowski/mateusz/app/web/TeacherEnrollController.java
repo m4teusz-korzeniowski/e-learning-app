@@ -40,7 +40,7 @@ public class TeacherEnrollController {
     public String enrollUserForm(@PathVariable long id, @ModelAttribute("enroll") TeacherCourseEnrollDto enroll,
                                  @RequestParam(name = "keyword", required = false) @ModelAttribute("keyword") String keyword,
                                  Model model, HttpSession session) {
-        CourseNameDto courseNameById = courseService.findCourseNameById(id);
+        CourseNameDto courseNameById = courseService.findCourseNameAndCreatorNameById(id);
         if (courseNameById == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
