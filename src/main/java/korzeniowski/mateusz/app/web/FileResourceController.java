@@ -38,7 +38,7 @@ public class FileResourceController {
             String filePath = request.getRequestURI().substring(("/resource/").length());
             Long itemId = moduleItemService.extractItemIdFromFileName(filePath);
             UserSessionDto userInfo = (UserSessionDto) request.getSession().getAttribute("userInfo");
-            if (accessService.hasLoggedInTeacherAccessToModuleItem(itemId, userInfo.getId())) {
+            if (accessService.hasUserAccessToResourceFile(itemId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             Resource file = moduleItemService.getFile(filePath);

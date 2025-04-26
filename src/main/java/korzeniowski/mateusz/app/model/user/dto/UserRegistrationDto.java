@@ -7,18 +7,17 @@ import org.hibernate.validator.constraints.pl.PESEL;
 
 
 public class UserRegistrationDto {
-    @NotBlank(message = "pole nie może być puste")
-    @Size(min = 2, max = 50, message = "pole musi mieć od 2 do 50 znaków")
+    @NotBlank(message = "*pole nie może być puste!")
+    @Size(min = 2, max = 50, message = "*pole musi mieć od 2 do 50 znaków!")
     private String firstName;
-    @NotBlank(message = "pole nie może być puste")
-    @Size(min = 2, max = 50, message = "pole musi mieć od 2 do 50 znaków")
+    @NotBlank(message = "*pole nie może być puste!")
+    @Size(min = 2, max = 50, message = "*pole musi mieć od 2 do 50 znaków!")
     private String lastName;
-    @Email(message = "niepoprawny format adresu e-mail")
-    @NotBlank(message = "pole nie może być puste")
+    @Email(message = "*niepoprawny format adresu e-mail!")
+    @NotBlank(message = "*pole nie może być puste!")
     private String email;
     private Boolean enabled;
-    //private String confirmPassword;
-    @PESEL
+    @PESEL(message = "*niepoprawny numer PESEL!")
     private String pesel;
     private String role;
 
@@ -54,7 +53,7 @@ public class UserRegistrationDto {
         this.role = role;
     }
 
-    public @PESEL String getPesel() {
+    public String getPesel() {
         return pesel;
     }
 

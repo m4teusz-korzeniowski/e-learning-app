@@ -21,10 +21,12 @@
 </div>
 <br><br>
 <div class="user-courses">
-    <div class="element">
-        <p th:utext="${course.description}">Opis kursu</p>
+    <div th:if="${!course.description.equals('<p><br></p>')}">
+        <div class="element">
+            <p th:utext="${course.description}">Opis kursu</p>
+        </div>
+        <br>
     </div>
-    <br>
     <div th:each="courseModule : ${course.modules}">
         <div class="element">
             <h3 th:text="${courseModule.name}">Nazwa modułu</h3>
@@ -32,7 +34,7 @@
                 <p th:utext="${item.description}">Element modułu</p>
                 <div th:if="${item.filePath != null}">
                     <div>
-                        <a th:href="@{/{courseId}/files/{filename}(filename=${item.filePath},courseId=${courseId})}"
+                        <a th:href="@{/resource/{filename}(filename=${item.filePath})}"
                            th:text="${item.name}" target="_blank">Plik</a>
                     </div>
                     <br>

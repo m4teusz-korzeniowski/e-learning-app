@@ -46,8 +46,10 @@
             <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
         </div>
         <br>
-        <div class="submit-button">
-            <button type="submit">Dodaj kurs</button>
+        <div class="element" style="visibility: hidden">
+            <div class="submit-button">
+                <button type="submit">Dodaj kurs</button>
+            </div>
         </div>
         <br>
     </form>

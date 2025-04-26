@@ -6,6 +6,7 @@ import korzeniowski.mateusz.app.model.course.test.Answer;
 import korzeniowski.mateusz.app.model.course.test.Question;
 import korzeniowski.mateusz.app.model.course.test.Test;
 import korzeniowski.mateusz.app.model.user.User;
+import korzeniowski.mateusz.app.model.user.UserRole;
 import korzeniowski.mateusz.app.repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -87,5 +88,18 @@ public class AccessService {
         } else {
             return false;
         }
+    }
+
+    public boolean hasUserAccessToResourceFile(Long itemId, Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            UserRole role = user.get().getUserRoles().iterator().next();
+            if (role.getName().equals("TEACHER")) {
+                return hasLoggedInTeacherAccessToModuleItem(itemId, userId);
+            } else if (role.getName().equals("STUDENT")) {
+                return moduleItemRepository.hasUserAccessToResourceFile(itemId, userId);
+            }
+        }
+        return false;
     }
 }

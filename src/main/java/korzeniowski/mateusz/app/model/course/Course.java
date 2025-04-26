@@ -2,6 +2,7 @@ package korzeniowski.mateusz.app.model.course;
 
 import jakarta.persistence.*;
 import korzeniowski.mateusz.app.model.course.module.Module;
+import korzeniowski.mateusz.app.model.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,8 @@ public class Course {
     @OneToMany(mappedBy = "course")
     private List<Module> modules = new ArrayList<>();
     private Long creatorId;
+    @ManyToMany(mappedBy = "courses")
+    List<User> users = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -55,5 +58,13 @@ public class Course {
 
     public void setCreatorId(Long creatorId) {
         this.creatorId = creatorId;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }

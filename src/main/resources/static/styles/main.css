@@ -13,16 +13,17 @@ body {
     padding: 10px;
     background: white;
     overflow: auto;
+    min-width: 500px;
 }
 
 #test-name {
     padding: 0 0 20px 40px;
 }
 
-.user-courses .submit-button {
-    margin: 0;
-    position: absolute;
-    right: 50%;
+.submit-button {
+    visibility: visible;
+    display: flex;
+    justify-content: center;
 }
 
 

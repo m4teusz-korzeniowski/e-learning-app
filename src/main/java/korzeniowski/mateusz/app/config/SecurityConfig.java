@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -68,7 +67,6 @@ public class SecurityConfig {
             } else if (exception instanceof BadCredentialsException) {
                 session.setAttribute("BAD_CREDENTIALS_ERROR", "*nieprawidłowy login lub hasło!");
             }
-
             response.sendRedirect("/login");
         };
     }

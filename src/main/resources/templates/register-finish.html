@@ -22,8 +22,10 @@
             <p th:if="${#fields.hasErrors('confirmedPassword')}" th:errors="*{confirmedPassword}"></p>
         </div>
         <br>
-        <div class="submit-button">
-            <button type="submit">Dokończ rejestrację</button>
+        <div class="element" style="visibility: hidden">
+            <div class="submit-button">
+                <button type="submit">Dokończ rejestrację</button>
+            </div>
         </div>
         <br>
     </form>

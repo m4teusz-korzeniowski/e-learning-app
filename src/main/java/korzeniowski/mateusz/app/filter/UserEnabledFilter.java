@@ -30,7 +30,7 @@ public class UserEnabledFilter extends OncePerRequestFilter {
         if (auth != null && auth.isAuthenticated() && auth.getPrincipal() instanceof UserDetails userDetails) {
             var email = userDetails.getUsername();
             var user = userService.findCredentialsByEmail(email);
-            if (user.isPresent() && !user.get().getEnabled()) {
+            if (user.isEmpty() || !user.get().getEnabled()) {
                 request.getSession().invalidate();
                 SecurityContextHolder.clearContext();
                 response.sendRedirect("/login");

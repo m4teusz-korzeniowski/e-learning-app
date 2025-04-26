@@ -114,7 +114,7 @@ public class EmailController {
             message.setLength(message.length() - 2);
             redirectAttributes.addFlashAttribute("message", message.toString());
         }
-        return "redirect:/email-confirmation";
+        return "redirect:/email/success";
     }
 
     @GetMapping("/email/success")
