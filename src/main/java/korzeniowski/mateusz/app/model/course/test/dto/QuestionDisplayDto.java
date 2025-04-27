@@ -6,11 +6,13 @@ public class QuestionDisplayDto {
     private Long id;
     private String description;
     private String type;
+    private String category;
 
-    public QuestionDisplayDto(Long id, String description, String type) {
+    public QuestionDisplayDto(Long id, String description, String type, String category) {
         this.id = id;
         this.description = description;
         this.type = type;
+        this.category = category;
     }
 
     public Long getId() {
@@ -37,9 +39,18 @@ public class QuestionDisplayDto {
         this.type = type;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public static QuestionDisplayDto map(Question question) {
         return new QuestionDisplayDto(question.getId(),
                 question.getDescription(),
-                question.getQuestionType().name());
+                question.getQuestionType().name(),
+                question.getCategory());
     }
 }

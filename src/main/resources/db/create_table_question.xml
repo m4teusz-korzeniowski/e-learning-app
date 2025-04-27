@@ -18,6 +18,9 @@
             <column name="question_type" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
+            <column name="category" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
             <column name="test_id" type="bigint"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="question"

@@ -13,9 +13,11 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query(value = "select q from Question q where q.test.id = :testId and" +
             "(upper(q.description) like upper(concat('%', :keyword, '%')) or" +
-            " upper(q.questionType) like upper(concat('%', :keyword, '%')))",
+            " upper(q.questionType) like upper(concat('%', :keyword, '%')) or" +
+            " upper(coalesce(q.category,'Brak')) like upper(concat('%', :keyword, '%')))",
             countQuery = "select count(q) from Question q where q.test.id = :testId and" +
                     "(upper(q.description) like upper(concat('%', :keyword, '%')) or" +
-                    " upper(q.questionType) like upper(concat('%', :keyword, '%')))")
+                    " upper(q.questionType) like upper(concat('%', :keyword, '%')) or" +
+                    " upper(coalesce(q.category,'Brak')) like upper(concat('%', :keyword, '%')))")
     Page<Question> findAllByKeywordAndTestId(@Param("keyword") String keyword, @Param("testId") Long testId, Pageable pageable);
 }

@@ -13,7 +13,7 @@ import java.util.List;
 
 public class QuestionEditDto {
     private Long id;
-    @NotBlank(message = "*pole ni może być puste!")
+    @NotBlank(message = "*pole nie może być puste!")
     @Size(max = 5000, message = "*przekroczono maksymalny rozmiar opisu!")
     private String description;
     @NotNull(message = "*pole nie może być puste!")
@@ -21,16 +21,21 @@ public class QuestionEditDto {
     private Double score;
     @NotBlank(message = "*pole nie może być puste!")
     private String type;
+    @Size(max = 50, message = "*przekroczono maksymalny rozmiar dla kategorii!")
+    private String category;
     @Valid
     private List<AnswerEditDto> answers;
     private Long courseId;
     private Long testId;
 
-    public QuestionEditDto(Long id, String description, Double score, String type, List<AnswerEditDto> answers, Long courseId, Long testId) {
+    public QuestionEditDto(Long id, String description, Double score, String type,
+                           String category, List<AnswerEditDto> answers,
+                           Long courseId, Long testId) {
         this.id = id;
         this.description = description;
         this.score = score;
         this.type = type;
+        this.category = category;
         this.answers = answers;
         this.courseId = courseId;
         this.testId = testId;
@@ -92,6 +97,14 @@ public class QuestionEditDto {
         this.testId = testId;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public static QuestionEditDto map(Question question) {
         List<AnswerEditDto> answers = new ArrayList<>();
         for (Answer answer : question.getAnswers()) {
@@ -101,6 +114,7 @@ public class QuestionEditDto {
                 question.getDescription(),
                 question.getScore(),
                 question.getQuestionType().name(),
+                question.getCategory(),
                 answers,
                 question.getTest().getModule().getCourse().getId(),
                 question.getTest().getId());

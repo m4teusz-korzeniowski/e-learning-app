@@ -40,6 +40,7 @@
                 <td>ID:</td>
                 <td>Treść pytania:</td>
                 <td>Rodzaj pytania:</td>
+                <td>Kategoria:</td>
                 <td>Działania:</td>
             </tr>
             </thead>
@@ -47,6 +48,8 @@
                 <td th:text="${question.id}"></td>
                 <td th:text="${question.description}"></td>
                 <td th:text="${question.type}"></td>
+                <td th:if="${question.category != null}" th:text="${question.category}"></td>
+                <td th:if="${question.category == null}">Brak</td>
                 <td>
                     <a th:href="@{/teacher/questions/edit/{questionId}
                     (questionId=${question.id})}"><i class="fa-solid fa-file-pen"></i></a>
@@ -63,8 +66,11 @@
         </div>
         <br>
     </div>
-    <div class="element">
+    <div th:if="${keyword == null or keyword.isBlank()}" class="element">
         <span th:text="'Ilość pytań w bazie: ' + ${totalItems}"></span>
+    </div>
+    <div th:if="${keyword != null}" class="element">
+        <span th:text="'Ilość pytań w bazie spełniających kryteria wyszukania: ' + ${totalItems}"></span>
     </div>
     <br>
     <div class="element">

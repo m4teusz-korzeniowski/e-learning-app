@@ -2,9 +2,13 @@ package korzeniowski.mateusz.util;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-public class CreatePasswordHash {
+public final class CreatePasswordHash {
+
+    private static final BCryptPasswordEncoder ENCODER = new BCryptPasswordEncoder();
+
+
     public static String createHashBCrypt(String password) {
-        return "{bcrypt}" + new BCryptPasswordEncoder().encode(password);
+        return "{bcrypt}" + ENCODER.encode(password);
     }
 
     public static void main(String[] args) {

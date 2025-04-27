@@ -20,6 +20,7 @@ public class Question {
     private Test test;
     @OneToMany(mappedBy = "question")
     private List<Answer> answers = new ArrayList<>();
+    private String category;
 
     public Long getId() {
         return id;
@@ -67,5 +68,13 @@ public class Question {
 
     public void setQuestionType(QuestionType questionType) {
         this.questionType = questionType;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

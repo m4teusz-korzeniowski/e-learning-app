@@ -63,15 +63,15 @@ public class QuestionService {
     public Page<QuestionDisplayDto> findQuestionsPageWithKeyword(int pageNumber, int pageSize,
                                                                  String keyword, Long testId) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<QuestionDisplayDto> users;
+        Page<QuestionDisplayDto> questions;
         if (!keyword.isBlank()) {
-            users = questionRepository.findAllByKeywordAndTestId(
+            questions = questionRepository.findAllByKeywordAndTestId(
                             keyword, testId, pageable)
                     .map(QuestionDisplayDto::map);
         } else {
-            users = questionRepository.findAllByTestId(testId, pageable).map(QuestionDisplayDto::map);
+            questions = questionRepository.findAllByTestId(testId, pageable).map(QuestionDisplayDto::map);
         }
-        return users;
+        return questions;
     }
 
     public boolean questionExists(Long questionId) {
@@ -133,6 +133,7 @@ public class QuestionService {
             question.get().setDescription(dto.getDescription());
             question.get().setScore(dto.getScore());
             question.get().setQuestionType(QuestionType.valueOf(dto.getType()));
+            question.get().setCategory(dto.getCategory());
         } else {
             throw new NoSuchElementException("Nie znaleziono pytania!");
         }

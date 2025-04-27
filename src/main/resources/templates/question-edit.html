@@ -42,6 +42,9 @@
             <p>Maksymalna ilość punktów za pytanie:</p>
             <input type="number" th:field="*{score}">
             <p th:if="${#fields.hasErrors('score')}" th:errors="*{score}"></p>
+            <p>Kategoria:</p>
+            <input type="text" th:field="*{category}">
+            <p th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></p>
             <p>Wybierz typ pytania:</p>
             <select th:field="*{type}" id="type">
                 <option th:value="'SINGLE_CHOICE'">Pojedyńczy wybór</option>
