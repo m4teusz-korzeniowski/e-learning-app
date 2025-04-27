@@ -2,11 +2,13 @@ package korzeniowski.mateusz.app.web;
 
 import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
+import korzeniowski.mateusz.app.model.course.test.dto.TestDisplayDto;
 import korzeniowski.mateusz.app.model.user.dto.UserDisplayDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.app.service.AccessService;
 import korzeniowski.mateusz.app.service.CourseService;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseDto;
+import korzeniowski.mateusz.app.service.TestService;
 import korzeniowski.mateusz.app.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -18,7 +20,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Controller
@@ -27,11 +32,13 @@ public class TeacherController {
     private final AccessService accessService;
     private final UserService userService;
     private final static int PAGE_SIZE = 10;
+    private final TestService testService;
 
-    public TeacherController(CourseService courseService, AccessService accessService, UserService userService) {
+    public TeacherController(CourseService courseService, AccessService accessService, UserService userService, TestService testService) {
         this.courseService = courseService;
         this.accessService = accessService;
         this.userService = userService;
+        this.testService = testService;
     }
 
     @GetMapping("/teacher")
@@ -105,5 +112,29 @@ public class TeacherController {
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
         return "course-participants";
+    }
+
+    @GetMapping("/teacher/test/{testId}/display")
+    public String showTest(@PathVariable("testId") Long testId, Model model, HttpSession session) {
+        try {
+            UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
+            Long creatorId = testService.findCourseIdFromTest(testId);
+            if (accessService.hasLoggedInTeacherAccessToTheTest(creatorId, userInfo.getId())) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
+            Optional<TestDisplayDto> foundTest = testService.findTestById(testId);
+            if (foundTest.isPresent()) {
+                String courseName = courseService.findCourseNameById(foundTest.get().getCourseId());
+                model.addAttribute("currentDateTime", LocalDateTime.now());
+                model.addAttribute("courseName", courseName);
+                model.addAttribute("test", foundTest.get());
+                model.addAttribute("attempts", new ArrayList<>());
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return "test-teacher";
     }
 }

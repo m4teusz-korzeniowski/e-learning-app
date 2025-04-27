@@ -76,14 +76,14 @@ body {
     margin-left: auto;
 }
 
-.module-row{
+.module-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
 }
 
-.item-row{
+.item-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -94,7 +94,7 @@ body {
     min-height: 250px;
 }
 
-.answer-edit{
+.answer-edit {
     border-top: 1px solid;
     padding: 10px 0;
 }
@@ -103,6 +103,38 @@ body {
     width: 100%;
 }
 
-.email-input{
+.email-input {
     width: 100%;
+}
+
+.test-info-element {
+    flex: 1;
+    border: 1px solid darkblue;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 10px;
+    text-align: center;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+}
+
+.test-info-element p {
+    font-weight: bold;
+}
+@media (max-width: 500px) {
+    .test-info-wrapper .element {
+        flex-wrap: wrap;
+    }
+    .test-info-wrapper .test-info-element {
+        flex: 1 1 100%;
+    }
+}
+
+.test-summary{
+    font-weight: bold;
+    text-align: center;
 }

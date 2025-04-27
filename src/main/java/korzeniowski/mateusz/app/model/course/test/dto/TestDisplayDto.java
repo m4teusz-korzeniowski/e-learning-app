@@ -2,6 +2,10 @@ package korzeniowski.mateusz.app.model.course.test.dto;
 
 import korzeniowski.mateusz.app.model.course.test.Test;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 public class TestDisplayDto {
     private Long id;
     private String name;
@@ -9,14 +13,24 @@ public class TestDisplayDto {
     private String moduleName;
     private String courseName;
     private Long courseId;
+    private Integer maxAttempts;
+    private Integer duration;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
-    public TestDisplayDto(Long id, String name, String description, String moduleName, String courseName, Long courseId) {
+    public TestDisplayDto(Long id, String name, String description, String moduleName, String courseName,
+                          Long courseId, Integer maxAttempts, Integer duration,
+                          LocalDateTime startTime, LocalDateTime endTime) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.moduleName = moduleName;
         this.courseName = courseName;
         this.courseId = courseId;
+        this.maxAttempts = maxAttempts;
+        this.duration = duration;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public Long getId() {
@@ -67,6 +81,50 @@ public class TestDisplayDto {
         this.courseId = courseId;
     }
 
+    public Integer getMaxAttempts() {
+        return maxAttempts;
+    }
+
+    public void setMaxAttempts(Integer maxAttempts) {
+        this.maxAttempts = maxAttempts;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getFormattedStartTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+                "d MMMM yyyy, HH:mm", new Locale("pl", "PL"));
+        return startTime.format(formatter);
+    }
+
+    public String getFormattedEndTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+                "d MMMM yyyy, HH:mm", new Locale("pl", "PL"));
+        return endTime.format(formatter);
+    }
+
     public static TestDisplayDto map(Test test) {
         return new TestDisplayDto(
                 test.getId(),
@@ -74,7 +132,11 @@ public class TestDisplayDto {
                 test.getDescription(),
                 test.getModule().getName(),
                 test.getModule().getCourse().getName(),
-                test.getModule().getCourse().getId()
+                test.getModule().getCourse().getId(),
+                test.getMaxAttempts(),
+                test.getDuration(),
+                test.getStartTime(),
+                test.getEndTime()
         );
     }
 }
