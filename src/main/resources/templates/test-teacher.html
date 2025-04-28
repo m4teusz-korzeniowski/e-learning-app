@@ -79,6 +79,9 @@
         </div>
     </div>
     <br>
+    <div th:if="${error != null}" class="element">
+        <p th:text="${error}"></p>
+    </div>
 </div>
 <br><br>
 </body>

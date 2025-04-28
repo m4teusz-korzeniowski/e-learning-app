@@ -6,6 +6,9 @@
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
     <changeSet id="0001" author="mk">
         <createTable tableName="attempt">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
             <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
@@ -16,10 +19,11 @@
             </column>
             <column name="ended_at" type="timestamp">
             </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="score" type="double"/>
         </createTable>
-        <addPrimaryKey tableName="attempt" 
-                       columnNames="user_id,test_id"
-                       constraintName="pk_attempt"/>
         <addForeignKeyConstraint baseTableName="attempt"
                                  baseColumnNames="user_id"
                                  constraintName="fk_attempt_user"

@@ -3,6 +3,7 @@ package korzeniowski.mateusz.app.service;
 import korzeniowski.mateusz.app.model.course.module.Module;
 import korzeniowski.mateusz.app.model.course.module.ModuleItem;
 import korzeniowski.mateusz.app.model.course.test.Answer;
+import korzeniowski.mateusz.app.model.course.test.Attempt;
 import korzeniowski.mateusz.app.model.course.test.Question;
 import korzeniowski.mateusz.app.model.course.test.Test;
 import korzeniowski.mateusz.app.model.user.User;
@@ -22,14 +23,16 @@ public class AccessService {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
     private final UserRepository userRepository;
+    private final AttemptRepository attemptRepository;
 
-    public AccessService(TestRepository testRepository, ModuleItemRepository moduleItemRepository, ModuleRepository moduleRepository, QuestionRepository questionRepository, AnswerRepository answerRepository, UserRepository userRepository) {
+    public AccessService(TestRepository testRepository, ModuleItemRepository moduleItemRepository, ModuleRepository moduleRepository, QuestionRepository questionRepository, AnswerRepository answerRepository, UserRepository userRepository, AttemptRepository attemptRepository) {
         this.testRepository = testRepository;
         this.moduleItemRepository = moduleItemRepository;
         this.moduleRepository = moduleRepository;
         this.questionRepository = questionRepository;
         this.answerRepository = answerRepository;
         this.userRepository = userRepository;
+        this.attemptRepository = attemptRepository;
     }
 
     public boolean hasLoggedInTeacherAccessToTheCourse(Long creatorId, Long teacherId) {
@@ -101,5 +104,14 @@ public class AccessService {
             }
         }
         return false;
+    }
+
+    public boolean hasTeacherAccessToAttempt(Long attemptId, Long teacherId) {
+        Optional<Attempt> attempt = attemptRepository.findById(attemptId);
+        if (attempt.isPresent()) {
+            Long creatorId = attempt.get().getTest().getModule().getCourse().getCreatorId();
+            return !creatorId.equals(teacherId);
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 }

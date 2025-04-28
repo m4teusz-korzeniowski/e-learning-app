@@ -7,25 +7,27 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Attempt {
-    @EmbeddedId
-    private AttemptId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @MapsId("userId")
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @MapsId("testId")
     @ManyToOne
     @JoinColumn(name = "test_id")
     private Test test;
     private LocalDateTime startedAt;
     private LocalDateTime endedAt;
+    @Enumerated(EnumType.STRING)
+    private AttemptStatus status;
+    private Double score;
 
-    public AttemptId getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(AttemptId id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -59,5 +61,21 @@ public class Attempt {
 
     public void setEndedAt(LocalDateTime endedAt) {
         this.endedAt = endedAt;
+    }
+
+    public AttemptStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AttemptStatus status) {
+        this.status = status;
+    }
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
     }
 }

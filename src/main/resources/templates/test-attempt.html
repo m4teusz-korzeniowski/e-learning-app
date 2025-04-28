@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Test próbny</title>
+    <th:block th:replace="~{fragments :: head}"></th:block>
+</head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+<div class="info-bar">
+    <div>
+        <h2>Info about</h2>
+    </div>
+</div>
+<div class="user-courses">
+    <div th:each="question : ${attempt.getQuestions()}">
+        <div class="element">
+            <p th:text="${question.description}"></p>
+        </div>
+    </div>
+</div>
+<br><br>
+</body>
+</html>
