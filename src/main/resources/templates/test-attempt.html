@@ -12,7 +12,7 @@
 </div>
 <br><br>
 <div class="user-courses">
-    <form th:action="@{'/teacher/attempt/' + ${attemptId} + '/question/' + ${questionNo} + '/save'}" method="post">
+    <form th:action="@{'/attempt/' + ${attemptId} + '/question/' + ${questionNo} + '/save'}" method="post">
         <div class="element">
             <p th:text="'Pytanie ' + ${questionNo} + ' z ' + ${totalQuestionNumber}"></p>
             <p th:text="${attempt.questions[questionNo - 1].description}"></p>
@@ -37,7 +37,7 @@
         <div class="element">
             <a class="page-span"
                th:each="number : ${#numbers.sequence(1, totalQuestionNumber)}"
-               th:href="@{/teacher/attempt/{attemptId}/question/{questionId}(attemptId=${attemptId}, questionId=${number})}"
+               th:href="@{/attempt/{attemptId}/question/{questionId}(attemptId=${attemptId}, questionId=${number})}"
                th:text="${number}">
             </a>
         </div>

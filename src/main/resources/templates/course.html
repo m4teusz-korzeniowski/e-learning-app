@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div th:each="test : ${courseModule.tests}">
-                <p><a href="#" th:href="@{/module/quiz/{id}(id=${test.getId()})}" th:text="${test.name}">Nazwa Testu</a>
+                <p><a href="#" th:href="@{/test/{id}/display(id=${test.getId()})}" th:text="${test.name}">Nazwa Testu</a>
                 </p>
             </div>
         </div>

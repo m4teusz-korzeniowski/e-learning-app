@@ -31,6 +31,8 @@ public class SecurityConfig {
                 .requestMatchers("/email").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
                 .requestMatchers("/email/**").hasAnyRole("TEACHER", "ADMIN")
                 .requestMatchers("/resource/**").hasAnyRole("STUDENT", "TEACHER")
+                .requestMatchers("/attempt/**").hasAnyRole("STUDENT", "TEACHER")
+                .requestMatchers("/test/**").hasAnyRole("STUDENT", "TEACHER")
                 .requestMatchers("/styles/**", "/scripts/**", "/images/**").permitAll()
                 .requestMatchers("/register").permitAll()
                 .anyRequest().authenticated());

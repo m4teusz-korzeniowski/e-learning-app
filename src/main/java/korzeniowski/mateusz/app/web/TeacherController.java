@@ -118,11 +118,11 @@ public class TeacherController {
         return "course-participants";
     }
 
-    @GetMapping("/teacher/test/{testId}/display")
+    @GetMapping("/test/{testId}/display")
     public String showTest(@PathVariable("testId") Long testId, Model model, HttpSession session) {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-            if (accessService.hasLoggedInTeacherAccessToTheTest(testId, userInfo.getId())) {
+            if (accessService.hasLoggedInUserAccessToTest(testId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             Optional<TestDisplayDto> foundTest = testService.findTestById(testId);
@@ -141,12 +141,12 @@ public class TeacherController {
         return "test-teacher";
     }
 
-    @GetMapping("/teacher/test/{testId}/attempt")
+    @GetMapping("/test/{testId}/attempt")
     public String showTestAttempt(@PathVariable("testId") long testId, HttpSession session,
                                   RedirectAttributes redirectAttributes) {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-            if (accessService.hasLoggedInTeacherAccessToTheTest(testId, userInfo.getId())) {
+            if (accessService.hasLoggedInUserAccessToTest(testId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             Optional<TestAttemptDto> foundTest = attemptService.findTestAttempt(testId);
@@ -158,34 +158,34 @@ public class TeacherController {
                 Long attemptId = attemptService.findAttemptId(userInfo.getId(), testId);
                 AttemptState attemptState = attemptService.findAttemptState(attemptId);
                 Integer questionNumber = attemptState.getCurrentQuestionAttempt();
-                return "redirect:/teacher/attempt/" + attemptId + "/question/" + questionNumber;
+                return "redirect:/attempt/" + attemptId + "/question/" + questionNumber;
             } else {
                 if (attemptService.createAttemptIfAvailable(userInfo.getId(), test)) {
                     Long attemptId = attemptService.findAttemptId(userInfo.getId(), testId);
                     AttemptState attemptState = attemptService.findAttemptState(attemptId);
                     test = attemptService.initializeTest(test, testId, attemptState.getId(), attemptId);
                     attemptService.updateAttemptState(attemptState.getId(), test);
-                    return "redirect:/teacher/attempt/" + attemptId + "/question/1";
+                    return "redirect:/attempt/" + attemptId + "/question/1";
                 } else {
                     redirectAttributes.addFlashAttribute("error", "*przekroczono limit podejść do testu!");
-                    return "redirect:/teacher/test/" + testId + "/display";
+                    return "redirect:/test/" + testId + "/display";
                 }
             }
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         } catch (EmptyQuestionBankException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/teacher/test/" + testId + "/display";
+            return "redirect:/test/" + testId + "/display";
         }
     }
 
-    @GetMapping("/teacher/attempt/{attemptId}/question/{questionNumber}")
+    @GetMapping("/attempt/{attemptId}/question/{questionNumber}")
     public String showAttemptQuestion(@PathVariable("attemptId") long attemptId,
                                       @PathVariable("questionNumber") int questionNumber,
                                       Model model, HttpSession session) {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-            if (accessService.hasLoggedInTeacherAccessToTheTest(attemptId, userInfo.getId())) {
+            if (accessService.hasLoggedInUserAccessToAttempt(attemptId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
 
@@ -207,7 +207,7 @@ public class TeacherController {
         }
     }
 
-    @PostMapping("/teacher/attempt/{attemptId}/question/{questionNumber}/save")
+    @PostMapping("/attempt/{attemptId}/question/{questionNumber}/save")
     public String saveAttemptAnswer(@PathVariable long attemptId,
                                     @PathVariable int questionNumber,
                                     @RequestParam("action") String action,
@@ -215,7 +215,7 @@ public class TeacherController {
                                     HttpSession session) {
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
-            if (accessService.hasLoggedInTeacherAccessToTheTest(attemptId, userInfo.getId())) {
+            if (accessService.hasLoggedInUserAccessToAttempt(attemptId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             TestAttemptDto attempt = (TestAttemptDto) session.getAttribute("attempt");
@@ -233,16 +233,16 @@ public class TeacherController {
                 if (questionNumber <= 1) {
                     questionNumber = 2;
                 }
-                return "redirect:/teacher/attempt/" + attemptId + "/question/" + (questionNumber - 1);
+                return "redirect:/attempt/" + attemptId + "/question/" + (questionNumber - 1);
             } else if ("next".equals(action)) {
                 if (questionNumber >= attempt.getNumberOfQuestions()) {
                     questionNumber = attempt.getNumberOfQuestions() - 1;
                 }
-                return "redirect:/teacher/attempt/" + attemptId + "/question/" + (questionNumber + 1);
+                return "redirect:/attempt/" + attemptId + "/question/" + (questionNumber + 1);
             } else if ("finish".equals(action)) {
-                return "redirect:/teacher/attempt/" + attemptId + "/summary";
+                return "redirect:/attempt/" + attemptId + "/summary";
             } else {
-                return "redirect:/teacher/attempt/" + attemptId + "/question/" + questionNumber;
+                return "redirect:/attempt/" + attemptId + "/question/" + questionNumber;
             }
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);

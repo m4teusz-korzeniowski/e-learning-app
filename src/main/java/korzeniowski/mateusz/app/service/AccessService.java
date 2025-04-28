@@ -114,4 +114,30 @@ public class AccessService {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
+
+    public boolean hasLoggedInUserAccessToTest(Long testId, Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            UserRole role = user.get().getUserRoles().iterator().next();
+            if (role.getName().equals("TEACHER")) {
+                return hasLoggedInTeacherAccessToTheTest(testId, userId);
+            } else if (role.getName().equals("STUDENT")) {
+                return testRepository.hasUserAccessToTest(testId, userId);
+            }
+        }
+        return false;
+    }
+
+    public boolean hasLoggedInUserAccessToAttempt(Long attemptId, Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            UserRole role = user.get().getUserRoles().iterator().next();
+            if (role.getName().equals("TEACHER")) {
+                return hasTeacherAccessToAttempt(attemptId, userId);
+            } else if (role.getName().equals("STUDENT")) {
+                return attemptRepository.hasUserAccessToAttempt(attemptId, userId);
+            }
+        }
+        return false;
+    }
 }
