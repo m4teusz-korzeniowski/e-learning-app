@@ -57,6 +57,11 @@
             <p>Maksymalna ilość podejść</p>
             <input type="number" th:field="*{maxAttempts}">
             <p th:if="${#fields.hasErrors('maxAttempts')}" th:errors="*{maxAttempts}"></p>
+            <p>Podgląd prób:</p>
+            <select th:field="*{overviewEnabled}" id="overview">
+                <option th:value="false">Niedozwolony</option>
+                <option th:value="true">Dozwolony</option>
+            </select>
         </div>
         <br>
         <div class="element" style="visibility: hidden">

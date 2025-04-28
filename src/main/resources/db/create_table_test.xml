@@ -23,6 +23,7 @@
             <column name="max_attempts" type="integer"/>
             <column name="start_time" type="timestamp"/>
             <column name="end_time" type="timestamp"/>
+            <column name="overview_enabled" type="boolean"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="test" baseColumnNames="module_id"
                                  constraintName="fk_test_module"

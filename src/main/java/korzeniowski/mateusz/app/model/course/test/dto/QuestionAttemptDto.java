@@ -2,7 +2,6 @@ package korzeniowski.mateusz.app.model.course.test.dto;
 
 import korzeniowski.mateusz.app.model.course.test.Question;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class QuestionAttemptDto {
@@ -65,7 +64,9 @@ public class QuestionAttemptDto {
     }
 
     public static QuestionAttemptDto map(Question question) {
-        return new QuestionAttemptDto(question.getDescription(), question.getScore(), question.getCategory(),
-                question.getQuestionType().name(), new ArrayList<>());
+        return new QuestionAttemptDto(question.getDescription(), question.getScore(),
+                question.getCategory(),
+                question.getQuestionType().name(),
+                question.getAnswers().stream().map(AnswerAttemptDto::map).toList());
     }
 }

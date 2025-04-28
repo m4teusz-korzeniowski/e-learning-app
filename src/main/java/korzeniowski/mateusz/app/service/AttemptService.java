@@ -2,6 +2,7 @@ package korzeniowski.mateusz.app.service;
 
 import korzeniowski.mateusz.app.exceptions.EmptyQuestionBankException;
 import korzeniowski.mateusz.app.model.course.test.*;
+import korzeniowski.mateusz.app.model.course.test.dto.AnswerAttemptDto;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionAttemptDto;
 import korzeniowski.mateusz.app.model.course.test.dto.TestAttemptDto;
 import korzeniowski.mateusz.app.repository.AttemptRepository;
@@ -163,6 +164,14 @@ public class AttemptService {
             attempt.setQuestions(selected.stream().map(QuestionAttemptDto::map).toList());
         }
         return attempt;
+    }
+
+    public void updateUserAnswers(TestAttemptDto attempt,
+                                  int questionNumber,
+                                  List<Integer> answers) {
+        List<AnswerAttemptDto> questionAnswers = attempt.getQuestions().get(questionNumber - 1).getAnswers();
+        questionAnswers.forEach(answer -> answer.setUserAnswer(false));
+        answers.forEach(answer -> questionAnswers.get(answer).setUserAnswer(true));
     }
 }
 

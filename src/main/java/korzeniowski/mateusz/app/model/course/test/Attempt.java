@@ -22,6 +22,8 @@ public class Attempt {
     @Enumerated(EnumType.STRING)
     private AttemptStatus status;
     private Double score;
+    @Lob
+    private String answersGivenJson;
 
     public Long getId() {
         return id;
@@ -77,5 +79,13 @@ public class Attempt {
 
     public void setScore(Double score) {
         this.score = score;
+    }
+
+    public String getAnswersGivenJson() {
+        return answersGivenJson;
+    }
+
+    public void setAnswersGivenJson(String answersGivenJson) {
+        this.answersGivenJson = answersGivenJson;
     }
 }

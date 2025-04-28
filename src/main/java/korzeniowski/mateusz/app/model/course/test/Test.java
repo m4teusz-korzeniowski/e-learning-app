@@ -19,6 +19,7 @@ public class Test {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Integer maxAttempts;
+    private Boolean overviewEnabled;
     @OneToMany(mappedBy = "test")
     private List<Attempt> attempts;
     @OneToMany(mappedBy = "test")
@@ -123,5 +124,13 @@ public class Test {
 
     public void setAttempts(List<Attempt> attempts) {
         this.attempts = attempts;
+    }
+
+    public Boolean getOverviewEnabled() {
+        return overviewEnabled;
+    }
+
+    public void setOverviewEnabled(Boolean overviewEnabled) {
+        this.overviewEnabled = overviewEnabled;
     }
 }

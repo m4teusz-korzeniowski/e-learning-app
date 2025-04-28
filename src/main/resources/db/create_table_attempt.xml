@@ -23,6 +23,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="score" type="double"/>
+            <column name="answers_given_json" type="clob"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="attempt"
                                  baseColumnNames="user_id"

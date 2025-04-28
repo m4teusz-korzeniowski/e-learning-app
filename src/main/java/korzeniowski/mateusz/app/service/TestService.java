@@ -90,6 +90,7 @@ public class TestService {
             test.setDuration(dto.getDuration());
             test.setStartTime(dto.getStart());
             test.setEndTime(dto.getEnd());
+            test.setOverviewEnabled(dto.getOverviewEnabled());
             testRepository.save(test);
         });
     }

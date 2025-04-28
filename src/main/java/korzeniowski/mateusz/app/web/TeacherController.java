@@ -1,10 +1,12 @@
 package korzeniowski.mateusz.app.web;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.exceptions.EmptyQuestionBankException;
 import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.AttemptState;
-import korzeniowski.mateusz.app.model.course.test.dto.AttemptStateDto;
+import korzeniowski.mateusz.app.model.course.test.dto.AnswerAttemptDto;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionAttemptDto;
 import korzeniowski.mateusz.app.model.course.test.dto.TestAttemptDto;
 import korzeniowski.mateusz.app.model.course.test.dto.TestDisplayDto;
@@ -16,10 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -158,7 +157,6 @@ public class TeacherController {
             if (attemptService.isAttemptInProgress(userInfo.getId(), testId)) {
                 Long attemptId = attemptService.findAttemptId(userInfo.getId(), testId);
                 AttemptState attemptState = attemptService.findAttemptState(attemptId);
-                test = attemptService.loadAttempt(attemptState);
                 Integer questionNumber = attemptState.getCurrentQuestionAttempt();
                 return "redirect:/teacher/attempt/" + attemptId + "/question/" + questionNumber;
             } else {
@@ -190,18 +188,64 @@ public class TeacherController {
             if (accessService.hasLoggedInTeacherAccessToTheTest(attemptId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
+
             AttemptState attemptState = attemptService.findAttemptState(attemptId);
             TestAttemptDto attempt = attemptService.loadAttempt(attemptState);
+            System.out.println("Test number: " + attempt.getNumberOfQuestions());
+            if (questionNumber < 1) {
+                questionNumber = 1;
+            } else if (questionNumber > attempt.getNumberOfQuestions()) {
+                questionNumber = attempt.getNumberOfQuestions();
+            }
+            model.addAttribute("totalQuestionNumber", attempt.getNumberOfQuestions());
+            model.addAttribute("questionNo", questionNumber);
+            session.setAttribute("attempt", attempt);
             model.addAttribute("attempt", attempt);
-            //model.addAttribute("attemptStateId", attemptState);
-            //model.addAttribute("questionNumber", questionNumber);
             return "test-attempt";
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
-    public String testAttempt() {
-        return "";
+    @PostMapping("/teacher/attempt/{attemptId}/question/{questionNumber}/save")
+    public String saveAttemptAnswer(@PathVariable long attemptId,
+                                    @PathVariable int questionNumber,
+                                    @RequestParam("action") String action,
+                                    @RequestParam(value = "answers", required = false) List<Integer> answers,
+                                    HttpSession session) {
+        try {
+            UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
+            if (accessService.hasLoggedInTeacherAccessToTheTest(attemptId, userInfo.getId())) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            }
+            TestAttemptDto attempt = (TestAttemptDto) session.getAttribute("attempt");
+            if (attempt == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+
+            if (answers != null) {
+                attemptService.updateUserAnswers(attempt, questionNumber, answers);
+            }
+            AttemptState attemptState = attemptService.findAttemptState(attemptId);
+            attemptService.updateAttemptState(attemptState.getId(), attempt);
+
+            if ("previous".equals(action)) {
+                if (questionNumber <= 1) {
+                    questionNumber = 2;
+                }
+                return "redirect:/teacher/attempt/" + attemptId + "/question/" + (questionNumber - 1);
+            } else if ("next".equals(action)) {
+                if (questionNumber >= attempt.getNumberOfQuestions()) {
+                    questionNumber = attempt.getNumberOfQuestions() - 1;
+                }
+                return "redirect:/teacher/attempt/" + attemptId + "/question/" + (questionNumber + 1);
+            } else if ("finish".equals(action)) {
+                return "redirect:/teacher/attempt/" + attemptId + "/summary";
+            } else {
+                return "redirect:/teacher/attempt/" + attemptId + "/question/" + questionNumber;
+            }
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 }

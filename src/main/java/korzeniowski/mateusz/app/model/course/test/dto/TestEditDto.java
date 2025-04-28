@@ -25,10 +25,12 @@ public class TestEditDto {
     @Min(value = 1, message = "*jeżeli pole nie jest puste, wymagane jest co najmniej jedno podejście!")
     private Integer maxAttempts;
     private Long courseId;
+    private Boolean overviewEnabled;
 
     public TestEditDto(Long id, String name, String description,
                        Integer numberOfQuestions, Integer duration,
-                       LocalDateTime start, LocalDateTime end, Integer maxAttempts, Long courseId) {
+                       LocalDateTime start, LocalDateTime end, Integer maxAttempts,
+                       Long courseId, Boolean overviewEnabled) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -38,6 +40,7 @@ public class TestEditDto {
         this.end = end;
         this.maxAttempts = maxAttempts;
         this.courseId = courseId;
+        this.overviewEnabled = overviewEnabled;
     }
 
     public Long getId() {
@@ -112,6 +115,14 @@ public class TestEditDto {
         this.courseId = courseId;
     }
 
+    public Boolean getOverviewEnabled() {
+        return overviewEnabled;
+    }
+
+    public void setOverviewEnabled(Boolean overviewEnabled) {
+        this.overviewEnabled = overviewEnabled;
+    }
+
     public static TestEditDto map(Test test) {
         return new TestEditDto(
                 test.getId(),
@@ -122,7 +133,8 @@ public class TestEditDto {
                 test.getStartTime(),
                 test.getEndTime(),
                 test.getMaxAttempts(),
-                test.getModule().getCourse().getId()
+                test.getModule().getCourse().getId(),
+                test.getOverviewEnabled()
         );
     }
 }

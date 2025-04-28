@@ -8,16 +8,56 @@
 <body>
 <header th:replace="~{fragments :: navbar}"></header>
 <div class="info-bar">
-    <div>
-        <h2>Info about</h2>
-    </div>
+    <h2 th:text="'Test: ' + ${attempt.name}"></h2>
 </div>
+<br><br>
 <div class="user-courses">
-    <div th:each="question : ${attempt.getQuestions()}">
+    <form th:action="@{'/teacher/attempt/' + ${attemptId} + '/question/' + ${questionNo} + '/save'}" method="post">
         <div class="element">
-            <p th:text="${question.description}"></p>
+            <p th:text="'Pytanie ' + ${questionNo} + ' z ' + ${totalQuestionNumber}"></p>
+            <p th:text="${attempt.questions[questionNo - 1].description}"></p>
+            <div th:each="answer, iterStat : ${attempt.questions[questionNo - 1].answers}">
+                <input type="checkbox"
+                       th:id="'answer-' + ${iterStat.index}"
+                       name="answers"
+                       th:value="${iterStat.index}"
+                       th:checked="${answer.userAnswer}"
+                       th:attr="data-question-type=${attempt.questions[questionNo - 1].questionType}"/>
+                <label th:for="'answer-' + ${iterStat.index}"
+                       th:text="${answer.content}"></label>
+            </div>
         </div>
-    </div>
+        <br>
+        <div class="element">
+            <button type="submit" name="action" value="previous">Poprzednie</button>
+            <button type="submit" name="action" value="next">Następne</button>
+            <button type="submit" name="action" value="finish">Podsumowanie</button>
+        </div>
+        <br>
+        <div class="element">
+            <a class="page-span"
+               th:each="number : ${#numbers.sequence(1, totalQuestionNumber)}"
+               th:href="@{/teacher/attempt/{attemptId}/question/{questionId}(attemptId=${attemptId}, questionId=${number})}"
+               th:text="${number}">
+            </a>
+        </div>
+    </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            document.querySelectorAll('input[type="checkbox"]').forEach(function (checkbox) {
+                checkbox.addEventListener('click', function () {
+                    if (checkbox.dataset.questionType === 'SINGLE_CHOICE') {
+                        document.querySelectorAll('input[type="checkbox"][data-question-type="SINGLE_CHOICE"]').forEach(function (other) {
+                            if (other !== checkbox) {
+                                other.checked = false;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 </div>
 <br><br>
 </body>
