@@ -2,10 +2,12 @@ package korzeniowski.mateusz.app.repository;
 
 import korzeniowski.mateusz.app.model.course.test.Attempt;
 import korzeniowski.mateusz.app.model.course.test.AttemptStatus;
+import korzeniowski.mateusz.app.model.course.test.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface AttemptRepository extends JpaRepository<Attempt, Long> {
@@ -20,7 +22,8 @@ public interface AttemptRepository extends JpaRepository<Attempt, Long> {
     Integer countByUserIdAndTestId(@Param("userId") Long userId, @Param("testId") Long testId);
 
     @Query("select attempt.id from Attempt attempt " +
-            "where attempt.user.id = :userId and attempt.test.id = :testId")
+            "where attempt.user.id = :userId and attempt.test.id = :testId" +
+            " and attempt.status = 'IN_PROGRESS'")
     Optional<Long> findByUserIdAndTestId(@Param("userId") Long userId, @Param("testId") Long testId);
 
     @Query("select case when count(attempt) > 0 then false else true end" +
@@ -30,4 +33,11 @@ public interface AttemptRepository extends JpaRepository<Attempt, Long> {
             " join attempt.user user" +
             " where attempt.id = :attemptId and user.id = :userId and module.visible = true")
     Boolean hasUserAccessToAttempt(@Param("attemptId") Long attemptId, @Param("userId") Long userId);
+
+
+    List<Attempt> findAllByUserIdAndTestId(Long userId, Long testId);
+
+    @Query("select attempt.answersGivenJson from Attempt attempt" +
+            " where attempt.user.id = :userId and attempt.test.id = :testId")
+    Optional<String> findJsonByUserIdAndTestId(@Param("userId") Long userId, @Param("testId") Long testId);
 }

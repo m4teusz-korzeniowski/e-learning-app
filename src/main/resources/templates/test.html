@@ -1,46 +1,110 @@
 <!DOCTYPE html>
-<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${test.name}">Nazwa testu</title>
+    <title th:text="${test.name} + ' - Podgląd'">Podgląd testu</title>
     <th:block th:replace="~{fragments :: head}"></th:block>
 </head>
 <body>
 <header th:replace="~{fragments :: navbar}"></header>
 <div class="info-bar">
     <div>
-        <h2 th:text="${test.courseName}">Nazwa kursu </h2>
+        <h2 th:text="${test.name}">Test</h2>
     </div>
 </div>
-<div class="info-bar">
+<div sec:authorize="hasAnyRole('TEACHER')" class="info-bar">
+    <a th:href="@{/teacher}">Strona główna</a>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/teacher/course}">Moje kursy</a>
+    <span>&nbsp>&nbsp</span>
+    <a th:href="@{/teacher/course/{id}/display(id=${test.courseId})}" th:text="${courseName}">Nazwa kursu</a>
+    <span>&nbsp>&nbsp</span>
+    <span th:text="${test.name}"></span>
+</div>
+<div sec:authorize="hasAnyRole('STUDENT')" class="info-bar">
     <a th:href="@{/}">Strona główna</a>
     <span>&nbsp>&nbsp</span>
     <span>Moje kursy</span>
     <span>&nbsp>&nbsp</span>
-    <a th:href="@{/course/{id}(id=${test.courseId})}" th:text="${test.courseName}">Nazwa kursu</a>
+    <a th:href="@{/course/{id}(id=${test.courseId})}" th:text="${courseName}">Nazwa kursu</a>
     <span>&nbsp>&nbsp</span>
-    <span th:text="${test.moduleName}">Nazwa modułu</span>
-    <span>&nbsp>&nbsp</span>
-    <a th:href="@{/module/quiz/{id}(id=${test.id})}" th:text="${test.name}">Nazwa testu</a>
+    <span th:text="${test.name}"></span>
 </div>
 <br><br>
-<div>
-    <h3 id="test-name">Nazwa testu</h3>
-</div>
 <div class="user-courses">
-    <div class="element">
-        <p th:text="${test.description}">Opis testu</p>
+    <div class="test-info-wrapper">
+        <div class="element" style="display: flex">
+            <div class="test-info-element">
+                <p th:if="${test.maxAttempts != null}" th:text="'Dozwolona ilość podejść: ' + ${test.maxAttempts}"></p>
+                <p th:if="${test.maxAttempts == null}">Dozwolona ilość podejść: Nieograniczona</p>
+            </div>
+            <div th:if="${test.startTime != null and (test.endTime == null or test.endTime.isAfter(currentDateTime))}"
+                 class="test-info-element">
+                <p th:if="${test.startTime.isBefore(currentDateTime)}"
+                   th:text="'Test został otwarty: ' + ${test.getFormattedStartTime()}"></p>
+                <p th:if="${test.startTime.isAfter(currentDateTime)}"
+                   th:text="'Test zostanie otwarty: ' + ${test.getFormattedStartTime()}"></p>
+            </div>
+            <div th:if="${test.endTime != null}" class="test-info-element">
+                <p th:if="${test.endTime.isAfter(currentDateTime)}"
+                   th:text="'Test zakończy się: ' + ${test.getFormattedEndTime()}"></p>
+                <p th:if="${test.endTime.isBefore(currentDateTime)}"
+                   th:text="'Test został zamknięty: ' + ${test.getFormattedEndTime()}"></p>
+            </div>
+            <div th:if="${test.duration != null}" class="test-info-element">
+                <p th:text="'Limit czasu: ' + ${test.duration} + ' min.'">Limit czasu:</p>
+            </div>
+        </div>
     </div>
     <br>
     <div class="element">
-        <p th:if="${result!=null}" th:text="'Wynik testu: = ' + ${result.getScore()}">Wynik</p>
-        <p th:if="${result==null}">Brak wyników!</p>
+        <p class="test-summary">Podsumowanie twoich podejść:</p>
+        <p class="test-summary"><i class="fa-solid fa-trophy" style="font-size: 32px; color: palegoldenrod;"></i></p>
+        <table>
+            <thead>
+            <tr>
+                <td>Próba:</td>
+                <td>Stan</td>
+                <td th:text="'Ocena / 100.00'">Ocena:</td>
+                <td>Przegląd:</td>
+            </tr>
+            </thead>
+            <tr th:each="attempt, iter: ${attempts}">
+                <td th:text="${iter.index + 1}"></td>
+                <td>
+                    <p th:if="${attempt.status.equals('IN_PROGRESS')}" th:text="'W toku'"></p>
+                    <p th:if="${attempt.status.equals('COMPLETED')}" th:text="'Ukończone'"></p>
+                    <p th:if="${attempt.status.equals('COMPLETED')}" th:text="'Zakończone: ' + ${attempt.getFormattedEndedAt()}"></p>
+                </td>
+                <td th:text="${attempt.mark}"></td>
+                <td>
+                    <p th:if="${test.overviewEnabled}">Przegląd</p>
+                    <p th:if="${!test.overviewEnabled}">Niedozwolony</p>
+                </td>
+            </tr>
+        </table>
     </div>
     <br>
     <div class="element">
-        <p>Rozwiąż test</p>
+        <p class="test-summary">Twoja końcowa ocena za ten test wynosi: </p>
     </div>
     <br>
+    <div class="element">
+        <div class="submit-button">
+            <a th:href="@{/test/{id}/attempt(id=${testId})}">
+                <button>Rozwiąż test</button>
+            </a>
+        </div>
+    </div>
+    <br>
+    <div th:if="${error != null}" class="element">
+        <p th:text="${error}"></p>
+    </div>
+    <div th:if="${success != null}" class="element">
+        <p th:text="${success}"></p>
+    </div>
 </div>
+<br><br>
 </body>
 </html>

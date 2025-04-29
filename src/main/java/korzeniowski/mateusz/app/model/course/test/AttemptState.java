@@ -2,6 +2,8 @@ package korzeniowski.mateusz.app.model.course.test;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 public class AttemptState {
     @Id
@@ -14,6 +16,7 @@ public class AttemptState {
     @Enumerated(EnumType.STRING)
     private AttemptStatus status;
     private Integer currentQuestionAttempt;
+    private LocalDateTime lastModified;
 
     public Long getId() {
         return id;
@@ -55,4 +58,11 @@ public class AttemptState {
         this.currentQuestionAttempt = currentQuestionAttempt;
     }
 
+    public LocalDateTime getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(LocalDateTime lastModified) {
+        this.lastModified = lastModified;
+    }
 }

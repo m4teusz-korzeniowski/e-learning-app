@@ -20,7 +20,8 @@ public class ELearningAppApplication {
     @Bean
     CommandLineRunner init(StorageService storageService) {
         return (args) -> {
-            storageService.deleteAll();
+            //do włączenia tylko po przeniesieniu prod na server
+            //storageService.deleteAll();
             storageService.init();
         };
     }

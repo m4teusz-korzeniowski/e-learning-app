@@ -2,6 +2,7 @@ package korzeniowski.mateusz.app.web;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import korzeniowski.mateusz.app.exceptions.QuestionTypeException;
 import korzeniowski.mateusz.app.model.course.test.dto.AnswerEditDto;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionEditDto;
@@ -150,12 +151,12 @@ public class QuestionController {
                 }
                 redirectAttributes.addFlashAttribute("message",
                         "Edycja zakończyła się sukcesem");
-            } else {
-                redirectAttributes.addFlashAttribute("message",
-                        "*dla testu jednokrotnego wyboru, zaznacz tylko jedną poprawną odpowiedź!");
             }
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (QuestionTypeException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/teacher/questions/edit/" + questionId;
         }
         return "redirect:/teacher/questions/edit/" + questionId;
     }

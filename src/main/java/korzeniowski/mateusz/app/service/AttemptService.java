@@ -3,15 +3,15 @@ package korzeniowski.mateusz.app.service;
 import korzeniowski.mateusz.app.exceptions.EmptyQuestionBankException;
 import korzeniowski.mateusz.app.model.course.test.*;
 import korzeniowski.mateusz.app.model.course.test.dto.AnswerAttemptDto;
+import korzeniowski.mateusz.app.model.course.test.dto.AttemptDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionAttemptDto;
 import korzeniowski.mateusz.app.model.course.test.dto.TestAttemptDto;
-import korzeniowski.mateusz.app.repository.AttemptRepository;
-import korzeniowski.mateusz.app.repository.AttemptStateRepository;
-import korzeniowski.mateusz.app.repository.TestRepository;
-import korzeniowski.mateusz.app.repository.UserRepository;
+import korzeniowski.mateusz.app.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,12 +22,14 @@ public class AttemptService {
     private final TestRepository testRepository;
     private final UserRepository userRepository;
     private final AttemptStateRepository attemptStateRepository;
+    private final QuestionRepository questionRepository;
 
-    public AttemptService(AttemptRepository attemptRepository, TestRepository testRepository, UserRepository userRepository, AttemptStateRepository attemptStateRepository) {
+    public AttemptService(AttemptRepository attemptRepository, TestRepository testRepository, UserRepository userRepository, AttemptStateRepository attemptStateRepository, QuestionRepository questionRepository) {
         this.attemptRepository = attemptRepository;
         this.testRepository = testRepository;
         this.userRepository = userRepository;
         this.attemptStateRepository = attemptStateRepository;
+        this.questionRepository = questionRepository;
     }
 
     public Optional<TestAttemptDto> findTestAttempt(Long testId) {
@@ -67,20 +69,21 @@ public class AttemptService {
         state.setAttempt(attempt);
         state.setStatus(AttemptStatus.IN_PROGRESS);
         state.setCurrentQuestionAttempt(1);
+        state.setLastModified(LocalDateTime.now());
         attemptStateRepository.save(state);
     }
 
     @Transactional
     public boolean createAttemptIfAvailable(Long userId, TestAttemptDto test) {
         if (test.getMaxAttempts() != null) {
-            if (attemptRepository.countByUserIdAndTestId(userId, test.getId()) < test.getMaxAttempts()) {
-                createNewAttempt(userId, test.getId());
+            if (attemptRepository.countByUserIdAndTestId(userId, test.getTestId()) < test.getMaxAttempts()) {
+                createNewAttempt(userId, test.getTestId());
                 return true;
             } else {
                 return false;
             }
         } else {
-            createNewAttempt(userId, test.getId());
+            createNewAttempt(userId, test.getTestId());
             return true;
         }
     }
@@ -107,9 +110,11 @@ public class AttemptService {
         return TestAttemptDto.fromJson(attemptState.getAnswersGivenJson());
     }
 
-    public void updateAttemptState(Long attemptStateId, TestAttemptDto attempt) {
+    public void updateAttemptState(Long attemptStateId, TestAttemptDto attempt, Integer questionNo) {
         attemptStateRepository.findById(attemptStateId).ifPresent(attemptState -> {
             attemptState.setAnswersGivenJson(attempt.toJson());
+            attemptState.setCurrentQuestionAttempt(questionNo);
+            attemptState.setLastModified(LocalDateTime.now());
             attemptStateRepository.save(attemptState);
         });
     }
@@ -124,6 +129,7 @@ public class AttemptService {
             throw new EmptyQuestionBankException("*nie można uruchomić testu, który nie ma pytań!");
         } else if (questions.size() <= attempt.getNumberOfQuestions()) {
             attempt.setNumberOfQuestions(questions.size());
+            Collections.shuffle(questions);
             attempt.setQuestions(questions.stream().map(QuestionAttemptDto::map).toList());
         } else {
             Map<String, List<Question>> groupedByCategory = new HashMap<>();
@@ -161,6 +167,7 @@ public class AttemptService {
 
                 selected.addAll(additional);
             }
+            Collections.shuffle(selected);
             attempt.setQuestions(selected.stream().map(QuestionAttemptDto::map).toList());
         }
         return attempt;
@@ -173,5 +180,90 @@ public class AttemptService {
         questionAnswers.forEach(answer -> answer.setUserAnswer(false));
         answers.forEach(answer -> questionAnswers.get(answer).setUserAnswer(true));
     }
+
+
+    private double computeMultiplier(QuestionAttemptDto question) {
+        int numberOfCorrectAnswers = 0;
+        int numberOfUserCorrectAnswers = 0;
+        for (AnswerAttemptDto answer : question.getAnswers()) {
+            if (answer.getUserAnswer() && answer.getCorrectAnswer()) {
+                numberOfUserCorrectAnswers++;
+            }
+            if (answer.getUserAnswer() && !answer.getCorrectAnswer()) {
+                numberOfUserCorrectAnswers--;
+            }
+            if (answer.getCorrectAnswer()) {
+                numberOfCorrectAnswers++;
+            }
+        }
+        if (numberOfUserCorrectAnswers < 0) {
+            return 0.0;
+        }
+        return numberOfUserCorrectAnswers / (double) numberOfCorrectAnswers;
+    }
+
+    private boolean isAnswerCorrect(QuestionAttemptDto question) {
+        for (AnswerAttemptDto answer : question.getAnswers()) {
+            if (answer.getUserAnswer() && answer.getCorrectAnswer()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private double computeScore(List<QuestionAttemptDto> questions) {
+        double score = 0.0;
+        double multiplier = 1.0;
+        for (QuestionAttemptDto question : questions) {
+            if (question.getQuestionType().equals(QuestionType.SINGLE_CHOICE.name())) {
+                if (isAnswerCorrect(question)) {
+                    multiplier = 1.0;
+                } else {
+                    multiplier = 0.0;
+                }
+            } else if (question.getQuestionType().equals(QuestionType.MULTIPLE_CHOICE.name())) {
+                multiplier = computeMultiplier(question);
+            }
+            score += question.getScore() * multiplier;
+        }
+        return score;
+    }
+
+    private double getMaxScore(List<QuestionAttemptDto> questions) {
+        double maxScore = 0.0;
+        for (QuestionAttemptDto question : questions) {
+            maxScore += question.getScore();
+        }
+        return maxScore;
+    }
+
+    private double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        return BigDecimal.valueOf(value)
+                .setScale(places, RoundingMode.HALF_UP)
+                .doubleValue();
+    }
+
+    @Transactional
+    public void finishAttempt(Long attemptId, TestAttemptDto dto) {
+        attemptRepository.findById(attemptId).ifPresent(attempt -> {
+            attempt.setEndedAt(LocalDateTime.now());
+            attempt.setAnswersGivenJson(dto.toJson());
+            double score = computeScore(dto.getQuestions());
+            double maxScore = getMaxScore(dto.getQuestions());
+            attempt.setScore(round(score, 2));
+            attempt.setMark(round(score / maxScore * 100.00, 2));
+            attempt.setStatus(AttemptStatus.COMPLETED);
+            attemptRepository.save(attempt);
+            attemptStateRepository.findByAttemptId(attemptId).ifPresent(attemptStateRepository::delete);
+        });
+    }
+
+    public List<AttemptDisplayDto> findAttemptsByUserAndTest(Long userId, Long testId) {
+        return attemptRepository.findAllByUserIdAndTestId(userId, testId)
+                .stream().map(AttemptDisplayDto::map).toList();
+    }
+
 }
 

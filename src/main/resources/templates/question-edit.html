@@ -84,6 +84,12 @@
             </div>
             <br>
         </div>
+        <div th:if="${error!=null} and ${!error.isBlank()}">
+            <div class="element">
+                <p th:text="${error}"></p>
+            </div>
+            <br>
+        </div>
         <div class="element" style="visibility: hidden">
             <div class="submit-button">
                 <button type="submit">Zapisz zmiany</button>

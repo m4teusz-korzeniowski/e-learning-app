@@ -107,7 +107,7 @@ public class TeacherEditorController {
             }
             if (courseService.maximumNumberOfModuleReached(courseId, MAX_MODULES)) {
                 redirectAttributes.addFlashAttribute("message",
-                        "Kurs nie może mieć więcej modułów niż " + MAX_MODULES + "!");
+                        "*kurs nie może mieć więcej modułów niż " + MAX_MODULES + "!");
             } else {
                 moduleService.createModule(courseId);
             }
@@ -149,7 +149,7 @@ public class TeacherEditorController {
             }
             if (moduleService.maximumNumberOfTestReached(moduleId, MAX_NUMBER_OF_TESTS)) {
                 redirectAttributes.addFlashAttribute("message",
-                        "Moduł nie może mieć więcej testów niż " + MAX_NUMBER_OF_TESTS + "!");
+                        "*moduł nie może mieć więcej testów niż " + MAX_NUMBER_OF_TESTS + "!");
             } else {
                 testService.createTest(moduleId);
             }

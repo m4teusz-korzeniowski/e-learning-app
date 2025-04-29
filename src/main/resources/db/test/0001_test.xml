@@ -10,24 +10,28 @@
             <column name="description" value="xyz"/>
             <column name="number_of_questions" value="1"/>
             <column name="module_id" value="1"/>
+            <column name="overview_enabled" value="false"/>
         </insert>
         <insert tableName="test">
             <column name="name" value="Test1"/>
             <column name="description" value="xyz"/>
             <column name="number_of_questions" value="1"/>
             <column name="module_id" value="3"/>
+            <column name="overview_enabled" value="false"/>
         </insert>
         <insert tableName="test">
             <column name="name" value="Test2"/>
             <column name="description" value="xyz"/>
             <column name="number_of_questions" value="2"/>
             <column name="module_id" value="3"/>
+            <column name="overview_enabled" value="false"/>
         </insert>
         <insert tableName="test">
             <column name="name" value="Test3"/>
             <column name="description" value="xyz"/>
             <column name="number_of_questions" value="3"/>
             <column name="module_id" value="3"/>
+            <column name="overview_enabled" value="false"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

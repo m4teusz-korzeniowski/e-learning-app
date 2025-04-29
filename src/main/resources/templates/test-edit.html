@@ -71,7 +71,6 @@
         </div>
         <br>
         <br>
-        <br>
     </form>
     <form id="questions-add-form" method="post" action="#" th:object="${question}"
           th:action="@{/teacher/test/{testId}/create-questions(testId=${testId})}">
@@ -93,10 +92,13 @@
         </div>
         <br>
         <br>
-        <br>
     </form>
     <div class="element">
         <p><a th:href="@{/teacher/test/{testId}/questions(testId=${testId})}">Baza pytań</a></p>
+    </div>
+    <br>
+    <div class="element">
+        <p><a th:href="@{/test/{testId}/display(testId=${testId})}">Podgląd testu</a></p>
     </div>
     <br>
 </div>

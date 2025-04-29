@@ -28,10 +28,32 @@ body {
 
 
 .page-span {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    border: 2px ridge #ccc;
+    border-radius: 8px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
     margin-right: 10px;
-    border-style: ridge;
-    text-align: center;
-    padding: 2px;
+}
+
+.page-span:hover {
+    background-color: #f0f0f0;
+    color: #000;
+    border-color: #888;
+}
+
+.page-span.answered {
+    background-color: lightgreen;
+}
+
+.page-span.unanswered {
+    background-color: palevioletred;
 }
 
 .element table {

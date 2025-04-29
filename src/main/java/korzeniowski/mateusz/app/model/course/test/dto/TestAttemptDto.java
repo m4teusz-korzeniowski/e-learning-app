@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestAttemptDto {
-    private Long id;
+    private Long testId;
     private String name;
     private Integer numberOfQuestions;
     private List<QuestionAttemptDto> questions;
@@ -19,9 +19,9 @@ public class TestAttemptDto {
     public TestAttemptDto() {
     }
 
-    public TestAttemptDto(Long id, String name, Integer numberOfQuestions,
+    public TestAttemptDto(Long testId, String name, Integer numberOfQuestions,
                           List<QuestionAttemptDto> questions, Integer maxAttempts) {
-        this.id = id;
+        this.testId = testId;
         this.name = name;
         this.numberOfQuestions = numberOfQuestions;
         this.questions = questions;
@@ -52,12 +52,12 @@ public class TestAttemptDto {
         this.questions = questions;
     }
 
-    public Long getId() {
-        return id;
+    public Long getTestId() {
+        return testId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTestId(Long testId) {
+        this.testId = testId;
     }
 
     public Integer getMaxAttempts() {

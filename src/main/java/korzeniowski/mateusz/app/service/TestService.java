@@ -47,6 +47,7 @@ public class TestService {
         Test test = new Test();
         test.setName("Nazwa testu");
         test.setNumberOfQuestions(1);
+        test.setOverviewEnabled(false);
         moduleService.addTestToModule(moduleId, test);
         testRepository.save(test);
     }

@@ -17,10 +17,11 @@ public class TestDisplayDto {
     private Integer duration;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private Boolean overviewEnabled;
 
     public TestDisplayDto(Long id, String name, String description, String moduleName, String courseName,
                           Long courseId, Integer maxAttempts, Integer duration,
-                          LocalDateTime startTime, LocalDateTime endTime) {
+                          LocalDateTime startTime, LocalDateTime endTime, Boolean overviewEnabled) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -31,6 +32,7 @@ public class TestDisplayDto {
         this.duration = duration;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.overviewEnabled = overviewEnabled;
     }
 
     public Long getId() {
@@ -113,6 +115,14 @@ public class TestDisplayDto {
         this.endTime = endTime;
     }
 
+    public Boolean getOverviewEnabled() {
+        return overviewEnabled;
+    }
+
+    public void setOverviewEnabled(Boolean overviewEnabled) {
+        this.overviewEnabled = overviewEnabled;
+    }
+
     public String getFormattedStartTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
                 "d MMMM yyyy, HH:mm", new Locale("pl", "PL"));
@@ -136,7 +146,8 @@ public class TestDisplayDto {
                 test.getMaxAttempts(),
                 test.getDuration(),
                 test.getStartTime(),
-                test.getEndTime()
+                test.getEndTime(),
+                test.getOverviewEnabled()
         );
     }
 }

@@ -12,7 +12,7 @@
             <column name="content" type="varchar(500)">
                 <constraints nullable="false"/>
             </column>
-            <column name="correct" type="boolean">
+            <column name="correct" type="bit">
                 <constraints nullable="false"/>
             </column>
             <column name="question_id" type="bigint"/>

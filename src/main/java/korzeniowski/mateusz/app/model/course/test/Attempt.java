@@ -22,6 +22,7 @@ public class Attempt {
     @Enumerated(EnumType.STRING)
     private AttemptStatus status;
     private Double score;
+    private Double mark;
     @Lob
     private String answersGivenJson;
 
@@ -87,5 +88,13 @@ public class Attempt {
 
     public void setAnswersGivenJson(String answersGivenJson) {
         this.answersGivenJson = answersGivenJson;
+    }
+
+    public Double getMark() {
+        return mark;
+    }
+
+    public void setMark(Double mark) {
+        this.mark = mark;
     }
 }

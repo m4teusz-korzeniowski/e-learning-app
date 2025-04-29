@@ -1,5 +1,6 @@
 package korzeniowski.mateusz.app.service;
 
+import korzeniowski.mateusz.app.exceptions.QuestionTypeException;
 import korzeniowski.mateusz.app.model.course.test.Answer;
 import korzeniowski.mateusz.app.model.course.test.Question;
 import korzeniowski.mateusz.app.model.course.test.QuestionType;
@@ -23,7 +24,7 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final TestService testService;
     private final AnswerRepository answerRepository;
-    private final static int DEFAULT_NUMBER_OF_ANSWERS = 4;
+    private final static int DEFAULT_NUMBER_OF_ANSWERS = 2;
 
     public QuestionService(QuestionRepository questionRepository, TestService testService, AnswerRepository answerRepository) {
         this.questionRepository = questionRepository;
@@ -133,7 +134,11 @@ public class QuestionService {
             question.get().setDescription(dto.getDescription());
             question.get().setScore(dto.getScore());
             question.get().setQuestionType(QuestionType.valueOf(dto.getType()));
-            question.get().setCategory(dto.getCategory());
+            if (dto.getCategory().isBlank()) {
+                question.get().setCategory(null);
+            } else {
+                question.get().setCategory(dto.getCategory());
+            }
         } else {
             throw new NoSuchElementException("Nie znaleziono pytania!");
         }
@@ -146,13 +151,28 @@ public class QuestionService {
                 if (answer.getCorrect()) {
                     counter++;
                 }
-                if (counter >= 2) {
-                    return false;
+            }
+            if (counter != 1) {
+                throw new QuestionTypeException(
+                        "*dla pytania jednokrotnego wyboru, zaznacz dokładnie jedną poprawną odpowiedź!"
+                );
+            } else {
+                return true;
+            }
+        } else {
+            int counter = 0;
+            for (AnswerEditDto answer : question.getAnswers()) {
+                if (answer.getCorrect()) {
+                    counter++;
                 }
             }
-            return counter == 1;
-        } else {
-            return true;
+            if (counter < 1) {
+                throw new QuestionTypeException(
+                        "*dla pytania wielokrotnego wyboru, zaznacz co najmniej jedną poprawną odpowiedź!"
+                );
+            } else {
+                return true;
+            }
         }
     }
 }

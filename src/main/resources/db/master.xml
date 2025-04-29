@@ -24,12 +24,12 @@
     <include file="test/0001_application_user.xml" relativeToChangelogFile="true"/>
     <include file="test/0001_user_role.xml" relativeToChangelogFile="true"/>
     <include file="test/0001_user_roles.xml" relativeToChangelogFile="true"/>
-    <include file="test/0001_course.xml" relativeToChangelogFile="true"/>
-    <include file="test/0001_module.xml" relativeToChangelogFile="true"/>
-    <include file="test/0001_module_item.xml" relativeToChangelogFile="true"/>
-    <include file="test/0001_test.xml" relativeToChangelogFile="true"/>
-    <include file="test/0001_question.xml" relativeToChangelogFile="true"/>
-    <include file="test/0001_result.xml" relativeToChangelogFile="true"/>
-    <include file="test/0001_enrollment.xml" relativeToChangelogFile="true"/>
+    <include file="test/0001_course.xml" context="dev" relativeToChangelogFile="true"/>
+    <include file="test/0001_module.xml" context="dev" relativeToChangelogFile="true"/>
+    <include file="test/0001_module_item.xml" context="dev" relativeToChangelogFile="true"/>
+    <include file="test/0001_test.xml" context="dev" relativeToChangelogFile="true"/>
+    <include file="test/0001_question.xml" context="dev" relativeToChangelogFile="true"/>
+    <include file="test/0001_result.xml" context="dev" relativeToChangelogFile="true"/>
+    <include file="test/0001_enrollment.xml" context="dev" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

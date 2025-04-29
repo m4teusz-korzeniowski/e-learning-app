@@ -13,6 +13,7 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Lob
     private String description;
     @OneToMany(mappedBy = "course")
     private List<Module> modules = new ArrayList<>();

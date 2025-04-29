@@ -5,6 +5,7 @@ import korzeniowski.mateusz.app.model.course.test.Question;
 import java.util.List;
 
 public class QuestionAttemptDto {
+    private Long id;
     private String description;
     private Double score;
     private String category;
@@ -14,8 +15,9 @@ public class QuestionAttemptDto {
     public QuestionAttemptDto() {
     }
 
-    public QuestionAttemptDto(String description, Double score, String category,
+    public QuestionAttemptDto(Long id, String description, Double score, String category,
                               String questionType, List<AnswerAttemptDto> answers) {
+        this.id = id;
         this.description = description;
         this.score = score;
         this.category = category;
@@ -63,10 +65,29 @@ public class QuestionAttemptDto {
         this.answers = answers;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public static QuestionAttemptDto map(Question question) {
-        return new QuestionAttemptDto(question.getDescription(), question.getScore(),
+        return new QuestionAttemptDto(
+                question.getId(),
+                question.getDescription(), question.getScore(),
                 question.getCategory(),
                 question.getQuestionType().name(),
                 question.getAnswers().stream().map(AnswerAttemptDto::map).toList());
+    }
+
+    public Boolean didUserAnswer() {
+        for (AnswerAttemptDto answer : answers) {
+            if (answer.getUserAnswer().equals(true)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

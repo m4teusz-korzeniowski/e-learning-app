@@ -15,8 +15,9 @@
             <column name="current_question_attempt" type="integer"/>
             <column name="answers_given_json" type="clob"/>
             <column name="attempt_id" type="bigint">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
+            <column name="last_modified" type="timestamp"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="attempt_state" baseColumnNames="attempt_id"
                                  constraintName="fk_attempt_state"

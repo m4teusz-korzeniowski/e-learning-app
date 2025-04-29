@@ -12,7 +12,7 @@
             <column name="name" type="varchar(60)">
                 <constraints nullable="false"/>
             </column>
-            <column name="visible" type="boolean">
+            <column name="visible" type="bit">
                 <constraints nullable="false"/>
             </column>
             <column name="course_id" type="bigint"/>
