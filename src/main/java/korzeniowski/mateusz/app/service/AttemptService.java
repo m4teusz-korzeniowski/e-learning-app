@@ -1,6 +1,7 @@
 package korzeniowski.mateusz.app.service;
 
 import korzeniowski.mateusz.app.exceptions.EmptyQuestionBankException;
+import korzeniowski.mateusz.app.exceptions.ExceededTestAttemptsException;
 import korzeniowski.mateusz.app.model.course.test.*;
 import korzeniowski.mateusz.app.model.course.test.dto.AnswerAttemptDto;
 import korzeniowski.mateusz.app.model.course.test.dto.AttemptDisplayDto;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -75,12 +77,18 @@ public class AttemptService {
 
     @Transactional
     public boolean createAttemptIfAvailable(Long userId, TestAttemptDto test) {
+        if (test.getStartTime().isAfter(LocalDateTime.now())) {
+            throw new DateTimeException("*test nie został jeszcze otwarty!");
+        }
+        if (test.getEndTime().isBefore(LocalDateTime.now())) {
+            throw new DateTimeException("*test został już zamknięty!");
+        }
         if (test.getMaxAttempts() != null) {
             if (attemptRepository.countByUserIdAndTestId(userId, test.getTestId()) < test.getMaxAttempts()) {
                 createNewAttempt(userId, test.getTestId());
                 return true;
             } else {
-                return false;
+                throw new ExceededTestAttemptsException("*przekroczono limit podejść do testu!");
             }
         } else {
             createNewAttempt(userId, test.getTestId());

@@ -1,6 +1,7 @@
 package korzeniowski.mateusz.app.model.course.test.dto;
 
 import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import korzeniowski.mateusz.app.model.course.test.Test;
@@ -23,6 +24,7 @@ public class TestEditDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime end;
     @Min(value = 1, message = "*jeżeli pole nie jest puste, wymagane jest co najmniej jedno podejście!")
+    @Max(value = 10, message = "*maksymalna ilość podejść wynosi 10!")
     private Integer maxAttempts;
     private Long courseId;
     private Boolean overviewEnabled;

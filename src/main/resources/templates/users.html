@@ -48,6 +48,9 @@
                 <td th:if="${user.role.equals('STUDENT') and user.group!=null}" th:text="${user.group}"></td>
                 <td th:if="${user.group == null}">Brak</td>
                 <td>
+                    <a th:href="@{/email/prepare-user(userId=${user.id})}" target="_blank">
+                        <i class="fa-solid fa-envelope"></i>
+                    </a>
                     <a th:unless="${user.role=='ADMIN' && !session.userInfo.id.equals(user.id)}"
                        href="#" th:href="@{/admin/users/edit/{id}(id=${user.id})}">
                         <i class="fa-solid fa-user-edit"></i>

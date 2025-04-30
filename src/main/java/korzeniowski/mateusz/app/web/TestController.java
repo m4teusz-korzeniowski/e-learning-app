@@ -2,6 +2,7 @@ package korzeniowski.mateusz.app.web;
 
 import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.exceptions.EmptyQuestionBankException;
+import korzeniowski.mateusz.app.exceptions.ExceededTestAttemptsException;
 import korzeniowski.mateusz.app.model.course.test.Attempt;
 import korzeniowski.mateusz.app.model.course.test.AttemptState;
 import korzeniowski.mateusz.app.model.course.test.dto.AttemptDisplayDto;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,13 +93,12 @@ public class TestController {
                     attemptService.updateAttemptState(attemptState.getId(), test, 1);
                     return "redirect:/attempt/" + attemptId + "/question/1";
                 } else {
-                    redirectAttributes.addFlashAttribute("error", "*przekroczono limit podejść do testu!");
                     return "redirect:/test/" + testId + "/display";
                 }
             }
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        } catch (EmptyQuestionBankException e) {
+        } catch (EmptyQuestionBankException | DateTimeException | ExceededTestAttemptsException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/test/" + testId + "/display";
         }

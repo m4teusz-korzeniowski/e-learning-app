@@ -26,12 +26,10 @@ public class AdminUserEditController {
 
     private final UserService userService;
     private final PasswordTokenService passwordTokenService;
-    private final EmailService emailService;
 
-    public AdminUserEditController(UserService userService, PasswordTokenService passwordTokenService, EmailService emailService) {
+    public AdminUserEditController(UserService userService, PasswordTokenService passwordTokenService) {
         this.userService = userService;
         this.passwordTokenService = passwordTokenService;
-        this.emailService = emailService;
     }
 
     private void setUserInitialData(User userData, UserSettingsDto user) {

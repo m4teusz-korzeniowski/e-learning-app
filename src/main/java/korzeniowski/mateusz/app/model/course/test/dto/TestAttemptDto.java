@@ -2,8 +2,11 @@ package korzeniowski.mateusz.app.model.course.test.dto;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import korzeniowski.mateusz.app.model.course.test.Test;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,19 +16,30 @@ public class TestAttemptDto {
     private Integer numberOfQuestions;
     private List<QuestionAttemptDto> questions;
     private Integer maxAttempts;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
-    private final static ObjectMapper objectMapper = new ObjectMapper();
+    private final static ObjectMapper objectMapper;
+
+    static {
+        objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    }
 
     public TestAttemptDto() {
     }
 
     public TestAttemptDto(Long testId, String name, Integer numberOfQuestions,
-                          List<QuestionAttemptDto> questions, Integer maxAttempts) {
+                          List<QuestionAttemptDto> questions, Integer maxAttempts,
+                          LocalDateTime startTime, LocalDateTime endTime) {
         this.testId = testId;
         this.name = name;
         this.numberOfQuestions = numberOfQuestions;
         this.questions = questions;
         this.maxAttempts = maxAttempts;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public String getName() {
@@ -68,9 +82,25 @@ public class TestAttemptDto {
         this.maxAttempts = maxAttempts;
     }
 
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
     public static TestAttemptDto map(Test test) {
         return new TestAttemptDto(test.getId(), test.getName(), test.getNumberOfQuestions(),
-                new ArrayList<>(), test.getMaxAttempts());
+                new ArrayList<>(), test.getMaxAttempts(), test.getStartTime(), test.getEndTime());
     }
 
     public String toJson() {
