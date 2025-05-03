@@ -268,6 +268,17 @@ public class AttemptService {
     }
 
     @Transactional
+    public void leaveOnlyBestAttempt(Long userId, Long testId) {
+        List<Attempt> completedAttempts = attemptRepository.findAllByStatus(userId, testId, AttemptStatus.COMPLETED);
+        if (completedAttempts.size() >= 2) {
+            Attempt best = Collections.max(completedAttempts, Comparator.comparing(Attempt::getMark));
+            completedAttempts.stream()
+                    .filter(attempt -> !attempt.getId().equals(best.getId()))
+                    .forEach(attemptRepository::delete);
+        }
+    }
+
+    @Transactional
     public void finishAttempt(Long attemptId, TestAttemptDto dto) {
         attemptRepository.findById(attemptId).ifPresent(attempt -> {
             attempt.setEndedAt(LocalDateTime.now());
@@ -276,6 +287,30 @@ public class AttemptService {
             double maxScore = getMaxScore(dto.getQuestions());
             attempt.setScore(round(score, 2));
             attempt.setMark(round(score / maxScore * 100.00, 2));
+            if (dto.getMaxAttempts() == null) {
+                Long userId = attempt.getUser().getId();
+                Long testId = dto.getTestId();
+
+                leaveOnlyBestAttempt(userId, testId);
+
+                Optional<Attempt> previousBest = attemptRepository.findByStatus(userId, testId, AttemptStatus.COMPLETED);
+                if (previousBest.isPresent()) {
+                    Attempt previous = previousBest.get();
+                    if (previous.getMark() < attempt.getMark()) {
+                        attemptRepository.delete(previous);
+                        attempt.setStatus(AttemptStatus.COMPLETED);
+                        attemptRepository.save(attempt);
+                    } else {
+                        attemptRepository.delete(attempt);
+                    }
+                } else {
+                    attempt.setStatus(AttemptStatus.COMPLETED);
+                    attemptRepository.save(attempt);
+                }
+
+                attemptStateRepository.findByAttemptId(attemptId).ifPresent(attemptStateRepository::delete);
+                return;
+            }
             attempt.setStatus(AttemptStatus.COMPLETED);
             attemptRepository.save(attempt);
             attemptStateRepository.findByAttemptId(attemptId).ifPresent(attemptStateRepository::delete);

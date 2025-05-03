@@ -20,6 +20,12 @@ public interface AttemptRepository extends JpaRepository<Attempt, Long> {
                                    @Param("testId") Long testId,
                                    @Param("status") AttemptStatus status);
 
+    @Query("select attempt from Attempt attempt where" +
+            " attempt.user.id = :userId and attempt.test.id = :testId and attempt.status = :status")
+    List<Attempt> findAllByStatus(@Param("userId") Long userId,
+                                  @Param("testId") Long testId,
+                                  @Param("status") AttemptStatus status);
+
     Integer countByUserIdAndTestId(@Param("userId") Long userId, @Param("testId") Long testId);
 
     @Query("select attempt.id from Attempt attempt " +
