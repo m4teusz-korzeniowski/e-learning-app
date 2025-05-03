@@ -18,6 +18,8 @@ public class TestAttemptDto {
     private Integer maxAttempts;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private Integer duration;
+    private LocalDateTime attemptStartTime;
 
     private final static ObjectMapper objectMapper;
 
@@ -32,7 +34,7 @@ public class TestAttemptDto {
 
     public TestAttemptDto(Long testId, String name, Integer numberOfQuestions,
                           List<QuestionAttemptDto> questions, Integer maxAttempts,
-                          LocalDateTime startTime, LocalDateTime endTime) {
+                          LocalDateTime startTime, LocalDateTime endTime, Integer duration) {
         this.testId = testId;
         this.name = name;
         this.numberOfQuestions = numberOfQuestions;
@@ -40,6 +42,7 @@ public class TestAttemptDto {
         this.maxAttempts = maxAttempts;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.duration = duration;
     }
 
     public String getName() {
@@ -98,9 +101,27 @@ public class TestAttemptDto {
         this.endTime = endTime;
     }
 
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getAttemptStartTime() {
+        return attemptStartTime;
+    }
+
+    public void setAttemptStartTime(LocalDateTime attemptStartTime) {
+        this.attemptStartTime = attemptStartTime;
+    }
+
+
     public static TestAttemptDto map(Test test) {
         return new TestAttemptDto(test.getId(), test.getName(), test.getNumberOfQuestions(),
-                new ArrayList<>(), test.getMaxAttempts(), test.getStartTime(), test.getEndTime());
+                new ArrayList<>(), test.getMaxAttempts(), test.getStartTime(), test.getEndTime(),
+                test.getDuration());
     }
 
     public String toJson() {

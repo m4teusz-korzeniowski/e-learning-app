@@ -18,6 +18,13 @@
         <p>Upewnij się, że masz udzielone odpowiedzi na wszystkie pytania.</p>
     </div>
     <br>
+    <div th:if="${remainingTime != null}">
+        <div class="element">
+            <span>Pozostały czas: </span>
+            <span id="timer"></span>
+        </div>
+        <br>
+    </div>
     <div class="element">
         <a class="page-span"
            th:each="number : ${#numbers.sequence(1, totalQuestionNumber)}"
@@ -29,10 +36,42 @@
     <br>
     <div class="element" style="visibility: hidden">
         <div class="submit-button">
-            <a th:href="@{/attempt/{attemptId}/finalize(attemptId=${attemptId})}"><button>Zakończ podejście</button></a>
+            <a th:href="@{/attempt/{attemptId}/finalize(attemptId=${attemptId})}">
+                <button>Zakończ podejście</button>
+            </a>
         </div>
     </div>
     <br>
 </div>
+<th:block th:if="${remainingTime != null}">
+    <script th:inline="javascript">
+        let remainingTime = [[${remainingTime}]];
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return String(minutes).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+        }
+
+        function updateTimer() {
+            const timer = document.getElementById('timer');
+            if (timer) {
+                timer.textContent = formatTime(remainingTime);
+            }
+        }
+
+        updateTimer();
+
+        setInterval(() => {
+                if (remainingTime > 0) {
+                    remainingTime--;
+                    updateTimer();
+                } else {
+                    window.location.href = '/attempt/' + [[${attemptId}]] + '/finalize';
+                }
+            }
+            , 1000);
+    </script>
+</th:block>
 </body>
 </html>

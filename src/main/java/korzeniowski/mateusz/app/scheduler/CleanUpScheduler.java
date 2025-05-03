@@ -8,11 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 @Component
-public class TokenCleanUpScheduler {
+public class CleanUpScheduler {
 
     private final PasswordTokenRepository passwordTokenRepository;
 
-    public TokenCleanUpScheduler(PasswordTokenRepository passwordTokenRepository) {
+    public CleanUpScheduler(PasswordTokenRepository passwordTokenRepository) {
         this.passwordTokenRepository = passwordTokenRepository;
     }
 

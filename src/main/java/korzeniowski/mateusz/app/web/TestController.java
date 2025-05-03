@@ -11,6 +11,7 @@ import korzeniowski.mateusz.app.model.course.test.dto.TestDisplayDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.app.service.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -89,6 +90,7 @@ public class TestController {
                 if (attemptService.createAttemptIfAvailable(userInfo.getId(), test)) {
                     Long attemptId = attemptService.findAttemptId(userInfo.getId(), testId);
                     AttemptState attemptState = attemptService.findAttemptState(attemptId);
+                    attemptService.setAttemptStartTime(test, attemptState.getLastModified());
                     test = attemptService.initializeTest(test, testId, attemptState.getId(), attemptId);
                     attemptService.updateAttemptState(attemptState.getId(), test, 1);
                     return "redirect:/attempt/" + attemptId + "/question/1";
@@ -124,6 +126,7 @@ public class TestController {
             model.addAttribute("totalQuestionNumber", attempt.getNumberOfQuestions());
             model.addAttribute("questionNo", questionNumber);
             model.addAttribute("attempt", attempt);
+            model.addAttribute("remainingTime", attemptService.getRemainingTime(attempt));
             return "test-attempt";
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -149,7 +152,7 @@ public class TestController {
 
 
     @PostMapping("/attempt/{attemptId}/question/{questionNumber}/save")
-    public String saveAttemptAnswer(@PathVariable long attemptId,
+    public Object saveAttemptAnswer(@PathVariable long attemptId,
                                     @PathVariable int questionNumber,
                                     @RequestParam("action") String action,
                                     @RequestParam(value = "answers", required = false) List<Integer> answers,
@@ -176,6 +179,8 @@ public class TestController {
                 return "redirect:/attempt/" + attemptId + "/question/" + (questionNumber + 1);
             } else if ("finish".equals(action)) {
                 return "redirect:/attempt/" + attemptId + "/summary";
+            } else if ("autosave".equals(action)) {
+                return ResponseEntity.ok().build();
             } else {
                 return "redirect:/attempt/" + attemptId + "/question/" + questionNumber;
             }
@@ -192,6 +197,7 @@ public class TestController {
             TestAttemptDto attempt = getOrLoadAttemptFromSession(session, attemptId);
             model.addAttribute("attempt", attempt);
             model.addAttribute("totalQuestionNumber", attempt.getNumberOfQuestions());
+            model.addAttribute("remainingTime", attemptService.getRemainingTime(attempt));
             return "attempt-summary";
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);

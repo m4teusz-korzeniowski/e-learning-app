@@ -4,6 +4,7 @@ import korzeniowski.mateusz.app.model.course.test.Attempt;
 import korzeniowski.mateusz.app.model.course.test.AttemptStatus;
 import korzeniowski.mateusz.app.model.course.test.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -40,4 +41,8 @@ public interface AttemptRepository extends JpaRepository<Attempt, Long> {
     @Query("select attempt.answersGivenJson from Attempt attempt" +
             " where attempt.user.id = :userId and attempt.test.id = :testId")
     Optional<String> findJsonByUserIdAndTestId(@Param("userId") Long userId, @Param("testId") Long testId);
+
+    @Modifying
+    @Query("delete from Attempt a where a.user.id = :userId and a.test.id = :testId")
+    void deleteByUserIdAndTestId(@Param("userId") Long userId, @Param("testId") Long testId);
 }

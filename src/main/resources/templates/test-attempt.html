@@ -34,6 +34,13 @@
             <button type="submit" name="action" value="finish">Podsumowanie</button>
         </div>
         <br>
+        <div th:if="${remainingTime != null}">
+            <div class="element">
+                <span>Pozostały czas: </span>
+                <span id="timer"></span>
+            </div>
+            <br>
+        </div>
         <div class="element">
             <a class="page-span"
                th:each="number : ${#numbers.sequence(1, totalQuestionNumber)}"
@@ -58,6 +65,56 @@
             });
         });
     </script>
+    <script th:inline="javascript">
+        setInterval(() => {
+            const formData = new FormData();
+            formData.append("action", "autosave");
+
+            document.querySelectorAll('input[name="answers"]:checked').forEach(input => {
+                formData.append("answers", input.value);
+            });
+
+            const csrfToken = document.querySelector('input[name="_csrf"]').value;
+
+            fetch("/attempt/" + [[${attemptId}]] + "/question/" + [[${questionNo}]] + "/save", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRF-TOKEN": csrfToken
+                }
+            }).catch(error => console.error('Autosave error:', error));
+        }, 30000);
+    </script>
+    <th:block th:if="${remainingTime != null}">
+        <script th:inline="javascript">
+            let remainingTime = [[${remainingTime}]];
+
+            function formatTime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                return String(minutes).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+            }
+
+            function updateTimer() {
+                const timer = document.getElementById('timer');
+                if (timer) {
+                    timer.textContent = formatTime(remainingTime);
+                }
+            }
+
+            updateTimer();
+
+            setInterval(() => {
+                    if (remainingTime > 0) {
+                        remainingTime--;
+                        updateTimer();
+                    } else {
+                        window.location.href = '/attempt/' + [[${attemptId}]] + '/finalize';
+                    }
+                }
+                , 1000);
+        </script>
+    </th:block>
 </div>
 <br><br>
 </body>

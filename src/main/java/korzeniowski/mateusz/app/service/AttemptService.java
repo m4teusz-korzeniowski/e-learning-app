@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DateTimeException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,14 +25,12 @@ public class AttemptService {
     private final TestRepository testRepository;
     private final UserRepository userRepository;
     private final AttemptStateRepository attemptStateRepository;
-    private final QuestionRepository questionRepository;
 
-    public AttemptService(AttemptRepository attemptRepository, TestRepository testRepository, UserRepository userRepository, AttemptStateRepository attemptStateRepository, QuestionRepository questionRepository) {
+    public AttemptService(AttemptRepository attemptRepository, TestRepository testRepository, UserRepository userRepository, AttemptStateRepository attemptStateRepository) {
         this.attemptRepository = attemptRepository;
         this.testRepository = testRepository;
         this.userRepository = userRepository;
         this.attemptStateRepository = attemptStateRepository;
-        this.questionRepository = questionRepository;
     }
 
     public Optional<TestAttemptDto> findTestAttempt(Long testId) {
@@ -75,6 +74,15 @@ public class AttemptService {
         attemptStateRepository.save(state);
     }
 
+    private boolean isUserTeacher(Long userId) {
+        Optional<String> teacher = userRepository.findUserByRoleAndId(userId, "TEACHER");
+        return teacher.isPresent();
+    }
+
+    private void deleteAttempt(Long userId, Long testId) {
+        attemptRepository.deleteByUserIdAndTestId(userId, testId);
+    }
+
     @Transactional
     public boolean createAttemptIfAvailable(Long userId, TestAttemptDto test) {
         if (test.getStartTime().isAfter(LocalDateTime.now())) {
@@ -84,6 +92,9 @@ public class AttemptService {
             throw new DateTimeException("*test został już zamknięty!");
         }
         if (test.getMaxAttempts() != null) {
+            if (isUserTeacher(userId)) {
+                deleteAttempt(userId, test.getTestId());
+            }
             if (attemptRepository.countByUserIdAndTestId(userId, test.getTestId()) < test.getMaxAttempts()) {
                 createNewAttempt(userId, test.getTestId());
                 return true;
@@ -127,6 +138,9 @@ public class AttemptService {
         });
     }
 
+    public void setAttemptStartTime(TestAttemptDto attempt, LocalDateTime startTime) {
+        attempt.setAttemptStartTime(startTime);
+    }
 
     public TestAttemptDto initializeTest(TestAttemptDto attempt, Long testId,
                                          Long attemptStateId, Long attemptId) {
@@ -271,6 +285,14 @@ public class AttemptService {
     public List<AttemptDisplayDto> findAttemptsByUserAndTest(Long userId, Long testId) {
         return attemptRepository.findAllByUserIdAndTestId(userId, testId)
                 .stream().map(AttemptDisplayDto::map).toList();
+    }
+
+    public Long getRemainingTime(TestAttemptDto attempt) {
+        if (attempt.getDuration() == null) {
+            return null;
+        }
+        long elapsed = Duration.between(attempt.getAttemptStartTime(), LocalDateTime.now()).toSeconds();
+        return attempt.getDuration() * 60 - elapsed;
     }
 
 }

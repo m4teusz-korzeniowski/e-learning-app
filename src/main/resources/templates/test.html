@@ -59,42 +59,40 @@
     </div>
     <br>
     <div class="element">
-        <p class="test-summary">Podsumowanie twoich podejść:</p>
-        <p class="test-summary"><i class="fa-solid fa-trophy" style="font-size: 32px; color: palegoldenrod;"></i></p>
-        <table>
-            <thead>
-            <tr>
-                <td>Próba:</td>
-                <td>Stan</td>
-                <td th:text="'Ocena / 100.00'">Ocena:</td>
-                <td>Przegląd:</td>
-            </tr>
-            </thead>
-            <tr th:each="attempt, iter: ${attempts}">
-                <td th:text="${iter.index + 1}"></td>
-                <td>
-                    <p th:if="${attempt.status.equals('IN_PROGRESS')}" th:text="'W toku'"></p>
-                    <p th:if="${attempt.status.equals('COMPLETED')}" th:text="'Ukończone'"></p>
-                    <p th:if="${attempt.status.equals('COMPLETED')}" th:text="'Zakończone: ' + ${attempt.getFormattedEndedAt()}"></p>
-                </td>
-                <td th:text="${attempt.mark}"></td>
-                <td>
-                    <p th:if="${test.overviewEnabled}">Przegląd</p>
-                    <p th:if="${!test.overviewEnabled}">Niedozwolony</p>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <br>
-    <div class="element">
-        <p class="test-summary">Twoja końcowa ocena za ten test wynosi: </p>
-    </div>
-    <br>
-    <div class="element">
         <div class="submit-button">
             <a th:href="@{/test/{id}/attempt(id=${testId})}">
                 <button>Rozwiąż test</button>
             </a>
+        </div>
+    </div>
+    <br>
+    <div class="element">
+        <p class="test-summary">Podsumowanie twoich podejść:</p>
+        <p class="test-summary"><i class="fa-solid fa-trophy" style="font-size: 32px; color: palegoldenrod;"></i></p>
+        <div style="max-height: 1000px; overflow-y: auto;">
+            <table>
+                <thead style="position: sticky">
+                <tr>
+                    <td>Próba:</td>
+                    <td>Stan</td>
+                    <td th:text="'Ocena / 100.00'">Ocena:</td>
+                    <td>Przegląd:</td>
+                </tr>
+                </thead>
+                <tr th:each="attempt, iter: ${attempts}">
+                    <td th:text="${iter.index + 1}"></td>
+                    <td>
+                        <p th:if="${attempt.status.equals('IN_PROGRESS')}" th:text="'W toku'"></p>
+                        <p th:if="${attempt.status.equals('COMPLETED')}" th:text="'Ukończone'"></p>
+                        <p th:if="${attempt.status.equals('COMPLETED')}" th:text="'Zakończone: ' + ${attempt.getFormattedEndedAt()}"></p>
+                    </td>
+                    <td th:text="${attempt.mark}"></td>
+                    <td>
+                        <p th:if="${test.overviewEnabled}">Przegląd</p>
+                        <p th:if="${!test.overviewEnabled}">Niedozwolony</p>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
     <br>
