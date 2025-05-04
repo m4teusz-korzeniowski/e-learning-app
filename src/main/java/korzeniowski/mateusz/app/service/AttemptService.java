@@ -17,7 +17,6 @@ import java.time.DateTimeException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class AttemptService {
@@ -142,6 +141,31 @@ public class AttemptService {
         attempt.setAttemptStartTime(startTime);
     }
 
+    private List<Question> chooseQuestions(List<Question> bank, int numberToSelect) {
+        Map<String, List<Question>> categoryMap = new LinkedHashMap<>();
+        for (Question question : bank) {
+            String category = question.getCategory() != null ? question.getCategory() : "Brak";
+            categoryMap.computeIfAbsent(category, k -> new ArrayList<>()).add(question);
+        }
+
+        List<List<Question>> groupedByCategory = new ArrayList<>(categoryMap.values());
+
+        List<Question> selected = new ArrayList<>();
+        int categoryIndex = 0;
+        while (selected.size() < numberToSelect && !groupedByCategory.isEmpty()) {
+            List<Question> currentCategory = groupedByCategory.get(categoryIndex % groupedByCategory.size());
+            if (!currentCategory.isEmpty()) {
+                Collections.shuffle(currentCategory);
+                selected.add(currentCategory.remove(0));
+            } else {
+                groupedByCategory.remove(categoryIndex % groupedByCategory.size());
+                continue;
+            }
+            categoryIndex++;
+        }
+        return selected;
+    }
+
     public TestAttemptDto initializeTest(TestAttemptDto attempt, Long testId,
                                          Long attemptStateId, Long attemptId) {
         List<Question> questions = testRepository.findQuestionsByTestId(testId);
@@ -154,41 +178,7 @@ public class AttemptService {
             Collections.shuffle(questions);
             attempt.setQuestions(questions.stream().map(QuestionAttemptDto::map).toList());
         } else {
-            Map<String, List<Question>> groupedByCategory = new HashMap<>();
-            for (Question question : questions) {
-                if (question.getCategory() == null) {
-                    question.setCategory("Brak");
-                }
-                groupedByCategory.computeIfAbsent(question.getCategory(), k -> new ArrayList<>()).add(question);
-            }
-            int numberOfCategories = groupedByCategory.keySet().size();
-            int questionPerCategory = attempt.getNumberOfQuestions() / numberOfCategories;
-            List<Question> selected = new ArrayList<>();
-            for (List<Question> questionsInCategory : groupedByCategory.values()) {
-                if (questionsInCategory.size() >= questionPerCategory) {
-                    Collections.shuffle(questionsInCategory);
-                    List<Question> picked = questionsInCategory.subList(0, questionPerCategory);
-                    selected.addAll(picked);
-                    questionsInCategory.removeAll(picked);
-                } else {
-                    selected.addAll(questionsInCategory);
-                }
-            }
-            if (selected.size() < attempt.getNumberOfQuestions()) {
-                int remainingQuestionsCount = attempt.getNumberOfQuestions() - selected.size();
-
-                List<Question> remainingQuestions = groupedByCategory.values().stream()
-                        .flatMap(List::stream)
-                        .collect(Collectors.toList());
-
-                Collections.shuffle(remainingQuestions);
-
-                List<Question> additional = remainingQuestions.stream()
-                        .limit(remainingQuestionsCount)
-                        .toList();
-
-                selected.addAll(additional);
-            }
+            List<Question> selected = chooseQuestions(questions, attempt.getNumberOfQuestions());
             Collections.shuffle(selected);
             attempt.setQuestions(selected.stream().map(QuestionAttemptDto::map).toList());
         }
@@ -278,6 +268,7 @@ public class AttemptService {
         }
     }
 
+
     @Transactional
     public void finishAttempt(Long attemptId, TestAttemptDto dto) {
         attemptRepository.findById(attemptId).ifPresent(attempt -> {
@@ -290,9 +281,7 @@ public class AttemptService {
             if (dto.getMaxAttempts() == null) {
                 Long userId = attempt.getUser().getId();
                 Long testId = dto.getTestId();
-
                 leaveOnlyBestAttempt(userId, testId);
-
                 Optional<Attempt> previousBest = attemptRepository.findByStatus(userId, testId, AttemptStatus.COMPLETED);
                 if (previousBest.isPresent()) {
                     Attempt previous = previousBest.get();
@@ -307,7 +296,6 @@ public class AttemptService {
                     attempt.setStatus(AttemptStatus.COMPLETED);
                     attemptRepository.save(attempt);
                 }
-
                 attemptStateRepository.findByAttemptId(attemptId).ifPresent(attemptStateRepository::delete);
                 return;
             }

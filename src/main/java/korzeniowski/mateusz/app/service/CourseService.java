@@ -65,6 +65,9 @@ public class CourseService {
 
     public Page<CourseNameDto> findAllCoursesPageWithKeyword(String keyword, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        if (keyword.isEmpty()) {
+            return courseRepository.findAll(pageable).map(CourseNameDto::map);
+        }
         return courseRepository.findAllByKeyword(keyword, pageable).map(CourseNameDto::map);
     }
 
