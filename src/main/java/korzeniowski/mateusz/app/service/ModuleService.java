@@ -1,9 +1,12 @@
 package korzeniowski.mateusz.app.service;
 
+import korzeniowski.mateusz.app.exceptions.AttemptInProgressException;
 import korzeniowski.mateusz.app.model.course.module.Module;
 import korzeniowski.mateusz.app.model.course.module.ModuleItem;
 import korzeniowski.mateusz.app.model.course.module.dto.ModuleDisplayDto;
+import korzeniowski.mateusz.app.model.course.test.AttemptStatus;
 import korzeniowski.mateusz.app.model.course.test.Test;
+import korzeniowski.mateusz.app.repository.AttemptRepository;
 import korzeniowski.mateusz.app.repository.ModuleRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -17,10 +20,12 @@ public class ModuleService {
     private final ModuleRepository moduleRepository;
     private final CourseService courseService;
     private final static int MAX_NAME_LENGTH = 60;
+    private final AttemptRepository attemptRepository;
 
-    public ModuleService(ModuleRepository moduleRepository, CourseService courseService) {
+    public ModuleService(ModuleRepository moduleRepository, CourseService courseService, AttemptRepository attemptRepository) {
         this.moduleRepository = moduleRepository;
         this.courseService = courseService;
+        this.attemptRepository = attemptRepository;
     }
 
     public ModuleDisplayDto findModuleById(Long id) {
@@ -68,8 +73,11 @@ public class ModuleService {
     }
 
     @Transactional
-    public void deleteModule(Long id) {
-        moduleRepository.deleteById(id);
+    public void deleteModule(Long moduleId) {
+        if (attemptRepository.hasModuleActiveAttempt(moduleId, AttemptStatus.IN_PROGRESS)) {
+            throw new AttemptInProgressException("*nie można usunać modułu posiadającego aktywne próby!");
+        }
+        moduleRepository.deleteById(moduleId);
     }
 
     public boolean maximumNumberOfTestReached(Long moduleId, int maxSize) {

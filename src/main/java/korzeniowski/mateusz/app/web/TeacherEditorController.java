@@ -2,6 +2,7 @@ package korzeniowski.mateusz.app.web;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import korzeniowski.mateusz.app.exceptions.AttemptInProgressException;
 import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
 import korzeniowski.mateusz.app.model.course.module.dto.ModuleDisplayDto;
 import korzeniowski.mateusz.app.model.course.module.dto.ModuleItemDisplayDto;
@@ -117,15 +118,16 @@ public class TeacherEditorController {
         return "redirect:/teacher/course/edit/" + courseId;
     }
 
-    //TO DO usunąć courseId i pobrać courseId z modułu
-    @GetMapping("/teacher/course/edit/{courseId}/remove-module/{moduleId}")
-    public String removeModule(@PathVariable long courseId, @PathVariable long moduleId,
-                               HttpSession session) {
+    @GetMapping("/teacher/module/{moduleId}/remove")
+    public String removeModule(@PathVariable long moduleId,
+                               HttpSession session, RedirectAttributes redirectAttributes) {
+        Long courseId = null;
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
             if (accessService.hasLoggedInTeacherAccessToModule(moduleId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
+            courseId = moduleService.findCourseIdFromModule(moduleId);
             if (moduleService.moduleExist(moduleId)) {
                 moduleService.deleteModule(moduleId);
             } else {
@@ -133,13 +135,15 @@ public class TeacherEditorController {
             }
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (AttemptInProgressException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/teacher/course/edit/" + courseId;
         }
         return "redirect:/teacher/course/edit/" + courseId;
     }
 
-    //TO DO usunąć courseId i pobrać courseId z modułu
-    @GetMapping("/teacher/course/edit/{courseId}/{moduleId}/create-test")
-    public String addTest(@PathVariable long courseId, @PathVariable long moduleId,
+    @GetMapping("/teacher/module/{moduleId}/create-test")
+    public String addTest(@PathVariable long moduleId,
                           RedirectAttributes redirectAttributes,
                           HttpSession session) {
         try {
@@ -147,27 +151,29 @@ public class TeacherEditorController {
             if (accessService.hasLoggedInTeacherAccessToModule(moduleId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
+            long courseId = moduleService.findCourseIdFromModule(moduleId);
             if (moduleService.maximumNumberOfTestReached(moduleId, MAX_NUMBER_OF_TESTS)) {
-                redirectAttributes.addFlashAttribute("message",
+                redirectAttributes.addFlashAttribute("error",
                         "*moduł nie może mieć więcej testów niż " + MAX_NUMBER_OF_TESTS + "!");
             } else {
                 testService.createTest(moduleId);
             }
+            return "redirect:/teacher/course/edit/" + courseId;
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return "redirect:/teacher/course/edit/" + courseId;
     }
 
-    //TO DO usunąć courseId i pobrać courseId z testu
-    @GetMapping("/teacher/course/edit/{courseId}/remove-test/{testId}")
-    public String removeTest(@PathVariable long courseId, @PathVariable long testId,
-                             HttpSession session) {
+    @GetMapping("/teacher/test/{testId}/remove")
+    public String removeTest(@PathVariable long testId,
+                             HttpSession session, RedirectAttributes redirectAttributes) {
+        Long courseId = null;
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
             if (accessService.hasLoggedInTeacherAccessToTheTest(testId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
+            courseId = testService.findCourseIdFromTest(testId);
             if (testService.testExists(testId)) {
                 testService.deleteTest(testId);
             } else {
@@ -176,22 +182,26 @@ public class TeacherEditorController {
             return "redirect:/teacher/course/edit/" + courseId;
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (AttemptInProgressException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/teacher/course/edit/" + courseId;
         }
     }
 
-    //TO DO usunąć courseId i pobrać courseId z modułu
-    @GetMapping("/teacher/course/edit/{courseId}/{moduleId}/create-item")
-    public String addItem(@PathVariable long courseId, @PathVariable long moduleId,
+    @GetMapping("/teacher/module/{moduleId}/create-item")
+    public String addItem(@PathVariable long moduleId,
                           RedirectAttributes redirectAttributes,
                           HttpSession session) {
+        Long courseId = null;
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
             if (accessService.hasLoggedInTeacherAccessToModule(moduleId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
+            courseId = moduleService.findCourseIdFromModule(moduleId);
             if (moduleService.maximumNumberOfItemsReached(moduleId, MAX_NUMBER_OF_MODULE_ITEMS)) {
-                redirectAttributes.addFlashAttribute("message",
-                        "Moduł nie może mieć więcej elementów niż " + MAX_NUMBER_OF_MODULE_ITEMS + "!");
+                redirectAttributes.addFlashAttribute("error",
+                        "*moduł nie może mieć więcej elementów niż " + MAX_NUMBER_OF_MODULE_ITEMS + "!");
             } else {
                 moduleItemService.createModuleItem(moduleId);
             }
@@ -201,15 +211,16 @@ public class TeacherEditorController {
         return "redirect:/teacher/course/edit/" + courseId;
     }
 
-    //TO DO usunąć courseId i pobrać courseId z item module
-    @GetMapping("/teacher/course/edit/{courseId}/remove-item/{itemId}")
-    public String removeItem(@PathVariable long courseId, @PathVariable long itemId,
+    @GetMapping("/teacher/module-item/{itemId}/remove")
+    public String removeItem(@PathVariable long itemId,
                              HttpSession session) {
+        Long courseId = null;
         try {
             UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
             if (accessService.hasLoggedInTeacherAccessToModuleItem(itemId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
+            courseId = moduleItemService.findCourseIdFromModuleItem(itemId);
             if (moduleItemService.moduleItemExists(itemId)) {
                 moduleItemService.deleteModuleItem(itemId);
             } else {

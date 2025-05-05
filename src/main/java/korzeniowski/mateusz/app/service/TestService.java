@@ -1,11 +1,14 @@
 package korzeniowski.mateusz.app.service;
 
+import korzeniowski.mateusz.app.exceptions.AttemptInProgressException;
 import korzeniowski.mateusz.app.model.course.module.Module;
+import korzeniowski.mateusz.app.model.course.test.AttemptStatus;
 import korzeniowski.mateusz.app.model.course.test.Question;
 import korzeniowski.mateusz.app.model.course.test.Test;
 import korzeniowski.mateusz.app.model.course.test.dto.TestDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.dto.TestEditDto;
 import korzeniowski.mateusz.app.model.course.test.dto.TestNameIdDto;
+import korzeniowski.mateusz.app.repository.AttemptRepository;
 import korzeniowski.mateusz.app.repository.TestRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -21,10 +24,12 @@ public class TestService {
     private final TestRepository testRepository;
     private final ModuleService moduleService;
     private final static int MAX_LENGTH_OF_TEST_NAME = 60;
+    private final AttemptRepository attemptRepository;
 
-    public TestService(TestRepository testRepository, ModuleService moduleService) {
+    public TestService(TestRepository testRepository, ModuleService moduleService, AttemptRepository attemptRepository) {
         this.testRepository = testRepository;
         this.moduleService = moduleService;
+        this.attemptRepository = attemptRepository;
     }
 
     public Optional<TestDisplayDto> findTestById(Long id) {
@@ -60,6 +65,9 @@ public class TestService {
 
     @Transactional
     public void deleteTest(Long testId) {
+        if (attemptRepository.hasTestActiveAttempt(testId, AttemptStatus.IN_PROGRESS)) {
+            throw new AttemptInProgressException("*nie można usunąć testu posiadającego aktywne próby!");
+        }
         testRepository.findTestById(testId).ifPresent(testRepository::delete);
     }
 

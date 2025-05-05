@@ -21,12 +21,6 @@
 </div>
 <br><br>
 <div class="user-courses">
-    <div th:if="${message!=null} and ${!message.isBlank()}">
-        <div class="element">
-            <p th:text="${message}"></p>
-        </div>
-        <br>
-    </div>
     <form th:action="@{/teacher/course/edit/{id}(id=${id})}" method="post" th:object="${course}">
         <div class="element">
             <input type="hidden" th:field="*{creatorId}" th:value="*{creatorId}">
@@ -46,7 +40,7 @@
                     <input type="text" th:field="*{modules[__${iter.index}__].name}"/>
                     <input type="hidden" th:field="*{modules[__${iter.index}__].id}"/>
                     <span class="action-button">
-                        <a th:href="@{/teacher/course/edit/{id}/remove-module/{moduleId}(id=${id},moduleId=${courseModule.id})}">
+                        <a th:href="@{/teacher/module/{moduleId}/remove(moduleId=${courseModule.id})}">
                             <button type="button">Usuń moduł</button>
                         </a>
                     </span>
@@ -61,7 +55,7 @@
                             <a th:href="@{/teacher/module-item/{itemId}/edit(itemId=${item.id})}">
                                 <button type="button">Edytuj</button>
                             </a>
-                            <a th:href="@{/teacher/course/edit/{id}/remove-item/{itemId}(id=${id},itemId=${item.id})}">
+                            <a th:href="@{/teacher/module-item/{itemId}/remove(itemId=${item.id})}">
                                 <button type="button">Usuń</button>
                             </a>
                         </span>
@@ -77,7 +71,7 @@
                             <a th:href="@{/teacher/test/{testId}/edit(testId=${test.id})}">
                                 <button type="button">Edytuj</button>
                             </a>
-                            <a th:href="@{/teacher/course/edit/{id}/remove-test/{testId}(id=${id},testId=${test.id})}">
+                            <a th:href="@{/teacher/test/{testId}/remove(testId=${test.id})}">
                                 <button type="button">Usuń</button>
                             </a>
                         </span>
@@ -85,13 +79,13 @@
                     <br>
                 </div>
                 <div th:if="${courseModule.getItems().size() < maxNumberOfModuleItems}">
-                    <a th:href="@{/teacher/course/edit/{id}/{moduleId}/create-item(id=${id},moduleId=${courseModule.id})}">
+                    <a th:href="@{/teacher/module/{moduleId}/create-item(moduleId=${courseModule.id})}">
                         <button type="button">Dodaj element</button>
                     </a>
                 </div>
                 <br>
                 <div th:if="${courseModule.getTests().size() < maxNumberOfTests}">
-                    <a th:href="@{/teacher/course/edit/{id}/{moduleId}/create-test(id=${id},moduleId=${courseModule.id})}">
+                    <a th:href="@{/teacher/module/{moduleId}/create-test(moduleId=${courseModule.id})}">
                         <button type="button">Dodaj test</button>
                     </a>
                 </div>
@@ -104,6 +98,18 @@
                 <a th:href="@{/teacher/course/edit/{id}/create-module(id=${id})}">
                     <button type="button">Dodaj moduł</button>
                 </a>
+            </div>
+            <br>
+        </div>
+        <div th:if="${message!=null} and ${!message.isBlank()}">
+            <div class="element">
+                <p th:text="${message}"></p>
+            </div>
+            <br>
+        </div>
+        <div th:if="${error!=null} and ${!error.isBlank()}">
+            <div class="element">
+                <p th:text="${error}"></p>
             </div>
             <br>
         </div>

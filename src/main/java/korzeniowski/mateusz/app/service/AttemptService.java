@@ -84,10 +84,10 @@ public class AttemptService {
 
     @Transactional
     public boolean createAttemptIfAvailable(Long userId, TestAttemptDto test) {
-        if (test.getStartTime().isAfter(LocalDateTime.now())) {
+        if (test.getStartTime() != null && test.getStartTime().isAfter(LocalDateTime.now())) {
             throw new DateTimeException("*test nie został jeszcze otwarty!");
         }
-        if (test.getEndTime().isBefore(LocalDateTime.now())) {
+        if (test.getEndTime() != null && test.getEndTime().isBefore(LocalDateTime.now())) {
             throw new DateTimeException("*test został już zamknięty!");
         }
         if (test.getMaxAttempts() != null) {
