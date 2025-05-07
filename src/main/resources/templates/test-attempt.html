@@ -10,6 +10,11 @@
 <div class="info-bar">
     <h2 th:text="'Test: ' + ${attempt.name}"></h2>
 </div>
+<div class="info-bar">
+    <a th:href="@{/test/{testId}/display(testId=${attempt.testId})}">Test</a>
+    <span>&nbsp>&nbsp</span>
+    <span>Podejście do testu</span>
+</div>
 <br><br>
 <div class="user-courses">
     <form th:action="@{'/attempt/' + ${attemptId} + '/question/' + ${questionNo} + '/save'}" method="post">

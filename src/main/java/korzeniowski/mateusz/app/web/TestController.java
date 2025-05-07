@@ -214,6 +214,7 @@ public class TestController {
             TestAttemptDto attempt = getOrLoadAttemptFromSession(session, attemptId);
             long testId = attempt.getTestId();
             attemptService.finishAttempt(attemptId, attempt);
+            session.removeAttribute("attempt_" + attemptId);
             redirectAttributes.addFlashAttribute("success", "Pomyślnie zakończono test.");
             return "redirect:/test/" + testId + "/display";
         } catch (NoSuchElementException e) {
