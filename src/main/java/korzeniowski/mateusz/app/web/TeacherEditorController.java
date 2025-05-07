@@ -57,13 +57,22 @@ public class TeacherEditorController {
         return "course-editor";
     }
 
+    private String returnCourseEditForm(long courseId, Model model, CourseDisplayDto course) {
+        model.addAttribute("id", courseId);
+        model.addAttribute("course", course);
+        model.addAttribute("maxModules", MAX_MODULES);
+        model.addAttribute("maxNumberOfTests", MAX_NUMBER_OF_TESTS);
+        model.addAttribute("maxNumberOfModuleItems", MAX_NUMBER_OF_MODULE_ITEMS);
+        return "course-editor";
+    }
+
     @PostMapping("/teacher/course/edit/{id}")
     public String editCourse(@PathVariable long id, @ModelAttribute("course") @Valid CourseDisplayDto course,
                              BindingResult bindingResult, RedirectAttributes redirectAttributes,
                              HttpSession session, Model model) {
         if (bindingResult.hasErrors()) {
             String message = "*pola z nazwą nie mogą być puste!";
-            model.addAttribute("message", message);
+            model.addAttribute("error", message);
             return showEditableCourse(id, model, session);
         }
         try {

@@ -1,6 +1,7 @@
 package korzeniowski.mateusz.app.web;
 
 import jakarta.servlet.http.HttpSession;
+import korzeniowski.mateusz.app.exceptions.AttemptOverviewDisabledException;
 import korzeniowski.mateusz.app.exceptions.EmptyQuestionBankException;
 import korzeniowski.mateusz.app.exceptions.ExceededTestAttemptsException;
 import korzeniowski.mateusz.app.model.course.test.Attempt;
@@ -218,5 +219,32 @@ public class TestController {
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/attempt/{attemptId}/overview/{questionNumber}")
+    public String overviewAttempt(@PathVariable("attemptId") long attemptId,
+                                  @PathVariable("questionNumber") int questionNumber,
+                                  HttpSession session,
+                                  Model model, RedirectAttributes redirectAttributes) {
+        Long testId = null;
+        try {
+            checkUserAccessToAttempt(session, attemptId);
+            testId = attemptService.findTestIdFromAttempt(attemptId);
+            TestAttemptDto attempt = attemptService.findAttemptOverview(attemptId);
+            if (questionNumber < 1) {
+                questionNumber = 1;
+            } else if (questionNumber > attempt.getNumberOfQuestions()) {
+                questionNumber = attempt.getNumberOfQuestions();
+            }
+            model.addAttribute("totalQuestionNumber", attempt.getNumberOfQuestions());
+            model.addAttribute("questionNo", questionNumber);
+            model.addAttribute("attempt", attempt);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (AttemptOverviewDisabledException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/test/" + testId + "/display";
+        }
+        return "attempt-overview";
     }
 }

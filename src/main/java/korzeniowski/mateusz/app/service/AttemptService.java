@@ -1,5 +1,7 @@
 package korzeniowski.mateusz.app.service;
 
+import korzeniowski.mateusz.app.exceptions.AttemptInProgressException;
+import korzeniowski.mateusz.app.exceptions.AttemptOverviewDisabledException;
 import korzeniowski.mateusz.app.exceptions.EmptyQuestionBankException;
 import korzeniowski.mateusz.app.exceptions.ExceededTestAttemptsException;
 import korzeniowski.mateusz.app.model.course.test.*;
@@ -316,6 +318,31 @@ public class AttemptService {
         }
         long elapsed = Duration.between(attempt.getAttemptStartTime(), LocalDateTime.now()).toSeconds();
         return attempt.getDuration() * 60 - elapsed;
+    }
+
+    public TestAttemptDto findAttemptOverview(Long attemptId) {
+        Optional<Attempt> attempt = attemptRepository.findById(attemptId);
+        if (attempt.isPresent()) {
+            if (attempt.get().getStatus() == AttemptStatus.IN_PROGRESS) {
+                throw new AttemptOverviewDisabledException("*nie można podejżeć aktywnej próby!");
+            }
+            TestAttemptDto dto = TestAttemptDto.fromJson(attempt.get().getAnswersGivenJson());
+            if (dto.getOverviewEnabled()) {
+                return dto;
+            } else {
+                throw new AttemptOverviewDisabledException("*podgląd próby nie jest dozwolony!");
+            }
+        }
+        throw new NoSuchElementException("*próba nie istnieje!");
+    }
+
+    public Long findTestIdFromAttempt(Long attemptId) {
+        Optional<Attempt> attempt = attemptRepository.findById(attemptId);
+        if (attempt.isPresent()) {
+            return attempt.get().getTest().getId();
+        } else {
+            throw new NoSuchElementException("*próba nie istnieje!");
+        }
     }
 
 }

@@ -20,6 +20,7 @@ public class TestAttemptDto {
     private LocalDateTime endTime;
     private Integer duration;
     private LocalDateTime attemptStartTime;
+    private Boolean overviewEnabled;
 
     private final static ObjectMapper objectMapper;
 
@@ -34,7 +35,8 @@ public class TestAttemptDto {
 
     public TestAttemptDto(Long testId, String name, Integer numberOfQuestions,
                           List<QuestionAttemptDto> questions, Integer maxAttempts,
-                          LocalDateTime startTime, LocalDateTime endTime, Integer duration) {
+                          LocalDateTime startTime, LocalDateTime endTime, Integer duration,
+                          Boolean overviewEnabled) {
         this.testId = testId;
         this.name = name;
         this.numberOfQuestions = numberOfQuestions;
@@ -43,6 +45,7 @@ public class TestAttemptDto {
         this.startTime = startTime;
         this.endTime = endTime;
         this.duration = duration;
+        this.overviewEnabled = overviewEnabled;
     }
 
     public String getName() {
@@ -117,11 +120,18 @@ public class TestAttemptDto {
         this.attemptStartTime = attemptStartTime;
     }
 
+    public Boolean getOverviewEnabled() {
+        return overviewEnabled;
+    }
+
+    public void setOverviewEnabled(Boolean overviewEnabled) {
+        this.overviewEnabled = overviewEnabled;
+    }
 
     public static TestAttemptDto map(Test test) {
         return new TestAttemptDto(test.getId(), test.getName(), test.getNumberOfQuestions(),
                 new ArrayList<>(), test.getMaxAttempts(), test.getStartTime(), test.getEndTime(),
-                test.getDuration());
+                test.getDuration(), test.getOverviewEnabled());
     }
 
     public String toJson() {

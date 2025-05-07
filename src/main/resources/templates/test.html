@@ -33,6 +33,12 @@
 </div>
 <br><br>
 <div class="user-courses">
+    <div th:if="${test.description != null} and ${!test.description.equals('<p><br></p>')}">
+        <div class="element">
+            <p th:utext="${test.description}"></p>
+        </div>
+        <br>
+    </div>
     <div class="test-info-wrapper">
         <div class="element" style="display: flex">
             <div class="test-info-element">
@@ -88,7 +94,7 @@
                     </td>
                     <td th:text="${attempt.mark}"></td>
                     <td>
-                        <p th:if="${test.overviewEnabled}">Przegląd</p>
+                        <a th:if="${test.overviewEnabled}" th:href="@{/attempt/{attemptId}/overview/1(attemptId=${attempt.id})}">Przegląd</a>
                         <p th:if="${!test.overviewEnabled}">Niedozwolony</p>
                     </td>
                 </tr>

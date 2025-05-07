@@ -11,12 +11,14 @@ public class AttemptDisplayDto {
     private String status;
     private Double score;
     private Double mark;
+    private Long id;
 
-    public AttemptDisplayDto(LocalDateTime endedAt, String status, Double score, Double mark) {
+    public AttemptDisplayDto(LocalDateTime endedAt, String status, Double score, Double mark, Long id) {
         this.endedAt = endedAt;
         this.status = status;
         this.score = score;
         this.mark = mark;
+        this.id = id;
     }
 
     public LocalDateTime getEndedAt() {
@@ -51,6 +53,14 @@ public class AttemptDisplayDto {
         this.mark = mark;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getFormattedEndedAt() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
                 "d MMMM yyyy, HH:mm", new Locale("pl", "PL"));
@@ -62,6 +72,7 @@ public class AttemptDisplayDto {
                 attempt.getEndedAt(),
                 attempt.getStatus().name(),
                 attempt.getScore(),
-                attempt.getMark());
+                attempt.getMark(),
+                attempt.getId());
     }
 }

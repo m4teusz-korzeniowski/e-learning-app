@@ -21,7 +21,7 @@
 </div>
 <br><br>
 <div class="user-courses">
-    <div th:if="${!course.description.equals('<p><br></p>')}">
+    <div th:if="${course.description != null} and ${!course.description.equals('<p><br></p>')}">
         <div class="element">
             <p th:utext="${course.description}">Opis kursu</p>
         </div>
