@@ -4,6 +4,17 @@ This is an educational web application for creating and managing courses, tests,
 
 ---
 
+## Screenshots
+
+### Test
+![Test](test_screenshot.png)
+### Attempt
+![Attempt](test_screenshot2.png)
+### Course edit
+![Course edit](course_edit_screenshot.png)
+### Users - admin panel
+![Users - admin panel](users_screenshot.png)
+
 ## 🚧 Work in Progress
 This application is still under development. Some features might be incomplete, and bugs may occur.
 
