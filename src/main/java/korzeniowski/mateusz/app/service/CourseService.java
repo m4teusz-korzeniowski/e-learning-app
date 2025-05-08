@@ -136,17 +136,36 @@ public class CourseService {
     }
 
     public Page<TeacherCourseDto> findTeacherCoursesContainKeyword(long teacherId, int pageNumber,
-                                                            int pageSize, String keyword) {
+                                                                   int pageSize, String keyword) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<TeacherCourseDto> courses;
         if (!keyword.isBlank()) {
             courses = courseRepository
-                    .findAllByCreatorIdAndKeyword(teacherId,keyword,pageable)
+                    .findAllByCreatorIdAndKeyword(teacherId, keyword, pageable)
                     .map(TeacherCourseDto::map);
         } else {
             courses = courseRepository
                     .findAllByCreatorId(teacherId, pageable)
                     .map(TeacherCourseDto::map);
+        }
+        return courses;
+    }
+
+    public Page<CourseNameDto> findUserCourses(long userId, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return courseRepository.findAllByUserId(userId, pageable).map(CourseNameDto::map);
+    }
+
+    public Page<CourseNameDto> findUserCoursesContainKeyword(long userId, int pageNumber,
+                                                             int pageSize, String keyword) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<CourseNameDto> courses;
+        if (!keyword.isBlank()) {
+            courses = courseRepository
+                    .findAllByUserIdAndKeyword(userId, keyword, pageable)
+                    .map(CourseNameDto::map);
+        } else {
+            return courseRepository.findAllByUserId(userId, pageable).map(CourseNameDto::map);
         }
         return courses;
     }

@@ -10,7 +10,7 @@
 <header th:replace="~{fragments :: navbar}"></header>
 <div class="info-bar">
     <div>
-        <h2>Profil Użytkownika</h2>
+        <h2 th:text="'Profil użytkownika: ' + ${user.getFullName()}">Profil Użytkownika</h2>
     </div>
 </div>
 <div class="info-bar">
@@ -20,17 +20,19 @@
     <span>&nbsp>&nbsp</span>
     <span>Użytkownicy</span>
     <span>&nbsp>&nbsp</span>
-    <a th:href="@{/user/{id}(id=${user.id})}" th:text="${user.getFullName()}">Nazwa kursu</a>
+    <a th:href="@{/user/{id}(id=${user.id})}" th:text="${user.getFullName()}"></a>
 </div>
 <br><br>
 <div class="user-courses">
     <div class="element">
-        <h3 th:text="${user.getFullName()}"></h3>
-    </div>
-    <br>
-    <div class="element">
-        <p>E-mail:</p>
-        <p th:text="${user.email}"></p>
+        <p th:text="'E-mail: ' + ${user.email}">E-mail:</p>
+        <a
+                th:href="@{/email/prepare-user(userId=${user.id})}"
+                target="_blank"
+        >
+            <i class="fa-solid fa-envelope"></i>
+            Wyślij wiadomość:
+        </a>
     </div>
 </div>
 <br><br>

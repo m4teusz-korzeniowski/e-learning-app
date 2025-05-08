@@ -43,10 +43,30 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query(value = "select course from Course course where" +
             " course.creatorId = :teacherId" +
             " and upper(course.name) like upper(concat('%', :keyword, '%'))",
-    countQuery = "select count(course) from Course course where" +
-            " course.creatorId = :teacherId" +
-            " and upper(course.name) like upper(concat('%', :keyword, '%'))")
+            countQuery = "select count(course) from Course course where" +
+                    " course.creatorId = :teacherId" +
+                    " and upper(course.name) like upper(concat('%', :keyword, '%'))")
     Page<Course> findAllByCreatorIdAndKeyword(@Param("teacherId") Long teacherId,
                                               @Param("keyword") String keyword,
                                               Pageable pageable);
+
+    @Query(value = "select course from Course course" +
+            " join course.users user" +
+            " where user.id = :userId",
+            countQuery = "select count(course) from Course course" +
+                    " join course.users user" +
+                    " where user.id = :userId")
+    Page<Course> findAllByUserId(@Param("userId") Long userId, Pageable pageable);
+
+    @Query(value = "select course from Course course" +
+            " join course.users user" +
+            " where user.id = :userId" +
+            " and upper(course.name) like upper(concat('%',:keyword, '%'))",
+            countQuery = "select count(course) from Course course" +
+                    " join course.users user" +
+                    " where user.id = :userId" +
+                    " and upper(course.name) like upper(concat('%',:keyword, '%'))")
+    Page<Course> findAllByUserIdAndKeyword(@Param("userId") Long userId,
+                                           @Param("keyword") String keyword,
+                                           Pageable pageable);
 }
