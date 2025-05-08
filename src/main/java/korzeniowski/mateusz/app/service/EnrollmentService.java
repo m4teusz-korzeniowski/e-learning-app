@@ -1,13 +1,10 @@
 package korzeniowski.mateusz.app.service;
 
-import korzeniowski.mateusz.app.exceptions.StudentRoleMissingException;
 import korzeniowski.mateusz.app.model.enroll.Enrollment;
 import korzeniowski.mateusz.app.model.user.User;
-import korzeniowski.mateusz.app.model.user.UserRole;
 import korzeniowski.mateusz.app.model.user.dto.UserDisplayDto;
 import korzeniowski.mateusz.app.repository.EnrollmentRepository;
 import korzeniowski.mateusz.app.repository.UserRepository;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,11 +36,11 @@ public class EnrollmentService {
     public List<UserDisplayDto> findUsersNotEnrolledForCourse(Long courseId, String keyword) {
         Stream<UserDisplayDto> stream = userRepository.findAllByKeyword(keyword).stream().map(UserDisplayDto::map);
         List<UserDisplayDto> users = new java.util.ArrayList<>(stream.toList());
-        users.removeIf(user -> checkIfUserIsEnrolledForCourse(user.getId(), courseId));
+        users.removeIf(user -> isUserEnrolledToCourse(user.getId(), courseId));
         return users;
     }
     
-    private boolean checkIfUserIsEnrolledForCourse(Long userId, Long courseId) {
+    public boolean isUserEnrolledToCourse(Long userId, Long courseId) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
             return enrollmentRepository.findByUserIdAndCourseId(userId, courseId).isPresent();

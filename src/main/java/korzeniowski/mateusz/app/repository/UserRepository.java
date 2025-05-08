@@ -82,4 +82,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
             " where role.name = :roleName and user.id = :userId")
     Optional<String> findUserByRoleAndId(@Param("userId") Long userId, @Param("roleName") String roleName);
 
+    @Query("select concat(user.firstName,' ', user.lastName) from User user" +
+            " where user.id = :userId")
+    Optional<String> findUserFullNameById(@Param("userId") Long userId);
+
 }

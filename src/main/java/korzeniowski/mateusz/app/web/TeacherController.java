@@ -6,10 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import korzeniowski.mateusz.app.exceptions.EmptyQuestionBankException;
 import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.AttemptState;
-import korzeniowski.mateusz.app.model.course.test.dto.AnswerAttemptDto;
-import korzeniowski.mateusz.app.model.course.test.dto.QuestionAttemptDto;
-import korzeniowski.mateusz.app.model.course.test.dto.TestAttemptDto;
-import korzeniowski.mateusz.app.model.course.test.dto.TestDisplayDto;
+import korzeniowski.mateusz.app.model.course.test.dto.*;
 import korzeniowski.mateusz.app.model.user.dto.UserDisplayDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
 import korzeniowski.mateusz.app.service.*;
@@ -34,15 +31,15 @@ public class TeacherController {
     private final AccessService accessService;
     private final UserService userService;
     private final static int PAGE_SIZE = 10;
-    private final TestService testService;
     private final AttemptService attemptService;
+    private final EnrollmentService enrollmentService;
 
-    public TeacherController(CourseService courseService, AccessService accessService, UserService userService, TestService testService, AttemptService attemptService) {
+    public TeacherController(CourseService courseService, AccessService accessService, UserService userService , AttemptService attemptService, EnrollmentService enrollmentService) {
         this.courseService = courseService;
         this.accessService = accessService;
         this.userService = userService;
-        this.testService = testService;
         this.attemptService = attemptService;
+        this.enrollmentService = enrollmentService;
     }
 
     @GetMapping("/teacher")
@@ -116,5 +113,34 @@ public class TeacherController {
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
         return "course-participants";
+    }
+
+    @GetMapping("/teacher/course/{courseId}/user/{userId}/results")
+    public String showUserResults(@PathVariable("courseId") long courseId,
+                                  @PathVariable("userId") long userId, Model model,
+                                  HttpSession session) {
+
+        String courseName = courseService.findCourseNameById(courseId);
+        UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
+        Long creatorId = courseService.findCreatorIdById(courseId);
+        if (courseName == null || courseName.isBlank() || creatorId == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        if (accessService.hasLoggedInTeacherAccessToTheCourse(creatorId, userInfo.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+        if (!enrollmentService.isUserEnrolledToCourse(userId, courseId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+        List<UserResultsDto> results = attemptService.findUserResultsByCourseId(courseId, userId);
+        try {
+            String userFullName = userService.findUserFullNameById(userId);
+            model.addAttribute("userFullName", userFullName);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        model.addAttribute("userResults", results);
+        model.addAttribute("courseName", courseName);
+        return "user-results";
     }
 }

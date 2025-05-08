@@ -73,9 +73,19 @@ public interface AttemptRepository extends JpaRepository<Attempt, Long> {
     Boolean hasCourseActiveAttempt(@Param("courseId") Long courseId, @Param("status") AttemptStatus status);
 
     @Query("select attempt.id from Attempt attempt" +
-            " join attempt.test test"+
+            " join attempt.test test" +
             " where attempt.status = :status" +
             " and attempt.startedAt is not null" +
             " and test.duration is not null")
     List<Long> findIdsByStatus(@Param("status") AttemptStatus status);
+
+    @Query("select attempt from Attempt attempt" +
+            " join attempt.test test" +
+            " join test.module module" +
+            " join module.course course" +
+            " join attempt.user user" +
+            " where user.id = :userId and course.id = :courseId and attempt.status = :status")
+    List<Attempt> findAllUserAttemptsByCourseId(@Param("userId") Long userId,
+                                                @Param("courseId") Long courseId,
+                                                @Param("status") AttemptStatus status);
 }

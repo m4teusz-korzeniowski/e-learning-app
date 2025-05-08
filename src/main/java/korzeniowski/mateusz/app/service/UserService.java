@@ -68,11 +68,11 @@ public class UserService {
     }
 
     public String findUserFullNameById(Long id) {
-        Optional<UserNameDto> user = userRepository.findById(id).map(UserNameDto::map);
-        if (user.isPresent()) {
-            return user.get().getFirstName() + " " + user.get().getLastName();
+        Optional<String> fullName = userRepository.findUserFullNameById(id);
+        if (fullName.isPresent()) {
+            return fullName.get();
         } else {
-            throw new UsernameNotFoundException(String.format("Username with ID %s not found", id));
+            throw new NoSuchElementException("User not found");
         }
     }
 

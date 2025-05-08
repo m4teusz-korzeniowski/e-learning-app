@@ -5,10 +5,7 @@ import korzeniowski.mateusz.app.exceptions.AttemptOverviewDisabledException;
 import korzeniowski.mateusz.app.exceptions.EmptyQuestionBankException;
 import korzeniowski.mateusz.app.exceptions.ExceededTestAttemptsException;
 import korzeniowski.mateusz.app.model.course.test.*;
-import korzeniowski.mateusz.app.model.course.test.dto.AnswerAttemptDto;
-import korzeniowski.mateusz.app.model.course.test.dto.AttemptDisplayDto;
-import korzeniowski.mateusz.app.model.course.test.dto.QuestionAttemptDto;
-import korzeniowski.mateusz.app.model.course.test.dto.TestAttemptDto;
+import korzeniowski.mateusz.app.model.course.test.dto.*;
 import korzeniowski.mateusz.app.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -343,6 +340,12 @@ public class AttemptService {
         } else {
             throw new NoSuchElementException("*próba nie istnieje!");
         }
+    }
+
+    public List<UserResultsDto> findUserResultsByCourseId(Long courseId, Long userId) {
+        List<Attempt> userAttempts = attemptRepository
+                .findAllUserAttemptsByCourseId(userId, courseId, AttemptStatus.COMPLETED);
+        return UserResultsDto.map(userAttempts);
     }
 
 }

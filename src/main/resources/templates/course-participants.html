@@ -45,6 +45,8 @@
                 <td th:text="${user.firstName}"></td>
                 <td th:text="${user.email}"></td>
                 <td>
+                    <a th:href="@{/teacher/course/{courseId}/user/{userId}/results
+                    (courseId=${courseId},userId=${user.id})}" ><button>Wyniki</button></a>
                     <a th:href="@{/email/prepare-user(userId=${user.id})}" target="_blank">
                         <i class="fa-solid fa-envelope"></i>
                     </a>
