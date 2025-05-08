@@ -6,6 +6,7 @@ import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseDto;
 import korzeniowski.mateusz.app.model.course.module.Module;
+import korzeniowski.mateusz.app.model.user.dto.UserDisplayDto;
 import korzeniowski.mateusz.app.repository.CourseRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -127,5 +128,26 @@ public class CourseService {
 
     public Long findCreatorIdById(Long courseId) {
         return courseRepository.findCreatorIdByCourseId(courseId);
+    }
+
+    public Page<TeacherCourseDto> findTeacherCourses(long teacherId, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return courseRepository.findAllByCreatorId(teacherId, pageable).map(TeacherCourseDto::map);
+    }
+
+    public Page<TeacherCourseDto> findTeacherCoursesContainKeyword(long teacherId, int pageNumber,
+                                                            int pageSize, String keyword) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<TeacherCourseDto> courses;
+        if (!keyword.isBlank()) {
+            courses = courseRepository
+                    .findAllByCreatorIdAndKeyword(teacherId,keyword,pageable)
+                    .map(TeacherCourseDto::map);
+        } else {
+            courses = courseRepository
+                    .findAllByCreatorId(teacherId, pageable)
+                    .map(TeacherCourseDto::map);
+        }
+        return courses;
     }
 }

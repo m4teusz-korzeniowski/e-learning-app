@@ -1,11 +1,7 @@
 package korzeniowski.mateusz.app.web;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import korzeniowski.mateusz.app.exceptions.EmptyQuestionBankException;
 import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
-import korzeniowski.mateusz.app.model.course.test.AttemptState;
 import korzeniowski.mateusz.app.model.course.test.dto.*;
 import korzeniowski.mateusz.app.model.user.dto.UserDisplayDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
@@ -17,20 +13,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Controller
 public class TeacherController {
+
+    private final static int PAGE_SIZE = 10;
+    private final static int COURSE_PER_PAGE = 1;
+
     private final CourseService courseService;
     private final AccessService accessService;
     private final UserService userService;
-    private final static int PAGE_SIZE = 10;
     private final AttemptService attemptService;
     private final EnrollmentService enrollmentService;
 
@@ -43,16 +39,38 @@ public class TeacherController {
     }
 
     @GetMapping("/teacher")
-    public String teacherHome(Model model) {
+    public String teacherHome() {
         return "teacher";
     }
 
     @GetMapping("/teacher/course")
-    public String teacherCourse(Model model, HttpSession session) {
+    public String teacherCourse(Model model, HttpSession session,
+                                @RequestParam(value = "keyword", required = false) String keyword,
+                                @RequestParam(value = "page",required = false) Integer currentPage) {
         UserSessionDto user = (UserSessionDto) session.getAttribute("userInfo");
         Long teacherId = user.getId();
-        List<TeacherCourseDto> courses = courseService.findAllCoursesByTeacherId(teacherId);
-        model.addAttribute("courses", courses);
+        Page<TeacherCourseDto> page;
+        if (currentPage != null) {
+            if (currentPage < 0) {
+                currentPage = 0;
+            }
+            if (keyword != null) {
+                page = courseService.findTeacherCoursesContainKeyword(teacherId, currentPage, COURSE_PER_PAGE, keyword);
+            } else {
+                page = courseService.findTeacherCourses(teacherId, currentPage, COURSE_PER_PAGE);
+            }
+        } else {
+            if (keyword != null) {
+                page = courseService.findTeacherCoursesContainKeyword(teacherId, 0, COURSE_PER_PAGE, keyword);
+            } else {
+                page = courseService.findTeacherCourses(teacherId, 0, COURSE_PER_PAGE);
+            }
+        }
+        model.addAttribute("courses", page.getContent());
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
         return "teacher-course";
     }
 

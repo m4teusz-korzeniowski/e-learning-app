@@ -37,7 +37,8 @@ public interface AttemptRepository extends JpaRepository<Attempt, Long> {
             " join attempt.test test" +
             " join test.module module" +
             " join attempt.user user" +
-            " where attempt.id = :attemptId and user.id = :userId and module.visible = true")
+            " where attempt.id = :attemptId and user.id = :userId and module.visible = true" +
+            " and test.overviewEnabled = true")
     Boolean hasUserAccessToAttempt(@Param("attemptId") Long attemptId, @Param("userId") Long userId);
 
 

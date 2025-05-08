@@ -30,10 +30,6 @@
     </div>
     <br>
     <div class="element">
-        <a th:href="@{/test/{testId}/display(testId=${attempt.testId})}">Powrót</a>
-    </div>
-    <br>
-    <div class="element">
         <a class="page-span"
            th:each="number : ${#numbers.sequence(1, totalQuestionNumber)}"
            th:href="@{/attempt/{attemptId}/overview/{questionId}(attemptId=${attemptId}, questionId=${number})}"

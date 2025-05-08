@@ -19,6 +19,13 @@
 </div>
 <br><br>
 <div class="user-courses">
+    <div class="element">
+        <form th:action="@{/teacher/course}" method="get">
+            <input name="keyword" type="text" th:value="${keyword}" placeholder="Wyszukaj...">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+    <br>
     <div th:each="course : ${courses}">
         <div class="element">
             <p th:text="${course.name}">Nazwa kursu</p>
@@ -27,6 +34,14 @@
             <p><a th:href="@{/teacher/course/{id}/display(id=${course.id})}">Podgląd</a> </p>
         </div>
         <br>
+    </div>
+    <div class="element">
+        <a class="page-span"
+           th:each="pageElem: ${#numbers.sequence(1,totalPages)}"
+           th:if="${pageElem > 0}"
+           th:href="@{/teacher/course(keyword=${keyword},page=${pageElem}-1)}"
+           th:text="${pageElem}"
+        ></a>
     </div>
 </div>
 </body>

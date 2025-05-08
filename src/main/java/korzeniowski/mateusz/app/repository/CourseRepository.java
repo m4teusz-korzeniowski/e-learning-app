@@ -37,4 +37,16 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Long findCreatorIdByCourseId(@Param("courseId") Long courseId);
 
     void deleteAllByCreatorId(Long id);
+
+    Page<Course> findAllByCreatorId(Long teacherId, Pageable pageable);
+
+    @Query(value = "select course from Course course where" +
+            " course.creatorId = :teacherId" +
+            " and upper(course.name) like upper(concat('%', :keyword, '%'))",
+    countQuery = "select count(course) from Course course where" +
+            " course.creatorId = :teacherId" +
+            " and upper(course.name) like upper(concat('%', :keyword, '%'))")
+    Page<Course> findAllByCreatorIdAndKeyword(@Param("teacherId") Long teacherId,
+                                              @Param("keyword") String keyword,
+                                              Pageable pageable);
 }
