@@ -50,7 +50,7 @@ public class TeacherEnrollController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         List<UserDisplayDto> users = new ArrayList<>();
-        if (keyword != null) {
+        if (keyword != null && !keyword.isEmpty()) {
             users = enrollmentService.findUsersNotEnrolledForCourse(id, keyword);
         }
         model.addAttribute("users", users);
@@ -72,7 +72,7 @@ public class TeacherEnrollController {
     @PostMapping("/teacher/course-enroll/{id}")
     public String enrollUser(@PathVariable long id, @ModelAttribute("enroll") TeacherCourseEnrollDto enroll,
                              BindingResult bindingResult, RedirectAttributes redirectAttributes,
-                             @ModelAttribute("keyword") String keyword,
+                             @RequestParam(value = "keyword", required = false) String keyword,
                              Model model, HttpSession session) {
         if (bindingResult.hasErrors()) {
             return enrollUserForm(id, enroll, keyword, model, session);

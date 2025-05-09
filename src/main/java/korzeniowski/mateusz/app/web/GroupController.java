@@ -74,7 +74,7 @@ public class GroupController {
                                       @RequestParam(name = "keyword", required = false) String keyword,
                                       Model model) {
         List<UserDisplayDto> users = new ArrayList<>();
-        if (keyword != null) {
+        if (keyword != null && !keyword.isEmpty()) {
             users = userService.findUsersWithoutGroupContainKeyword(keyword);
         }
         List<GroupDto> groups = groupService.findAllGroups();
@@ -87,7 +87,7 @@ public class GroupController {
     @PostMapping("/admin/groups/add")
     public String enrollUsersToGroup(@ModelAttribute("enroll") UserGroupEnrollmentDto enroll,
                                      BindingResult bindingResult,
-                                     @ModelAttribute("keyword") String keyword,
+                                     @RequestParam(value = "keyword", required = false) String keyword,
                                      Model model,
                                      RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {

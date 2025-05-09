@@ -113,7 +113,11 @@ body {
 }
 
 #editor {
-    min-height: 250px;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    min-height: 200px;
+    background-color: white;
+    margin-bottom: 1rem;
 }
 
 .answer-edit {

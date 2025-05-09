@@ -250,7 +250,7 @@ public class UserService {
 
     public List<UserDisplayDto> findUsersWithoutGroupContainKeyword(String keyword) {
         Stream<UserDisplayDto> stream = userRepository
-                .findAllStudentsWithoutGroupAndKeyword(keyword).stream().map(UserDisplayDto::map);
+                .findAllStudentsWithKeyword(keyword).stream().map(UserDisplayDto::map);
         return stream.toList();
     }
 

@@ -69,4 +69,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Page<Course> findAllByUserIdAndKeyword(@Param("userId") Long userId,
                                            @Param("keyword") String keyword,
                                            Pageable pageable);
+
+    Boolean existsByCreatorId(Long creatorId);
 }

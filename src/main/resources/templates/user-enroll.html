@@ -34,11 +34,11 @@
     <br>
     <form action="#" th:action="@{/teacher/course-enroll/{id}(id=${enroll.courseId})}" method="post"
           th:object="${enroll}">
+        <input type="hidden" name="keyword" th:value="${keyword}" />
         <div class="element">
             <div>
                 <span>Użytkownicy do zapisania: </span>
             </div>
-            <br>
             <label>
                 <input type="hidden" th:field="*{courseName}" th:value="*{courseName}">
             </label>
@@ -48,12 +48,13 @@
                 </label>
                 <br>
             </div>
-            <div th:if="${#fields.hasAnyErrors()}">
-                <p th:each="err: ${#fields.allErrors()}" th:text="${err}"></p>
-            </div>
-            <br>
         </div>
         <br>
+        <div  th:if="${#fields.hasAnyErrors()}"class="element">
+            <div>
+                <p th:each="err: ${#fields.allErrors()}" th:text="${err}"></p>
+            </div>
+        </div>
         <div class="element" style="visibility: hidden">
             <div class="submit-button">
                 <button type="submit">Zapisz użytkownika</button>

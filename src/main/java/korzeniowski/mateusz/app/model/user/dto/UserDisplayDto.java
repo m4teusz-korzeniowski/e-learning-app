@@ -78,7 +78,7 @@ public class UserDisplayDto {
                     user.getLastName(), user.getEmail(), role, user.getGroup().getName());
         } else {
             return new UserDisplayDto(user.getId(), user.getFirstName(),
-                    user.getLastName(), user.getEmail(), role, null);
+                    user.getLastName(), user.getEmail(), role, "Brak");
         }
     }
 }

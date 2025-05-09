@@ -47,9 +47,12 @@ public class CourseService {
 
     @Transactional
     public void createCourse(CourseCreationDto courseCreationDto) {
+        if (courseCreationDto.getCreatorId() == null) {
+            throw new NoSuchElementException("*wybierz co najmniej jednego użytkownika!");
+        }
         Course course = new Course();
         course.setName(courseCreationDto.getName());
-        course.setDescription(courseCreationDto.getDescription());
+        course.setDescription("<p><br></p>");
         course.setCreatorId(courseCreationDto.getCreatorId());
         courseRepository.save(course);
     }
@@ -73,8 +76,8 @@ public class CourseService {
     }
 
     @Transactional
-    public void removeCoursesByCreatorId(Long id) {
-        courseRepository.deleteAllByCreatorId(id);
+    public void removeCoursesByCreatorId(Long creatorId) {
+        courseRepository.deleteAllByCreatorId(creatorId);
     }
 
     @Transactional
@@ -168,5 +171,9 @@ public class CourseService {
             return courseRepository.findAllByUserId(userId, pageable).map(CourseNameDto::map);
         }
         return courses;
+    }
+
+    public Boolean hasTeacherAnyActiveCourses(Long creatorId) {
+        return courseRepository.existsByCreatorId(creatorId);
     }
 }

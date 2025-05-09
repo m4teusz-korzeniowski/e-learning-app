@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 @Controller
@@ -55,6 +56,9 @@ public class CourseCreationController {
             courseService.createCourse(course);
         } catch (DataIntegrityViolationException e) {
             bindingResult.rejectValue("name", "error.name", "*kurs już istnieje!");
+            return courseCreation(course, keyword, model);
+        } catch (NoSuchElementException e) {
+            bindingResult.rejectValue("name", "error.name", e.getMessage());
             return courseCreation(course, keyword, model);
         }
         redirectAttributes.addFlashAttribute(

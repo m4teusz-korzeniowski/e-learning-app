@@ -29,11 +29,13 @@
     </div>
     <br>
     <form action="#" th:action="@{/admin/groups/add}" method="post" th:object="${enroll}">
+        <input type="hidden" name="keyword" th:value="${keyword}" />
         <div class="element">
+            <input type="hidden" name="keyword" th:value="${keyword}" />
             <p>Wybierz użytkowników:</p>
             <div th:each="user: ${users}" th:if="${user.role.equals('STUDENT')}">
                 <input type="checkbox" th:field="*{userEmails}" th:value="${user.email}">
-                <label th:text="${user.lastName +' '+ user.firstName +' ' + user.email}"></label>
+                <label th:text="${user.lastName +' '+ user.firstName +' ' + user.email + user.group}"></label>
                 <br>
             </div>
         </div>
@@ -44,11 +46,13 @@
             <datalist id="groups">
                 <option th:each="group: ${groups}" th:value="${group.name}"></option>
             </datalist>
-            <div th:if="${#fields.hasAnyErrors()}">
+        </div>
+        <br>
+        <div th:if="${#fields.hasAnyErrors()}" class="element">
+            <div>
                 <p th:each="err: ${#fields.allErrors()}" th:text="${err}"></p>
             </div>
         </div>
-        <br>
         <div class="element" style="visibility: hidden">
             <div class="submit-button">
                 <button type="submit">Dodaj do grupy</button>

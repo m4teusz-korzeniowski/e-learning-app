@@ -22,7 +22,7 @@ import java.util.Optional;
 @Controller
 public class AdminUserController {
     private final UserService userService;
-    private static final int PAGE_SIZE = 4;
+    private static final int PAGE_SIZE = 10;
     private final CourseService courseService;
 
     public AdminUserController(UserService userService, CourseService courseService) {
@@ -32,8 +32,7 @@ public class AdminUserController {
 
     @GetMapping("/admin/users")
     public String showUsers(Model model, @RequestParam(value = "keyword", required = false) String keyword,
-                            @RequestParam(value = "page", required = false) Integer currentPage,
-                            @ModelAttribute("deleteMessage") String deleteMessage) {
+                            @RequestParam(value = "page", required = false) Integer currentPage) {
         Page<UserDisplayDto> page;
         if (currentPage != null) {
             if (currentPage < 0) {
@@ -65,18 +64,21 @@ public class AdminUserController {
         StringBuilder message = new StringBuilder();
         UserSessionDto userInfo = (UserSessionDto) session.getAttribute("userInfo");
         if (!userService.ifUserExists(userId)) {
-            message.append(String.format("Użytkownik o ID %d nie istnieje!", userId));
+            message.append(String.format("*użytkownik o ID %d nie istnieje!", userId));
         } else if (isUserNotOtherAdmin(userId, userInfo.getId())) {
-            if (isUserCourseCreator(userId)) {
-                //usuwanie wszystkich kursów usuwanego nauczyciela ?!
-                courseService.removeCoursesByCreatorId(userId);
+            if (isUserTeacherWithActiveCourses(userId)) {
+                message.append("*nie możesz usunąć nauczyciela, który ma przypisane kursy!");
+                redirectAttributes.addFlashAttribute("error", message.toString());
+                return "redirect:/admin/users";
             }
             userService.removeUser(userId);
             message.append(String.format("Usunięto użytkownika o ID %d!", userId));
+            redirectAttributes.addFlashAttribute("success", message.toString());
+            return "redirect:/admin/users";
         } else {
-            message.append("Nie możesz usunąć użytkownika, który jest adminem!");
+            message.append("*nie możesz usunąć użytkownika, który jest adminem!");
         }
-        redirectAttributes.addFlashAttribute("deleteMessage", message.toString());
+        redirectAttributes.addFlashAttribute("error", message.toString());
         return "redirect:/admin/users";
     }
 
@@ -86,11 +88,13 @@ public class AdminUserController {
         return user.map(value -> !value.getId().equals(authenticatedUserId)).orElse(false);
     }
 
-    private boolean isUserCourseCreator(long userId) {
+    private boolean isUserTeacherWithActiveCourses(long userId) {
         Optional<User> user = userService.findUserById(userId);
         if (user.isPresent()) {
             UserRole role = user.get().getUserRoles().stream().toList().get(0);
-            return role.getName().equals("TEACHER");
+            if (role.getName().equals("TEACHER")) {
+                return courseService.hasTeacherAnyActiveCourses(userId);
+            }
         }
         return false;
     }

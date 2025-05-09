@@ -33,70 +33,83 @@
             <input type="hidden" th:field="*{courseId}">
             <input type="hidden" th:field="*{testId}">
             <input type="hidden" th:field="*{id}">
-            <label for="description">Treść pytania:</label>
-            <p></p>
-            <textarea id="description" style="display: none" th:field="*{description}"
-                      name="description"></textarea>
-            <div id="editor"></div>
-            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
-            <p>Maksymalna ilość punktów za pytanie:</p>
-            <input type="number" th:field="*{score}">
-            <p th:if="${#fields.hasErrors('score')}" th:errors="*{score}"></p>
-            <p>Kategoria:</p>
-            <input type="text" th:field="*{category}">
-            <p th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></p>
-            <p>Wybierz typ pytania:</p>
-            <select th:field="*{type}" id="type">
+
+            <label for="description" class="form-label">Treść pytania:</label>
+            <textarea id="description" class="form-control mb-3" style="display: none"
+                      th:field="*{description}" name="description"></textarea>
+            <div id="editor" class="mb-3"></div>
+
+            <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback d-block mb-3"
+                 th:errors="*{description}"></div>
+
+            <label class="form-label mt-2">Maksymalna ilość punktów za pytanie:</label>
+            <input type="number" class="form-control mb-3" th:field="*{score}">
+            <div th:if="${#fields.hasErrors('score')}" class="invalid-feedback d-block mb-3"
+                 th:errors="*{score}"></div>
+
+            <label class="form-label">Kategoria:</label>
+            <input type="text" class="form-control mb-3" th:field="*{category}">
+            <div th:if="${#fields.hasErrors('category')}" class="invalid-feedback d-block mb-3"
+                 th:errors="*{category}"></div>
+
+            <label class="form-label">Wybierz typ pytania:</label>
+            <select class="form-select mb-3" th:field="*{type}" id="type">
                 <option th:value="'SINGLE_CHOICE'">Pojedyńczy wybór</option>
                 <option th:value="'MULTIPLE_CHOICE'">Wielokrotny wybór</option>
             </select>
         </div>
+
         <br>
+
         <div class="element">
-            <p>Odpowiedzi na pytanie:</p>
+            <label class="form-label">Odpowiedzi na pytanie:</label>
             <div class="answer-edit" th:each="anwers,iter : *{answers}">
-                <span>Prawidłowa:</span>
-                <input type="checkbox" th:field="*{answers[__${iter.index}__].correct}">
-                <p></p>
-                <p>Treść odpowiedzi:</p>
-                <input type="text" th:field="*{answers[__${iter.index}__].content}"/>
-                <p th:if="${#fields.hasErrors('answers[' + iter.index + '].content')}"
-                   th:errors="*{answers[__${iter.index}__].content}"></p>
+                <div class="form-check mb-2">
+                    <input type="checkbox" class="form-check-input"
+                           th:field="*{answers[__${iter.index}__].correct}" id="correct__${iter.index}__">
+                    <label class="form-check-label" th:for="'correct__' + ${iter.index}">Prawidłowa</label>
+                </div>
+
+                <label class="form-label">Treść odpowiedzi:</label>
+                <input type="text" class="form-control mb-2"
+                       th:field="*{answers[__${iter.index}__].content}">
+                    <div th:if="${#fields.hasErrors('answers[' + iter.index + '].content')}"
+                         class="invalid-feedback d-block mb-3"
+                         th:errors="*{answers[__${iter.index}__].content}">
+                    </div>
+
                 <input type="hidden" th:field="*{answers[__${iter.index}__].id}"/>
-                <p>
-                    <a th:href="@{/teacher/answer/{id}/remove-answer(id=*{answers[__${iter.index}__].id})}">
-                        <button type="button">Usuń</button>
-                    </a>
-                </p>
-                <p></p>
-            </div>
-            <div th:if="${question.answers.size() < maxNumberOfAnswers}">
-                <a th:href="@{/teacher/question/{id}/add-answer(id=${question.id})}">
-                    <button type="button">Dodaj odpowiedź</button>
+                <a class="btn btn-danger btn-sm"
+                   th:href="@{/teacher/answer/{id}/remove-answer(id=*{answers[__${iter.index}__].id})}">
+                    Usuń
                 </a>
             </div>
-            <br>
+
+            <div th:if="${question.answers.size() < maxNumberOfAnswers}" class="mt-1">
+                <a class="btn btn-primary btn-sm" th:href="@{/teacher/question/{id}/add-answer(id=${question.id})}">
+                    Dodaj odpowiedź
+                </a>
+            </div>
         </div>
+
         <br>
-        <div th:if="${message!=null} and ${!message.isBlank()}">
-            <div class="element">
-                <p th:text="${message}"></p>
+
+            <div th:if="${message!=null} and ${!message.isBlank()}"
+                    class="alert alert-success mt-2" th:text="${message}">
             </div>
-            <br>
+
+        <div th:if="${error!=null} and ${!error.isBlank()}" class="element">
+            <div class="alert alert-danger mt-2" th:text="${error}"></div>
         </div>
-        <div th:if="${error!=null} and ${!error.isBlank()}">
-            <div class="element">
-                <p th:text="${error}"></p>
-            </div>
-            <br>
-        </div>
+
+
         <div class="element" style="visibility: hidden">
             <div class="submit-button">
-                <button type="submit">Zapisz zmiany</button>
+                <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
             </div>
         </div>
-        <br>
     </form>
+
 </div>
 <br><br>
 <script th:inline="javascript">

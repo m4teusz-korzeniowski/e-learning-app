@@ -29,34 +29,22 @@
     </div>
     <form method="post" action="#" th:action="@{/admin/users/edit/{id}(id=${id})}" th:object="${user}">
         <div class="element">
-            <label>
-                <p>Imię:</p>
-                <input type="text" th:field="*{firstName}" th:value="*{firstName}">
-                <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Błędna nazwa</p>
-            </label>
-            <label>
-                <p>Nazwisko:</p>
-                <input type="text" th:field="*{lastName}" th:value="*{lastName}">
-                <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Błędna nazwa</p>
-            </label>
-            <label>
-                <p>E-mail:</p>
-                <input type="text" th:field="*{email}" th:value="*{email}">
-                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Błędna nazwa</p>
-            </label>
-            <label>
-                <p>Pesel:</p>
-                <input type="text" th:field="*{pesel}" th:value="*{pesel}">
-                <p th:if="${#fields.hasErrors('pesel')}" th:errors="*{pesel}">Błędna nazwa</p>
-            </label>
-            <label>
-                <p>Grupa:</p>
-                <input disabled type="text" th:field="*{group}" th:value="*{group}">
-            </label>
-            <label>
-                <p>Rola:</p>
-                <input type="hidden" th:field="*{role}" th:value="*{role}">
-            </label>
+            <p>Imię:</p>
+            <input type="text" th:field="*{firstName}" th:value="*{firstName}">
+            <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Błędna nazwa</p>
+            <p>Nazwisko:</p>
+            <input type="text" th:field="*{lastName}" th:value="*{lastName}">
+            <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Błędna nazwa</p>
+            <p>E-mail:</p>
+            <input type="text" th:field="*{email}" th:value="*{email}">
+            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Błędna nazwa</p>
+            <p>Pesel:</p>
+            <input type="text" th:field="*{pesel}" th:value="*{pesel}">
+            <p th:if="${#fields.hasErrors('pesel')}" th:errors="*{pesel}">Błędna nazwa</p>
+            <p>Grupa:</p>
+            <input disabled type="text" th:field="*{group}" th:value="*{group}">
+            <p>Rola:</p>
+            <input type="hidden" th:field="*{role}" th:value="*{role}">
         </div>
         <br>
         <div class="element">
@@ -73,11 +61,11 @@
         </div>
         <br>
         <div class="element" style="visibility: hidden">
-            <div class="submit-button" >
+            <div class="submit-button">
                 <button type="submit">Zatwierdź zmiany</button>
             </div>
         </div>
-        <br><br><br>
+        <br><br>
     </form>
     <form method="post" th:action="@{/admin/users/resend-token}" th:object="${token}">
         <div class="element">

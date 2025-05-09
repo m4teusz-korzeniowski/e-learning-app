@@ -40,10 +40,6 @@
                 </p>
                 <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Błędna nazwa</p>
             </label>
-            <label for="description">Opis</label>
-            <textarea id="description" style="display: none" th:field="*{description}" name="description"></textarea>
-            <div id="editor"></div>
-            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
         </div>
         <br>
         <div class="element" style="visibility: hidden">
@@ -54,24 +50,5 @@
         <br>
     </form>
 </div>
-<script>
-    const quill = new Quill('#editor', {
-        modules: {
-            toolbar: [
-                ['bold', 'italic'],
-                ['link', 'blockquote', 'code-block', 'image'],
-                [{ list: 'ordered' }, { list: 'bullet' }],
-            ],
-        },
-        theme: 'snow',
-    });
-    let form = document.getElementById("course-create-form");
-    form.onsubmit = function (event) {
-        event.preventDefault();
-        document.querySelector('#description').value = quill.root.innerHTML;
-        form.submit();
-    }
-
-</script>
 </body>
 </html>

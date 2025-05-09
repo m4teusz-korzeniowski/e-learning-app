@@ -45,8 +45,7 @@
                 <td th:text="${user.firstName}"></td>
                 <td th:text="${user.email}"></td>
                 <td th:text="${user.role}"></td>
-                <td th:if="${user.role.equals('STUDENT') and user.group!=null}" th:text="${user.group}"></td>
-                <td th:if="${user.group == null}">Brak</td>
+                <td th:text="${user.group}"></td>
                 <td>
                     <a th:href="@{/email/prepare-user(userId=${user.id})}" target="_blank">
                         <i class="fa-solid fa-envelope"></i>
@@ -63,9 +62,15 @@
         </table>
     </div>
     <br>
-    <div th:if="${deleteMessage!=null} and ${!deleteMessage.isBlank()}">
+    <div th:if="${error!=null} and ${!error.isBlank()}">
         <div class="element">
-            <p th:text="${deleteMessage}"></p>
+            <p th:text="${error}"></p>
+        </div>
+        <br>
+    </div>
+    <div th:if="${success!=null} and ${!success.isBlank()}">
+        <div class="element">
+            <p th:text="${success}"></p>
         </div>
         <br>
     </div>

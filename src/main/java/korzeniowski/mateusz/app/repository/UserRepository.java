@@ -39,12 +39,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByPesel(String pesel);
 
     @Query("select user from User user left join user.userRoles role left join user.group group" +
-            " where role.name='STUDENT' and group is null" +
+            " where role.name='STUDENT'" +
             " and" +
             " (upper(user.firstName) like upper(concat('%', :keyword,'%')) or" +
             " upper(user.lastName) like upper(concat('%', :keyword,'%')) or" +
-            " upper(user.email) like upper(concat('%', :keyword,'%')))")
-    List<User> findAllStudentsWithoutGroupAndKeyword(@Param("keyword") String keyword);
+            " upper(user.email) like upper(concat('%', :keyword,'%')) or" +
+            " upper(coalesce(group.name, 'Brak')) like upper(concat('%', :keyword, '%')))")
+    List<User> findAllStudentsWithKeyword(@Param("keyword") String keyword);
 
     @Query("select user from User user left join user.userRoles role" +
             " where role.name='TEACHER'" +

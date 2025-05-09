@@ -14,7 +14,7 @@ import java.util.List;
 @Controller
 public class AdminCourseController {
 
-    private final static int PAGE_SIZE = 2;
+    private final static int PAGE_SIZE = 10;
     private final UserService userService;
     private final CourseService courseService;
 
