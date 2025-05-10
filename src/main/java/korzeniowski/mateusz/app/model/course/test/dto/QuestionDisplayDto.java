@@ -47,9 +47,18 @@ public class QuestionDisplayDto {
         this.category = category;
     }
 
+    private static String cutDescription(String description) {
+        final int cutSize = 60;
+        if (description.length() > cutSize) {
+            return description.substring(0, cutSize) + "...";
+        } else {
+            return description;
+        }
+    }
+
     public static QuestionDisplayDto map(Question question) {
         return new QuestionDisplayDto(question.getId(),
-                question.getDescription(),
+                cutDescription(question.getDescription()),
                 question.getQuestionType().name(),
                 question.getCategory());
     }

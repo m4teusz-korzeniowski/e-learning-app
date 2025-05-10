@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class="info-bar">
-    <h2>Rejestracja - wprowadzenie hasła:</h2>
+    <h2>Rejestracja - ustaw hasło</h2>
 </div>
 <br><br>
 <div class="user-courses">
@@ -15,16 +15,16 @@
         <div class="element">
             <input type="hidden" name="token" th:value="${token}">
             <p>Hasło:</p>
-            <input type="password" th:field="*{password}">
-            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+            <input type="password" class="form-control mb-2" th:field="*{password}">
+            <p th:if="${#fields.hasErrors('password')}" class="invalid-feedback d-block mb-3" th:errors="*{password}"></p>
             <p>Powtórz hasło:</p>
-            <input type="password" th:field="*{confirmedPassword}">
-            <p th:if="${#fields.hasErrors('confirmedPassword')}" th:errors="*{confirmedPassword}"></p>
+            <input type="password" class="form-control mb-2" th:field="*{confirmedPassword}">
+            <p th:if="${#fields.hasErrors('confirmedPassword')}" class="invalid-feedback d-block mb-3" th:errors="*{confirmedPassword}"></p>
         </div>
         <br>
         <div class="element" style="visibility: hidden">
             <div class="submit-button">
-                <button type="submit">Dokończ rejestrację</button>
+                <button type="submit" class="btn btn-primary">Dokończ rejestrację</button>
             </div>
         </div>
         <br>

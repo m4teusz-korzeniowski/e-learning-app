@@ -23,23 +23,19 @@
 </div>
 <br><br>
 <div class="user-courses">
-    <div th:if="${message}!=null and ${!message.isBlank()}">
-        <div class="element">
-            <p th:text="${message}"></p>
-        </div>
-        <br>
+    <div th:if="${message!=null} and ${!message.isBlank()}"
+         class="alert alert-success mt-2" th:text="${message}">
     </div>
     <form action="#" th:action="@{/admin/groups/display/edit/{id}(id=${id})}" method="post" th:object="${group}">
         <div class="element">
-            <label>
-                <p>Nazwa grupy: <input type="text" th:field="*{name}"></p>
-                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Błędna nazwa</p>
-            </label>
+            <p>Nazwa grupy:</p>
+            <input type="text" class="form-control mb-2" th:field="*{name}">
+            <p th:if="${#fields.hasErrors('name')}" class="invalid-feedback d-block mb-3" th:errors="*{name}">Błędna nazwa</p>
         </div>
         <br>
         <div class="element" style="visibility: hidden">
             <div class="submit-button">
-                <button type="submit">Zatwierdź zmiany</button>
+                <button type="submit" class="btn btn-primary">Zatwierdź zmiany</button>
             </div>
         </div>
         <br>

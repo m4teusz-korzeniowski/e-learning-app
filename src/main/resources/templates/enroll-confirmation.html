@@ -21,12 +21,12 @@
 </div>
 <br><br>
 <div class="user-courses">
-    <div class="element">
-        <p th:if="${message!=null}" th:text="${message}"></p>
-        <p th:if="${message.isEmpty()}">Nie przeprowadzono żadnego zapisu</p>
+    <div th:if="${message!=null} and ${!message.isBlank()}"
+         class="alert alert-success mt-2" th:text="${message}">
     </div>
-    <br>
+    <div th:if="${message == null}">
+        <div class="alert alert-danger mt-2">*nie przeprowadzono żadnego zapisu!</div>
+    </div>
 </div>
-<br><br>
 </body>
 </html>

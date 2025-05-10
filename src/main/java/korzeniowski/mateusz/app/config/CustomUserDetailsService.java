@@ -24,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<UserCredentialsDto> credentials = userService.findCredentialsByEmail(username);
-        if (credentials.isPresent()) {
+        if (credentials.isPresent() && credentials.get().getPassword() != null) {
             return User.builder()
                     .username(credentials.get().getEmail())
                     .password(credentials.get().getPassword())

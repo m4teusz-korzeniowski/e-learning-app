@@ -21,13 +21,15 @@
     <span>&nbsp>&nbsp</span>
     <span>Potwierdzenie</span>
 </div>
-<br><br>
+<br>
 <div class="user-courses">
-    <div class="element">
-        <p th:if="${message!=null}" th:text="${message}"></p>
-        <p th:if="${message.isEmpty()}">Nie stworzono żadnej grupy</p>
+    <div th:if="${message!=null} and ${!message.isBlank()}"
+         class="alert alert-success mt-2" th:text="${message}">
+    </div>
+    <div th:if="${message.isEmpty()}">
+        <div class="alert alert-danger mt-2">*nie stworzono żadnej grupy!</div>
     </div>
 </div>
-<br><br>
+<br>
 </body>
 </html>

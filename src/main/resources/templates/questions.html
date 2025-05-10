@@ -69,7 +69,7 @@
     <div th:if="${keyword == null or keyword.isBlank()}" class="element">
         <span th:text="'Ilość pytań w bazie: ' + ${totalItems}"></span>
     </div>
-    <div th:if="${keyword != null}" class="element">
+    <div th:if="${keyword != null and !keyword.isBlank()}" class="element">
         <span th:text="'Ilość pytań w bazie spełniających kryteria wyszukania: ' + ${totalItems}"></span>
     </div>
     <br>

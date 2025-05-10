@@ -311,7 +311,8 @@ public class UserService {
         if (userDto.getEnabled() && user.getPassword() == null) {
             throw new UserEnabledException("*nie możesz aktywować użytkownika, który nie ma ustawionego hasła!");
         }
-        if (userDto.getRole().equals("ADMIN") && !userDto.getEnabled()) {
+        String role = user.getUserRoles().iterator().next().getName();
+        if (role.equals("ADMIN") && !userDto.getEnabled()) {
             throw new UserEnabledException("*nie możesz dezaktywować admina!");
         }
         user.setFirstName(userDto.getFirstName());

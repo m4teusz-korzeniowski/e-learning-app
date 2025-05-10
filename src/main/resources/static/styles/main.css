@@ -3,6 +3,11 @@ body {
     margin: 0;
 }
 
+a {
+    text-decoration: none;
+}
+
+
 .user-courses {
     padding: 0 30px;
 }
@@ -57,21 +62,44 @@ body {
 }
 
 .element table {
-    border-radius: 5px;
-    font-size: 12px;
-    font-weight: normal;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 400;
     border: none;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     width: 100%;
     max-width: 100%;
-    white-space: nowrap;
     background-color: white;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.element th, .element td {
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+    vertical-align: middle;
     text-align: center;
 }
 
-.element th, td {
-    border: solid;
-    text-align: center;
+.element thead{
+    font-weight: bold;
+}
+
+.element th {
+    background-color: #f1f3f5;
+    font-weight: 600;
+    color: #495057;
+}
+
+.element tr:nth-child(even) td {
+    background-color: #f9f9f9;
+}
+
+.element tr:hover td {
+    background-color: #e7f1ff;
+    transition: background-color 0.2s ease-in-out;
 }
 
 .element .user-settings-label {
@@ -79,6 +107,20 @@ body {
     border-style: solid;
     border-width: 1px;
 }
+
+.icon-edit i {
+    color: gold;
+}
+
+.icon-remove i {
+    color: darkred;
+}
+
+.icon-message i {
+    color: wheat;
+}
+
+.icon-
 
 .element .change-pass {
     padding: 3px;
@@ -119,6 +161,7 @@ body {
     background-color: white;
     margin-bottom: 1rem;
 }
+
 
 .answer-edit {
     border-top: 1px solid;

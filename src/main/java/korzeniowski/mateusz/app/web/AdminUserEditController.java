@@ -111,7 +111,7 @@ public class AdminUserEditController {
                 resendToken(user.get(), principal.getName());
                 String message = "Ponownie wysłano wiadomość e-mail z linkiem aktywacyjnym do: "
                         + user.get().getEmail() + ".";
-                redirectAttributes.addFlashAttribute("message", message);
+                redirectAttributes.addFlashAttribute("tokenMessage", message);
                 return "redirect:/admin/users/edit/" + userId;
             } else {
                 String message = "*użytkownik dokonał już rejestracji!";

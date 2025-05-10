@@ -27,7 +27,7 @@ public class RegistrationController {
 
     private final UserService userService;
     private final PasswordTokenService passwordTokenService;
-    private final static String INVALID_TOKEN_MESSAGE = "Token rejestracyjny jest nieprawidłowy lub wygasł. W razie problemów" +
+    private final static String INVALID_TOKEN_MESSAGE = "*token rejestracyjny jest nieprawidłowy lub wygasł. W razie problemów" +
             " skontaktuj się z administracją.";
 
     public RegistrationController(UserService userService, PasswordTokenService passwordTokenService) {

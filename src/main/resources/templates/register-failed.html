@@ -7,14 +7,12 @@
 </head>
 <body>
 <div class="info-bar">
-    <h2>Błąd rejestracji!</h2>
+    <h2>Błąd rejestracji</h2>
 </div>
 <br><br>
 <div class="user-courses">
-    <div th:if="${message != null}">
-        <div class="element">
-            <p th:text="${message}"></p>
-        </div>
+    <div th:if="${message!=null} and ${!message.isBlank()}"
+         class="alert alert-danger mt-2" th:text="${message}">
     </div>
 </div>
 </body>

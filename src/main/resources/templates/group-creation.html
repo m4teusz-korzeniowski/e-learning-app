@@ -23,16 +23,16 @@
 <div class="user-courses">
     <form action="#" th:action="@{/admin/groups/create}" method="post" th:object="${group}">
         <div class="element">
-            <label>
                 <p>Nazwa grupy:</p>
-                <span><input type="text" th:field="*{name}"></span>
-                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Błędna nazwa</p>
-            </label>
+                <span><input class="form-control mb-2" type="text" th:field="*{name}"></span>
+                <p
+                        class="invalid-feedback d-block mb-3"
+                        th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Błędna nazwa</p>
         </div>
         <br>
         <div class="element" style="visibility: hidden">
             <div class="submit-button">
-                <button type="submit">Dodaj grupę</button>
+                <button type="submit" class="btn btn-primary">Dodaj grupę</button>
             </div>
         </div>
         <br>

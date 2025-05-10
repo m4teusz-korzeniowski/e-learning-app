@@ -10,7 +10,7 @@
 <header th:replace="~{fragments :: navbar}"></header>
 <div class="info-bar">
     <div>
-        <h2>Twoje dane:</h2>
+        <h2 th:text="${session.userInfo.firstName} + ' ' + ${session.userInfo.lastName}">Twoje dane:</h2>
     </div>
 </div>
 <div class="info-bar">
@@ -22,30 +22,27 @@
 </div>
 <br><br>
 <div class="user-courses">
-    <div th:if="${message != null}">
-        <div class="element">
-            <p th:text="${message}"></p>
-        </div>
+    <div th:if="${message!=null} and ${!message.isBlank()}"
+         class="alert alert-success mt-2" th:text="${message}">
     </div>
-    <br>
     <div class="element" th:object="${user}">
         <p>Imię:</p>
-        <input disabled th:field="*{firstName}">
+        <input disabled class="form-control mb-2" th:field="*{firstName}">
         <p>Nazwisko:</p>
-        <input disabled th:field="*{lastName}">
+        <input disabled class="form-control mb-2" th:field="*{lastName}">
         <p>E-mail:</p>
-        <input disabled th:field="*{email}">
+        <input disabled class="form-control mb-2" th:field="*{email}">
         <p>Pesel:</p>
-        <input disabled th:field="*{pesel}">
+        <input disabled class="form-control mb-2" th:field="*{pesel}">
         <p>Grupa:</p>
-        <input disabled th:field="*{group}">
+        <input disabled class="form-control mb-2" th:field="*{group}">
         <p>Uprawnienia:</p>
-        <input th:if="*{role.equals('STUDENT')}" disabled th:value="'Uczeń'">
-        <input th:if="*{role.equals('TEACHER')}" disabled th:value="'Nauczyciel'">
-        <input th:if="*{role.equals('ADMIN')}" disabled th:value="'Admin'">
+        <input th:if="*{role.equals('STUDENT')}" class="form-control mb-2" disabled th:value="'Uczeń'">
+        <input th:if="*{role.equals('TEACHER')}" class="form-control mb-2" disabled th:value="'Nauczyciel'">
+        <input th:if="*{role.equals('ADMIN')}" class="form-control mb-2" disabled th:value="'Admin'">
         <p></p>
         <br>
-        <a th:href="@{/change-password}"><button type="button">Zmiana hasła</button></a>
+        <a th:href="@{/change-password}" class="btn btn-primary">Zmiana hasła</a>
     </div>
 </div>
 <br><br>

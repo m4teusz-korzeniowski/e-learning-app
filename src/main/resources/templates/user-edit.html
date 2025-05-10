@@ -21,77 +21,77 @@
 </div>
 <br><br>
 <div class="user-courses">
-    <div th:if="${message}!=null and ${!message.isBlank()}">
-        <div class="element">
-            <p th:text="${message}"></p>
-        </div>
-        <br>
+    <div th:if="${message!=null} and ${!message.isBlank()}"
+         class="alert alert-success mt-2" th:text="${message}">
     </div>
     <form method="post" action="#" th:action="@{/admin/users/edit/{id}(id=${id})}" th:object="${user}">
         <div class="element">
             <p>Imię:</p>
-            <input type="text" th:field="*{firstName}" th:value="*{firstName}">
-            <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Błędna nazwa</p>
+            <input type="text" class="form-control mb-2" th:field="*{firstName}" th:value="*{firstName}">
+            <p th:if="${#fields.hasErrors('firstName')}" class="invalid-feedback d-block mb-3" th:errors="*{firstName}">Błędna nazwa</p>
             <p>Nazwisko:</p>
-            <input type="text" th:field="*{lastName}" th:value="*{lastName}">
-            <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Błędna nazwa</p>
+            <input type="text" th:field="*{lastName}" class="form-control mb-2" th:value="*{lastName}">
+            <p th:if="${#fields.hasErrors('lastName')}" class="invalid-feedback d-block mb-3" th:errors="*{lastName}">Błędna nazwa</p>
             <p>E-mail:</p>
-            <input type="text" th:field="*{email}" th:value="*{email}">
-            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Błędna nazwa</p>
+            <input type="text" th:field="*{email}" class="form-control mb-2" th:value="*{email}">
+            <p th:if="${#fields.hasErrors('email')}" class="invalid-feedback d-block mb-3" th:errors="*{email}">Błędna nazwa</p>
             <p>Pesel:</p>
-            <input type="text" th:field="*{pesel}" th:value="*{pesel}">
-            <p th:if="${#fields.hasErrors('pesel')}" th:errors="*{pesel}">Błędna nazwa</p>
+            <input type="text" th:field="*{pesel}" class="form-control mb-2" th:value="*{pesel}">
+            <p th:if="${#fields.hasErrors('pesel')}" class="invalid-feedback d-block mb-3" th:errors="*{pesel}">Błędna nazwa</p>
             <p>Grupa:</p>
-            <input disabled type="text" th:field="*{group}" th:value="*{group}">
+            <input disabled type="text" class="form-control mb-2" th:field="*{group}" th:value="*{group}">
             <p>Rola:</p>
-            <input type="hidden" th:field="*{role}" th:value="*{role}">
+            <input disabled type="text" class="form-control mb-2" th:field="*{role}" th:value="*{role}">
         </div>
         <br>
         <div class="element">
-            <label>
-                <p>Status:</p>
-                <input disabled type="text" th:value="${user.enabled ? 'Aktywny' : 'Nieaktywny'}">
-                <p>Zmień status:</p>
-                <select th:field="*{enabled}">
-                    <option th:value="true">Aktywny</option>
-                    <option th:value="false">Nieaktywny</option>
-                </select>
-                <p th:if="${#fields.hasErrors('enabled')}" th:errors="*{enabled}">Błędna nazwa</p>
-            </label>
+            <p>Status:</p>
+            <input disabled class="form-control mb-2" type="text" th:value="${user.enabled ? 'Aktywny' : 'Nieaktywny'}">
+            <p>Zmień status:</p>
+            <select class="form-select" th:field="*{enabled}">
+                <option th:value="true">Aktywny</option>
+                <option th:value="false">Nieaktywny</option>
+            </select>
+            <p th:if="${#fields.hasErrors('enabled')}" class="invalid-feedback d-block mb-3" th:errors="*{enabled}">Błędna nazwa</p>
         </div>
         <br>
         <div class="element" style="visibility: hidden">
             <div class="submit-button">
-                <button type="submit">Zatwierdź zmiany</button>
+                <button type="submit" class="btn btn-primary">Zatwierdź zmiany</button>
             </div>
         </div>
-        <br><br>
+        <br>
     </form>
     <form method="post" th:action="@{/admin/users/resend-token}" th:object="${token}">
-        <div class="element">
+        <div th:if="*{expiryDate != null}" class="element">
             <p>Token rejestracyjny:</p>
-            <div th:if="*{expiryDate == null}">
-                <input disabled value="Nieaktywny">
-                <p></p>
-            </div>
-            <div th:if="*{expiryDate != null}">
+            <div>
                 <input type="hidden" name="userId" th:value="${id}">
-                <input disabled value="Aktywny">
-                <p></p>
-                <span>Data wygaśnięcia tokenu: </span>
-                <span th:text="*{expiryDate}"></span>
-                <p></p>
+                <div th:if="*{isExpired()}">
+                    <input class="form-control mb-2" disabled value="Aktywny">
+                    <p></p>
+                    <p>Data wygaśnięcia tokenu: </p>
+                    <input class="form-control mb-2" disabled th:value="*{getFormattedExpiryDate()}">
+                    <p></p>
+                </div>
+                <div th:if="*{!isExpired()}">
+                    <input class="form-control mb-2" disabled value="Nieaktywny">
+                    <p></p>
+                    <p>Token wygasł: </p>
+                    <input class="form-control mb-2" disabled th:value="*{getFormattedExpiryDate()}">
+                    <p></p>
+                </div>
                 <div>
-                    <button type="submit">Wyślij ponownie</button>
+                    <button type="submit" class="btn btn-primary">Wyślij ponownie</button>
                 </div>
             </div>
         </div>
         <br>
-        <div class="element" th:if="${message != null}">
-            <p th:text="${message}"></p>
+        <div th:if="${tokenMessage!=null} and ${!tokenMessage.isBlank()}"
+             class="alert alert-success mt-2" th:text="${tokenMessage}">
         </div>
-        <div class="element" th:if="${error != null}">
-            <p th:text="${error}"></p>
+        <div th:if="${error!=null} and ${!error.isBlank()}"
+             class="alert alert-danger mt-2" th:text="${error}">
         </div>
     </form>
 </div>

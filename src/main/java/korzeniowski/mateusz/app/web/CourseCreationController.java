@@ -35,7 +35,7 @@ public class CourseCreationController {
                                  @RequestParam(value = "keyword", required = false) String keyword,
                                  Model model) {
         List<UserDisplayDto> users;
-        if (keyword != null) {
+        if (keyword != null && !keyword.isEmpty()) {
             users = userService.findTeachersWithKeyword(keyword);
         } else {
             users = new ArrayList<>();

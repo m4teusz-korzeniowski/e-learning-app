@@ -2,11 +2,13 @@
     position: sticky;
     top: 0;
     z-index: 1000;
-    background-color: lightskyblue;
+    background-color: dodgerblue;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
     min-width: 580px;
 }
-
+h2 {
+    padding: 20px 0 0 0;
+}
 .navbar-wrapper {
     width: 100%;
     padding: 0 45px;

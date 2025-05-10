@@ -73,9 +73,11 @@ public class GroupController {
     public String groupEnrollmentForm(@ModelAttribute("enroll") UserGroupEnrollmentDto enroll,
                                       @RequestParam(name = "keyword", required = false) String keyword,
                                       Model model) {
-        List<UserDisplayDto> users = new ArrayList<>();
+        List<UserDisplayDto> users;
         if (keyword != null && !keyword.isEmpty()) {
             users = userService.findUsersWithoutGroupContainKeyword(keyword);
+        } else {
+            users = new ArrayList<>();
         }
         List<GroupDto> groups = groupService.findAllGroups();
         model.addAttribute("users", users);
@@ -153,20 +155,23 @@ public class GroupController {
 
     @GetMapping("/admin/groups/display/remove/{id}")
     public String deleteGroup(@PathVariable long id, RedirectAttributes redirectAttributes) {
-        StringBuilder message = new StringBuilder();
         try {
             if (!groupService.groupExist(id)) {
                 throw new NoSuchElementException("");
             }
             groupService.removeGroup(id);
-            message.append("Grupa o id = ").append(id).append(", została usunięta.");
+            String message = String.format("Grupa o ID = %d została usunięta.", id);
+            redirectAttributes.addFlashAttribute("message", message);
+            return "redirect:/admin/groups/display";
         } catch (DataIntegrityViolationException e) {
-            message.append("Nie można usunąć grupy(id = ").append(id).append("), do której należą użytkownicy!");
+            String error = "*nie można usunąć grupy, do której należą użytkownicy!";
+            redirectAttributes.addFlashAttribute("error", error);
+            return "redirect:/admin/groups/display";
         } catch (NoSuchElementException e) {
-            message.append("Grupa, którą chcesz usunąć nie istnieje!");
+            String error = "*grupa, którą chcesz usunąć nie istnieje!";
+            redirectAttributes.addFlashAttribute("error", error);
+            return "redirect:/admin/groups/display";
         }
-        redirectAttributes.addFlashAttribute("message", message.toString());
-        return "redirect:/admin/groups/display";
     }
 
     @GetMapping("/admin/groups/display/edit/{id}")
@@ -196,7 +201,7 @@ public class GroupController {
             return showGroupEdit(id, group, null, model);
         } catch (DataIntegrityViolationException e) {
             bindingResult.rejectValue("name", "error.name",
-                    "Grupa o podanej przez ciebie nazwie już istnieje!");
+                    "*grupa o podanej przez ciebie nazwie już istnieje!");
             return showGroupEdit(id, group, null, model);
         }
         return "redirect:/admin/groups/display/edit/" + id;

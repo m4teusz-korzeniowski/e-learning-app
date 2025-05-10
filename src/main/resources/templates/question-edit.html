@@ -73,10 +73,10 @@
                 <label class="form-label">Treść odpowiedzi:</label>
                 <input type="text" class="form-control mb-2"
                        th:field="*{answers[__${iter.index}__].content}">
-                    <div th:if="${#fields.hasErrors('answers[' + iter.index + '].content')}"
-                         class="invalid-feedback d-block mb-3"
-                         th:errors="*{answers[__${iter.index}__].content}">
-                    </div>
+                <div th:if="${#fields.hasErrors('answers[' + iter.index + '].content')}"
+                     class="invalid-feedback d-block mb-3"
+                     th:errors="*{answers[__${iter.index}__].content}">
+                </div>
 
                 <input type="hidden" th:field="*{answers[__${iter.index}__].id}"/>
                 <a class="btn btn-danger btn-sm"
@@ -91,25 +91,19 @@
                 </a>
             </div>
         </div>
-
         <br>
-
-            <div th:if="${message!=null} and ${!message.isBlank()}"
-                    class="alert alert-success mt-2" th:text="${message}">
-            </div>
-
-        <div th:if="${error!=null} and ${!error.isBlank()}" class="element">
+        <div th:if="${message!=null} and ${!message.isBlank()}"
+             class="alert alert-success mt-2" th:text="${message}">
+        </div>
+        <div th:if="${error!=null} and ${!error.isBlank()}">
             <div class="alert alert-danger mt-2" th:text="${error}"></div>
         </div>
-
-
         <div class="element" style="visibility: hidden">
             <div class="submit-button">
                 <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
             </div>
         </div>
     </form>
-
 </div>
 <br><br>
 <script th:inline="javascript">

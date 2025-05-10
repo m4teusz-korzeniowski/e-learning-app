@@ -22,13 +22,13 @@
     <span>&nbsp>&nbsp</span>
     <span>Potwierdzenie</span>
 </div>
-<br><br>
+<br>
 <div class="user-courses">
-    <div th:if="${message != null}" class="element">
-        <p th:text="${message}"></p>
+    <div th:if="${message!=null} and ${!message.isBlank()}"
+         class="alert alert-success mt-2" th:text="${message}">
     </div>
-    <div th:if="${message == null}" class="element">
-        <p>Nie wysłano żadnej wiadomości e-mail!</p>
+    <div th:if="${message == null}">
+        <div class="alert alert-danger mt-2">*nie wysłano żadnej wiadomości e-mail!</div>
     </div>
 </div>
 <br><br>
