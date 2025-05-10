@@ -43,12 +43,24 @@
                 <td th:text="${course.creatorId}"></td>
                 <td th:text="${course.creatorName}"></td>
                 <td>
-                    <a href="#"><i class="fa-solid fa-remove"></i></a>
+                    <a th:href="@{/admin/courses/{courseId}/remove(courseId=${course.id})}"><i class="fa-solid fa-remove"></i></a>
                 </td>
             </tr>
         </table>
     </div>
     <br>
+    <div th:if="${success != null}">
+        <div class="element">
+            <p th:text="${success}"></p>
+        </div>
+        <br>
+    </div>
+    <div th:if="${error != null}">
+        <div class="element">
+            <p th:text="${error}"></p>
+        </div>
+        <br>
+    </div>
     <div class="element">
         <a class="page-span"
            th:each="pageElem: ${#numbers.sequence(1,totalPages)}"

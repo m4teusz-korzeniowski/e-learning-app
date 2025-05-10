@@ -18,12 +18,12 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     Optional<Course> findByName(String courseName);
 
-    @Query(value = "select course from Course course where course.creatorId = " +
+    @Query(value = "select course from Course course where course.creatorId in " +
             "(select user.id from User user " +
             " where upper(user.firstName) like upper(concat('%', :keyword,'%'))" +
             " or upper(user.lastName) like upper(concat('%', :keyword, '%')))" +
             " or upper(course.name) like upper(concat('%', :keyword,'%'))",
-            countQuery = "select count(course) from Course course where course.creatorId = " +
+            countQuery = "select count(course) from Course course where course.creatorId in " +
                     "(select user.id from User user " +
                     " where upper(user.firstName) like upper(concat('%', :keyword,'%'))" +
                     " or upper(user.lastName) like upper(concat('%', :keyword, '%')))" +

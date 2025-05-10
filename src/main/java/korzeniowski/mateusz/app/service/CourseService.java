@@ -1,12 +1,15 @@
 package korzeniowski.mateusz.app.service;
 
+import korzeniowski.mateusz.app.exceptions.AttemptInProgressException;
 import korzeniowski.mateusz.app.model.course.Course;
 import korzeniowski.mateusz.app.model.course.dto.CourseCreationDto;
 import korzeniowski.mateusz.app.model.course.dto.CourseDisplayDto;
 import korzeniowski.mateusz.app.model.course.dto.CourseNameDto;
 import korzeniowski.mateusz.app.model.course.dto.TeacherCourseDto;
 import korzeniowski.mateusz.app.model.course.module.Module;
+import korzeniowski.mateusz.app.model.course.test.AttemptStatus;
 import korzeniowski.mateusz.app.model.user.dto.UserDisplayDto;
+import korzeniowski.mateusz.app.repository.AttemptRepository;
 import korzeniowski.mateusz.app.repository.CourseRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -24,9 +27,11 @@ import java.util.Optional;
 public class CourseService {
     private final CourseRepository courseRepository;
     private final static int MAX_LENGTH_OF_DESCRIPTION = 20000;
+    private final AttemptRepository attemptRepository;
 
-    public CourseService(CourseRepository courseRepository) {
+    public CourseService(CourseRepository courseRepository, AttemptRepository attemptRepository) {
         this.courseRepository = courseRepository;
+        this.attemptRepository = attemptRepository;
     }
 
     public List<CourseNameDto> findAllCoursesById(Long id) {
@@ -175,5 +180,18 @@ public class CourseService {
 
     public Boolean hasTeacherAnyActiveCourses(Long creatorId) {
         return courseRepository.existsByCreatorId(creatorId);
+    }
+
+    @Transactional
+    public void deleteCourseById(Long courseId) {
+        Optional<Course> course = courseRepository.findById(courseId);
+        if (course.isPresent()) {
+            if (attemptRepository.hasCourseActiveAttempt(courseId, AttemptStatus.IN_PROGRESS)) {
+                throw new AttemptInProgressException("*nie można usunąć kursu, mającego aktywne próby testów!");
+            }
+            courseRepository.deleteById(courseId);
+        } else {
+            throw new NoSuchElementException("*nie znaleziono kursu o ID = " + courseId + "!");
+        }
     }
 }
