@@ -60,11 +60,11 @@
         </table>
     </div>
     <br>
-    <div th:if="${message!=null} and ${!message.isBlank()}">
-        <div class="element">
-            <p th:text="${message}"></p>
-        </div>
-        <br>
+    <div th:if="${message!=null} and ${!message.isBlank()}"
+         class="alert alert-success mt-2" th:text="${message}">
+    </div>
+    <div th:if="${error!=null} and ${!error.isBlank()}"
+         class="alert alert-danger mt-2" th:text="${error}">
     </div>
     <div th:if="${keyword == null or keyword.isBlank()}" class="element">
         <span th:text="'Ilość pytań w bazie: ' + ${totalItems}"></span>

@@ -1,5 +1,6 @@
 package korzeniowski.mateusz.app.service;
 
+import korzeniowski.mateusz.app.exceptions.QuestionNotFound;
 import korzeniowski.mateusz.app.exceptions.QuestionTypeException;
 import korzeniowski.mateusz.app.model.course.test.Answer;
 import korzeniowski.mateusz.app.model.course.test.Question;
@@ -93,7 +94,7 @@ public class QuestionService {
         if (question.isPresent()) {
             return question.get().getTest().getId();
         } else {
-            throw new NoSuchElementException("Question not found");
+            throw new QuestionNotFound("Question not found");
         }
     }
 

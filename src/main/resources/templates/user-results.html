@@ -25,10 +25,9 @@
 </div>
 <br><br>
 <div class="user-courses">
-    <div class="element">
-        <p class="test-summary">Podsumowanie podejść użytkownika:</p>
-        <div th:each="result :${userResults}">
-            <p th:text="'Podejścia do testu: ' + ${result.testName}"></p>
+    <div th:each="result :${userResults}">
+        <div class="element">
+            <p class="h5 mb-3" th:text="'Podejścia do testu: ' + ${result.testName}"></p>
             <table>
                 <thead>
                 <tr th:if="${result != null}">
@@ -54,9 +53,10 @@
                 </tr>
             </table>
         </div>
+        <br>
     </div>
-    <br>
 </div>
+<br>
 <br><br>
 </body>
 </html>

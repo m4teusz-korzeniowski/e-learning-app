@@ -154,6 +154,18 @@ a {
     gap: 10px;
 }
 
+.module-row span{
+    padding-right: 7px;
+}
+
+.module-row span,
+.test-row span,
+.item-row span
+{
+    font-weight: bold;
+}
+
+
 #editor {
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
@@ -164,7 +176,7 @@ a {
 
 
 .answer-edit {
-    border-top: 1px solid;
+        border-top: 1px solid;
     padding: 10px 0;
 }
 
@@ -191,6 +203,8 @@ a {
     min-width: 120px;
 }
 
+
+
 .test-info-element p {
     font-weight: bold;
 }
@@ -207,3 +221,5 @@ a {
     font-weight: bold;
     text-align: center;
 }
+
+

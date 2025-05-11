@@ -32,16 +32,16 @@
         <br>
         <div th:each="courseModule,iter : *{modules}">
             <div class="element">
-                <span>Widoczność modułu:</span>
-                <input type="checkbox" th:field="*{modules[__${iter.index}__].visible}">
+                <span style="font-weight: bold">Widoczność modułu:</span>
+                <input type="checkbox" class="form-check-input mb-3" th:field="*{modules[__${iter.index}__].visible}">
                 <p></p>
                 <div class="module-row">
-                    <span>Nazwa modułu:</span>
-                    <input type="text" th:field="*{modules[__${iter.index}__].name}"/>
+                    <span>Nazwa modułu:&nbsp</span>
+                    <input class="form-control" style="max-width: 200px" type="text" th:field="*{modules[__${iter.index}__].name}"/>
                     <input type="hidden" th:field="*{modules[__${iter.index}__].id}"/>
                     <span class="action-button">
                         <a th:href="@{/teacher/module/{moduleId}/remove(moduleId=${courseModule.id})}">
-                            <button type="button">Usuń moduł</button>
+                            <button type="button" class="btn btn-danger btn-sm">Usuń moduł</button>
                         </a>
                     </span>
                 </div>
@@ -49,14 +49,14 @@
                 <div th:each="item,iter3 : ${courseModule.items}">
                     <div class="item-row">
                         <span>Nazwa elementu:</span>
-                        <input type="text" th:field="*{modules[__${iter.index}__].items[__${iter3.index}__].name}">
+                        <input class="form-control" style="max-width: 200px" type="text" th:field="*{modules[__${iter.index}__].items[__${iter3.index}__].name}">
                         <input type="hidden" th:field="*{modules[__${iter.index}__].items[__${iter3.index}__].id}">
                         <span class="action-button">
                             <a th:href="@{/teacher/module-item/{itemId}/edit(itemId=${item.id})}">
-                                <button type="button">Edytuj</button>
+                                <button type="button" class="btn btn-warning btn-sm">Edytuj</button>
                             </a>
                             <a th:href="@{/teacher/module-item/{itemId}/remove(itemId=${item.id})}">
-                                <button type="button">Usuń</button>
+                                <button type="button" class="btn btn-danger btn-sm">Usuń</button>
                             </a>
                         </span>
                     </div>
@@ -64,15 +64,15 @@
                 </div>
                 <div th:each="test,iter2: ${courseModule.tests}">
                     <div class="test-row">
-                        <span>Nazwa testu:</span>
-                        <input type="text" th:field="*{modules[__${iter.index}__].tests[__${iter2.index}__].name}">
+                        <span>Nazwa testu:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+                        <input class="form-control" style="max-width: 200px" type="text" th:field="*{modules[__${iter.index}__].tests[__${iter2.index}__].name}">
                         <input type="hidden" th:field="*{modules[__${iter.index}__].tests[__${iter2.index}__].id}">
                         <span class="action-button">
                             <a th:href="@{/teacher/test/{testId}/edit(testId=${test.id})}">
-                                <button type="button">Edytuj</button>
+                                <button type="button" class="btn btn-warning btn-sm">Edytuj</button>
                             </a>
                             <a th:href="@{/teacher/test/{testId}/remove(testId=${test.id})}">
-                                <button type="button">Usuń</button>
+                                <button type="button" class="btn btn-danger btn-sm">Usuń</button>
                             </a>
                         </span>
                     </div>
@@ -80,13 +80,13 @@
                 </div>
                 <div th:if="${courseModule.getItems().size() < maxNumberOfModuleItems}">
                     <a th:href="@{/teacher/module/{moduleId}/create-item(moduleId=${courseModule.id})}">
-                        <button type="button">Dodaj element</button>
+                        <button type="button" class="btn btn-primary btn-sm">Dodaj element</button>
                     </a>
                 </div>
                 <br>
                 <div th:if="${courseModule.getTests().size() < maxNumberOfTests}">
                     <a th:href="@{/teacher/module/{moduleId}/create-test(moduleId=${courseModule.id})}">
-                        <button type="button">Dodaj test</button>
+                        <button type="button" class="btn btn-primary btn-sm">Dodaj test</button>
                     </a>
                 </div>
                 <br>
@@ -96,26 +96,20 @@
         <div th:if="${course.modules.size() < maxModules}">
             <div class="element">
                 <a th:href="@{/teacher/course/edit/{id}/create-module(id=${id})}">
-                    <button type="button">Dodaj moduł</button>
+                    <button type="button" class="btn btn-primary btn-sm">Dodaj moduł</button>
                 </a>
             </div>
             <br>
         </div>
-        <div th:if="${message!=null} and ${!message.isBlank()}">
-            <div class="element">
-                <p th:text="${message}"></p>
-            </div>
-            <br>
+        <div th:if="${message!=null} and ${!message.isBlank()}"
+             class="alert alert-success mt-2" th:text="${message}">
         </div>
-        <div th:if="${error!=null} and ${!error.isBlank()}">
-            <div class="element">
-                <p th:text="${error}"></p>
-            </div>
-            <br>
+        <div th:if="${error!=null} and ${!error.isBlank()}"
+             class="alert alert-danger mt-2" th:text="${error}">
         </div>
         <div class="element" style="visibility: hidden">
             <div class="submit-button">
-                <button type="submit">Zapisz zmiany</button>
+                <button type="submit" class="btn btn-primary mb-2">Zapisz zmiany</button>
             </div>
         </div>
         <br>

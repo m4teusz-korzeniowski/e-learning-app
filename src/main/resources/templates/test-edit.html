@@ -23,11 +23,8 @@
 </div>
 <br><br>
 <div class="user-courses">
-    <div th:if="${message!=null} and ${!message.isBlank()}">
-        <div class="element">
-            <p th:text="${message}"></p>
-        </div>
-        <br>
+    <div th:if="${message!=null} and ${!message.isBlank()}"
+         class="alert alert-success mt-2" th:text="${message}">
     </div>
     <form id="test-update-form" method="post"
           th:action="@{/teacher/test/{testId}/edit(testId=${testId})}"
@@ -36,29 +33,30 @@
         <div class="element">
             <input type="hidden" th:field="*{id}">
             <input type="hidden" th:field="*{courseId}">
-            <label for="description">Opis testu:</label>
+            <input type="hidden" th:field="*{name}">
+            <label for="description" class="form-label">Opis testu:</label>
             <textarea id="description" style="display: none" th:field="*{description}"
                       name="description"></textarea>
             <div id="editor"></div>
-            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+            <p th:if="${#fields.hasErrors('description')}" class="invalid-feedback d-block mb-3" th:errors="*{description}"></p>
             <br>
             <p>Ilość pytań:</p>
-            <input type="number" th:field="*{numberOfQuestions}">
-            <p th:if="${#fields.hasErrors('numberOfQuestions')}" th:errors="*{numberOfQuestions}"></p>
+            <input type="number" class="form-control mb-2" th:field="*{numberOfQuestions}">
+            <p th:if="${#fields.hasErrors('numberOfQuestions')}" class="invalid-feedback d-block mb-3" th:errors="*{numberOfQuestions}"></p>
             <p>Czas trwania(w minutach):</p>
-            <input type="number" th:field="*{duration}">
-            <p th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}"></p>
+            <input type="number" class="form-control mb-2" th:field="*{duration}">
+            <p th:if="${#fields.hasErrors('duration')}" class="invalid-feedback d-block mb-3" th:errors="*{duration}"></p>
             <p>Data otwarcia testu:</p>
-            <input type="datetime-local" th:field="*{start}">
-            <p th:if="${#fields.hasErrors('start')}" th:errors="*{start}"></p>
+            <input type="datetime-local" class="form-control mb-2" th:field="*{start}">
+            <p th:if="${#fields.hasErrors('start')}" class="invalid-feedback d-block mb-3" th:errors="*{start}"></p>
             <p>Data zakończenia testu:</p>
-            <input type="datetime-local" th:field="*{end}">
-            <p th:if="${#fields.hasErrors('end')}" th:errors="*{end}"></p>
+            <input type="datetime-local" class="form-control mb-2" th:field="*{end}">
+            <p th:if="${#fields.hasErrors('end')}" class="invalid-feedback d-block mb-3" th:errors="*{end}"></p>
             <p>Maksymalna ilość podejść</p>
-            <input type="number" th:field="*{maxAttempts}">
-            <p th:if="${#fields.hasErrors('maxAttempts')}" th:errors="*{maxAttempts}"></p>
+            <input type="number" class="form-control mb-2" th:field="*{maxAttempts}">
+            <p th:if="${#fields.hasErrors('maxAttempts')}" class="invalid-feedback d-block mb-3" th:errors="*{maxAttempts}"></p>
             <p>Podgląd prób:</p>
-            <select th:field="*{overviewEnabled}" id="overview">
+            <select th:field="*{overviewEnabled}" class="form-select mb-2" id="overview">
                 <option th:value="false">Niedozwolony</option>
                 <option th:value="true">Dozwolony</option>
             </select>
@@ -66,7 +64,7 @@
         <br>
         <div class="element" style="visibility: hidden">
             <div class="submit-button">
-                <button type="submit">Zapisz zmiany</button>
+                <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
             </div>
         </div>
         <br>
@@ -76,29 +74,29 @@
           th:action="@{/teacher/test/{testId}/create-questions(testId=${testId})}">
         <div class="element">
             <p>Ilość pytań do stworzenia:</p>
-            <input type="number" th:field="*{numberOfQuestions}">
+            <input type="number" class="form-control mb-2" th:field="*{numberOfQuestions}">
             <div th:if="${error!=null} and ${!error.isBlank()}">
-                <p th:text="${error}"></p>
-            </div>
-            <div th:if="${questionMessage!=null} and ${!questionMessage.isBlank()}">
-                <p th:text="${questionMessage}"></p>
+                <p class="invalid-feedback d-block mb-1" th:text="${error}"></p>
             </div>
         </div>
         <br>
+        <div th:if="${questionMessage!=null} and ${!questionMessage.isBlank()}">
+            <p class="alert alert-success mt-2" th:text="${questionMessage}"></p>
+        </div>
         <div class="element" style="visibility: hidden">
             <div class="submit-button">
-                <button type="submit">Stwórz bazę pytań</button>
+                <button type="submit" class="btn btn-primary">Stwórz bazę pytań</button>
             </div>
         </div>
         <br>
         <br>
     </form>
     <div class="element">
-        <p><a th:href="@{/teacher/test/{testId}/questions(testId=${testId})}">Baza pytań</a></p>
+        <p><a th:href="@{/teacher/test/{testId}/questions(testId=${testId})}" class="h5 text-primary mb-0">Baza pytań</a></p>
     </div>
     <br>
     <div class="element">
-        <p><a th:href="@{/test/{testId}/display(testId=${testId})}">Podgląd testu</a></p>
+        <p><a th:href="@{/test/{testId}/display(testId=${testId})}" class="h5 text-primary mb-0">Podgląd testu</a></p>
     </div>
     <br>
 </div>

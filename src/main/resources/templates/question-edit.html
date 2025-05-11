@@ -85,7 +85,7 @@
                 </a>
             </div>
 
-            <div th:if="${question.answers.size() < maxNumberOfAnswers}" class="mt-1">
+            <div th:if="${question.answers.size() < maxNumberOfAnswers}" class="mt-2 answer-edit">
                 <a class="btn btn-primary btn-sm" th:href="@{/teacher/question/{id}/add-answer(id=${question.id})}">
                     Dodaj odpowiedź
                 </a>

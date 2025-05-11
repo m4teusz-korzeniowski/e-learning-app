@@ -28,7 +28,7 @@
     <br>
     <div th:each="course : ${courses}">
         <div class="element">
-            <p th:text="${course.name}">Nazwa kursu</p>
+            <p class="h5 mb-4" style="font-weight: bold" th:text="${course.name}">Nazwa kursu</p>
             <p><a href="#" th:href="@{/teacher/course/edit/{id}(id=${course.id})}">Edytuj</a></p>
             <p><a href="#" th:href="@{/teacher/course-enroll/{id}(id=${course.id})}">Zapisz do kursu</a></p>
             <p><a th:href="@{/teacher/course/{id}/display(id=${course.id})}">Podgląd</a> </p>

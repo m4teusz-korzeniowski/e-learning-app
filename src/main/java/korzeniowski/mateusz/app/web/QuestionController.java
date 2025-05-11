@@ -88,14 +88,15 @@ public class QuestionController {
             if (accessService.hasLoggedInTeacherAccessToQuestion(questionId, userInfo.getId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
-            long testId = questionService.findTestIdFromQuestion(questionId);
             if (!questionService.questionExists(questionId)) {
-                redirectAttributes.addFlashAttribute("message",
-                        String.format("Pytanie o ID %s nie istnieje!", questionId));
-            } else {
+                redirectAttributes.addFlashAttribute("error",
+                        String.format("*pytanie o ID = %s nie istnieje!", questionId));
+            }
+            long testId = questionService.findTestIdFromQuestion(questionId);
+            if (questionService.questionExists(questionId)) {
                 questionService.removeQuestion(questionId);
                 redirectAttributes.addFlashAttribute("message",
-                        String.format("Usunięto pytanie o ID %s", questionId));
+                        String.format("Usunięto pytanie o ID = %s", questionId));
             }
             return "redirect:/teacher/test/" + testId + "/questions";
         } catch (NoSuchElementException e) {
