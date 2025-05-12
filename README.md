@@ -13,7 +13,7 @@ This is an educational web application for creating and managing courses, tests,
 ### Test
 ![Test](test_screenshot.png)
 ### Attempt
-![Attempt](test_screenshot2.png)
+![Attempt](attempt_screen.png)
 ### Change password
 ![Change password](password_change.png)
 
