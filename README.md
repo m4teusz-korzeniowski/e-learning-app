@@ -12,8 +12,6 @@ This is an educational web application for creating and managing courses, tests,
 ![Users - admin panel](users_screenshot.png)
 ### Test
 ![Test](test_screenshot.png)
-### Attempt
-![Attempt](test_screenshot2.png)
 ### Change password
 ![Change password](password_change.png)
 
