@@ -6,15 +6,15 @@ This is an educational web application for creating and managing courses, tests,
 
 ## Screenshots
 
-### Course edit
+#### Course edit
 ![Course edit](course_edit_screenshot.png)
-### Admin user panel
+#### Admin user panel
 ![Users - admin panel](users_screenshot.png)
-### Test
+#### Test display
 ![Test](test_screenshot.png)
-### Attempt
+#### Attempt of the test
 ![Attempt](attempt_screen.png)
-### Change password
+#### Password change
 ![Change password](password_change.png)
 
 ## 🚧 Work in Progress
