@@ -2,6 +2,7 @@ package korzeniowski.mateusz.app.web;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import korzeniowski.mateusz.app.exceptions.StorageException;
 import korzeniowski.mateusz.app.exceptions.StorageFileNotFoundException;
 import korzeniowski.mateusz.app.model.course.module.dto.ModuleItemEditDto;
 import korzeniowski.mateusz.app.model.user.dto.UserSessionDto;
@@ -31,7 +32,7 @@ public class ModuleEditController {
     private final ModuleItemService moduleItemService;
     private final AccessService accessService;
 
-    public ModuleEditController(ModuleItemService moduleItemService , AccessService accessService) {
+    public ModuleEditController(ModuleItemService moduleItemService, AccessService accessService) {
         this.moduleItemService = moduleItemService;
         this.accessService = accessService;
     }
@@ -85,6 +86,19 @@ public class ModuleEditController {
             bindingResult.rejectValue("description", "error.description",
                     "*przekroczono maksymalnu rozmiar opisu");
             return returnEditForm(itemId, model, item);
+        }
+        return "redirect:/teacher/module-item/" + itemId + "/edit";
+    }
+
+    @GetMapping("/teacher/module-item/{itemId}/remove-file")
+    public String removeItemModuleFile(@PathVariable long itemId, RedirectAttributes redirectAttributes) {
+        try {
+            moduleItemService.removeFile(itemId);
+            redirectAttributes.addFlashAttribute("success", "Poprawnie usunięto plik!");
+        } catch (NoSuchElementException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        } catch (StorageException e) {
+            redirectAttributes.addFlashAttribute("error", "*błąd operacji na pliku!");
         }
         return "redirect:/teacher/module-item/" + itemId + "/edit";
     }

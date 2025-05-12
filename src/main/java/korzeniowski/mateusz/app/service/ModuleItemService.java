@@ -107,4 +107,20 @@ public class ModuleItemService {
             throw new NoSuchElementException("Nie znaleziono elementu o id " + moduleItemId);
         }
     }
+
+    @Transactional
+    public void removeFile(Long itemId) {
+        Optional<ModuleItem> item = moduleItemRepository.findById(itemId);
+        if (item.isPresent()) {
+            if (item.get().getFileUrl() != null && !item.get().getFileUrl().isBlank()) {
+                storageService.delete(item.get().getFileUrl());
+                item.get().setFileUrl(null);
+                moduleItemRepository.save(item.get());
+            } else {
+                throw new NoSuchElementException("*plik, który chcesz usunąć nie istnieje!");
+            }
+        } else {
+            throw new NoSuchElementException("*nie znaleziono elementu o id " + itemId);
+        }
+    }
 }
