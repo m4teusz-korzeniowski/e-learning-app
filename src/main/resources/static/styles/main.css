@@ -54,11 +54,23 @@ a {
 }
 
 .page-span.answered {
-    background-color: lightgreen;
+    background-color: darkgray;
 }
 
 .page-span.unanswered {
-    background-color: palevioletred;
+    background-color: white;
+}
+
+.correct {
+    background-color: lightgreen;
+}
+
+.incorrect {
+    background-color: indianred;
+}
+
+.not-checked {
+    background-color: white;
 }
 
 .element table {
@@ -83,7 +95,7 @@ a {
     text-align: center;
 }
 
-.element thead{
+.element thead {
     font-weight: bold;
 }
 
@@ -121,7 +133,6 @@ a {
 }
 
 .icon-
-
 .element .change-pass {
     padding: 3px;
     border-style: solid;
@@ -154,15 +165,21 @@ a {
     gap: 10px;
 }
 
-.module-row span{
+.module-row span {
     padding-right: 7px;
 }
 
 .module-row span,
 .test-row span,
-.item-row span
-{
+.item-row span {
     font-weight: bold;
+}
+
+.test-attempt-button {
+    visibility: visible;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
 }
 
 
@@ -176,12 +193,41 @@ a {
 
 
 .answer-edit {
-        border-top: 1px solid;
+    border-top: 1px solid;
     padding: 10px 0;
 }
 
 .answer-edit input[type="text"] {
     width: 100%;
+}
+
+.answers {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.answers-overview {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.answer-check-input {
+    margin-bottom: 11px;
+}
+
+.answers label:hover {
+    background-color: lightgrey;
+}
+
+.answers:hover label {
+    background-color: lightgrey;
+}
+
+
+.alert {
+    min-width: 500px;
 }
 
 .email-input {
@@ -204,20 +250,21 @@ a {
 }
 
 
-
 .test-info-element p {
     font-weight: bold;
 }
+
 @media (max-width: 500px) {
     .test-info-wrapper .element {
         flex-wrap: wrap;
     }
+
     .test-info-wrapper .test-info-element {
         flex: 1 1 100%;
     }
 }
 
-.test-summary{
+.test-summary {
     font-weight: bold;
     text-align: center;
 }

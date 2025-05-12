@@ -9,23 +9,31 @@
 <header th:replace="~{fragments :: navbar}"></header>
 <div class="info-bar">
     <div>
-        <h2>Info about</h2>
+        <h2>Podgląd próby</h2>
     </div>
 </div>
 <div class="info-bar">
     <a th:href="@{/test/{testId}/display(testId=${attempt.testId})}">Test</a>
     <span>&nbsp>&nbsp</span>
-    <span>Podgląd próby</span>
+    <span>Podgląd</span>
 </div>
 <br><br>
 <div class="user-courses">
     <div class="element">
-        <p th:text="'Pytanie ' + ${questionNo} + ' z ' + ${totalQuestionNumber}"></p>
+        <p style="font-weight: bold" th:text="'Pytanie ' + ${questionNo} + ' z ' + ${totalQuestionNumber}"></p>
         <p th:text="${attempt.questions[questionNo - 1].description}"></p>
-        <div th:each="answer : ${attempt.questions[questionNo - 1].answers}">
-            <input disabled type="checkbox" th:checked="${answer.userAnswer}">
-            <span th:if="${answer.userAnswer == answer.correctAnswer}" th:text="${answer.content} + ' - T'"></span>
-            <span th:unless="${answer.userAnswer == answer.correctAnswer}" th:text="${answer.content} + ' - F'"></span>
+        <div class="answers-overview" th:each="answer, iterStat : ${attempt.questions[questionNo - 1].answers}">
+            <input disabled type="checkbox"
+                   class="form-check-input answer-check-input"
+                   th:id="'answer-' + ${iterStat.index}"
+                   th:checked="${answer.userAnswer}"
+            />
+            <label class="form-control mb-2" th:for="'answer-' + ${iterStat.index}"
+                   th:text="${answer.content}"
+                   th:classappend="${
+                        (answer.userAnswer and answer.correctAnswer) ? 'correct' :
+                        ((answer.userAnswer and not answer.correctAnswer) or (not answer.userAnswer and answer.correctAnswer)) ? 'incorrect' :
+                        'not-checked'}"></label>
         </div>
     </div>
     <br>

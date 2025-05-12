@@ -9,17 +9,22 @@
 <header th:replace="~{fragments :: navbar}"></header>
 <div class="info-bar">
     <div>
-        <h2 th:text="'Podsumowanie podejścia:'"></h2>
+        <h2 th:text="'Podsumowanie podejścia'"></h2>
     </div>
+</div>
+<div class="info-bar">
+    <a th:href="@{/test/{testId}/display(testId=${attempt.testId})}" th:text="${attempt.name}"></a>
+    <span>&nbsp>&nbsp</span>
+    <span>Podejście do testu</span>
 </div>
 <br><br>
 <div class="user-courses">
-    <div class="element">
+    <div class="alert alert-warning mt-2">
         <p>Upewnij się, że masz udzielone odpowiedzi na wszystkie pytania.</p>
     </div>
     <br>
     <div th:if="${remainingTime != null}">
-        <div class="element">
+        <div class="alert alert-warning mt-2">
             <span>Pozostały czas: </span>
             <span id="timer"></span>
         </div>
@@ -36,8 +41,8 @@
     <br>
     <div class="element" style="visibility: hidden">
         <div class="submit-button">
-            <a th:href="@{/attempt/{attemptId}/finalize(attemptId=${attemptId})}">
-                <button>Zakończ podejście</button>
+            <a class="btn btn-primary " th:href="@{/attempt/{attemptId}/finalize(attemptId=${attemptId})}">
+                Zakończ podejście
             </a>
         </div>
     </div>

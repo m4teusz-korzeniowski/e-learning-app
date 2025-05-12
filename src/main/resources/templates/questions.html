@@ -51,9 +51,9 @@
                 <td th:if="${question.category != null}" th:text="${question.category}"></td>
                 <td th:if="${question.category == null}">Brak</td>
                 <td>
-                    <a th:href="@{/teacher/questions/edit/{questionId}
+                    <a class="icon-edit" th:href="@{/teacher/questions/edit/{questionId}
                     (questionId=${question.id})}"><i class="fa-solid fa-file-pen"></i></a>
-                    <a th:href="@{/teacher/questions/remove/{questionId}
+                    <a class="icon-remove" th:href="@{/teacher/questions/remove/{questionId}
                     (questionId=${question.id})}"><i class="fa-solid fa-remove"></i></a>
                 </td>
             </tr>
@@ -66,10 +66,10 @@
     <div th:if="${error!=null} and ${!error.isBlank()}"
          class="alert alert-danger mt-2" th:text="${error}">
     </div>
-    <div th:if="${keyword == null or keyword.isBlank()}" class="element">
+    <div th:if="${keyword == null or keyword.isBlank()}" class="alert alert-success mt-2">
         <span th:text="'Ilość pytań w bazie: ' + ${totalItems}"></span>
     </div>
-    <div th:if="${keyword != null and !keyword.isBlank()}" class="element">
+    <div th:if="${keyword != null and !keyword.isBlank()}" class="alert alert-success mt-2">
         <span th:text="'Ilość pytań w bazie spełniających kryteria wyszukania: ' + ${totalItems}"></span>
     </div>
     <br>

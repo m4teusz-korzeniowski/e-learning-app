@@ -102,11 +102,11 @@
         </div>
     </div>
     <br>
-    <div th:if="${error != null}" class="element">
-        <p th:text="${error}"></p>
+    <div th:if="${success!=null} and ${!success.isBlank()}"
+         class="alert alert-success mt-2" th:text="${success}">
     </div>
-    <div th:if="${success != null}" class="element">
-        <p th:text="${success}"></p>
+    <div th:if="${error!=null} and ${!error.isBlank()}"
+         class="alert alert-danger mt-2" th:text="${error}">
     </div>
 </div>
 <br><br>

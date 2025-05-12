@@ -11,7 +11,7 @@
     <h2 th:text="'Test: ' + ${attempt.name}"></h2>
 </div>
 <div class="info-bar">
-    <a th:href="@{/test/{testId}/display(testId=${attempt.testId})}">Test</a>
+    <a th:href="@{/test/{testId}/display(testId=${attempt.testId})}" th:text="${attempt.name}"></a>
     <span>&nbsp>&nbsp</span>
     <span>Podejście do testu</span>
 </div>
@@ -19,28 +19,35 @@
 <div class="user-courses">
     <form th:action="@{'/attempt/' + ${attemptId} + '/question/' + ${questionNo} + '/save'}" method="post">
         <div class="element">
-            <p th:text="'Pytanie ' + ${questionNo} + ' z ' + ${totalQuestionNumber}"></p>
+            <p style="font-weight: bold" th:text="'Pytanie ' + ${questionNo} + ' z ' + ${totalQuestionNumber}"></p>
             <p th:text="${attempt.questions[questionNo - 1].description}"></p>
-            <div th:each="answer, iterStat : ${attempt.questions[questionNo - 1].answers}">
+            <div class="answers" th:each="answer, iterStat : ${attempt.questions[questionNo - 1].answers}">
                 <input type="checkbox"
+                       class="form-check-input answer-check-input"
                        th:id="'answer-' + ${iterStat.index}"
                        name="answers"
                        th:value="${iterStat.index}"
                        th:checked="${answer.userAnswer}"
                        th:attr="data-question-type=${attempt.questions[questionNo - 1].questionType}"/>
-                <label th:for="'answer-' + ${iterStat.index}"
+                <label class="form-control mb-2" th:for="'answer-' + ${iterStat.index}"
                        th:text="${answer.content}"></label>
             </div>
         </div>
         <br>
-        <div class="element">
-            <button type="submit" name="action" value="previous">Poprzednie</button>
-            <button type="submit" name="action" value="next">Następne</button>
-            <button type="submit" name="action" value="finish">Podsumowanie</button>
+        <div class="element" style="visibility: hidden">
+            <div class="test-attempt-button">
+                <button class="btn btn-primary " th:if="${questionNumber > 1}" type="submit" name="action"
+                        value="previous">Poprzednie
+                </button>
+                <button class="btn btn-primary" th:if="${questionNumber} < ${attempt.numberOfQuestions}" type="submit"
+                        name="action" value="next">Następne
+                </button>
+                <button class="btn btn-primary" type="submit" name="action" value="finish">Podsumowanie</button>
+            </div>
         </div>
         <br>
         <div th:if="${remainingTime != null}">
-            <div class="element">
+            <div class="alert alert-warning mt-2">
                 <span>Pozostały czas: </span>
                 <span id="timer"></span>
             </div>
@@ -50,7 +57,8 @@
             <a class="page-span"
                th:each="number : ${#numbers.sequence(1, totalQuestionNumber)}"
                th:href="@{/attempt/{attemptId}/question/{questionId}(attemptId=${attemptId}, questionId=${number})}"
-               th:text="${number}">
+               th:text="${number}"
+               th:classappend="${attempt.questions[number - 1].didUserAnswer()} ? 'answered' : 'unanswered'">
             </a>
         </div>
     </form>
