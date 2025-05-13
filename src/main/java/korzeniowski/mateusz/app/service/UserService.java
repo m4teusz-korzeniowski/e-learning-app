@@ -15,8 +15,6 @@ import korzeniowski.mateusz.app.model.user.UserCredentialsDtoMapper;
 import korzeniowski.mateusz.app.model.user.UserRole;
 import korzeniowski.mateusz.app.model.user.dto.*;
 import korzeniowski.mateusz.app.repository.*;
-import korzeniowski.mateusz.app.model.course.test.Test;
-import korzeniowski.mateusz.app.model.course.test.dto.ResultDto;
 import korzeniowski.mateusz.util.CreatePasswordHash;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,16 +33,14 @@ import java.util.stream.Stream;
 public class UserService {
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
-    private final ResultRepository resultRepository;
     private final GroupRepository groupRepository;
     private final EmailService emailService;
     private final PasswordTokenService passwordTokenService;
     private final AppProperties appProperties;
 
-    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository, ResultRepository resultRepository, GroupRepository groupRepository, EmailService emailService, PasswordTokenService passwordTokenService, AppProperties appProperties) {
+    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository , GroupRepository groupRepository, EmailService emailService, PasswordTokenService passwordTokenService, AppProperties appProperties) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
-        this.resultRepository = resultRepository;
         this.groupRepository = groupRepository;
         this.emailService = emailService;
         this.passwordTokenService = passwordTokenService;
@@ -124,21 +120,6 @@ public class UserService {
             throw new PeselAlreadyInUseException(String.format("*pesel %s już istnieje", user.getPesel()));
         } else {
             sendActivationEmail(user, principalEmail);
-            /*userRepository.save(user);
-            PasswordToken token = passwordTokenService.generatePasswordTokenForUser(user);
-            String registerConfirmationLink =
-                    "<a href=\"" + appProperties.getUrl() + "/register?token=" +
-                            token.getToken() + "\">Dokończ rejestrację</a>";
-            try {
-                emailService.sendHtmlMessage(
-                        user.getEmail(),
-                        "Dokończenie rejestracji",
-                        registerConfirmationLink,
-                        principalEmail
-                );
-            } catch (MessagingException e) {
-                throw new RuntimeException(e);
-            }*/
         }
     }
 
@@ -169,30 +150,6 @@ public class UserService {
         return false;
     }
 
-    public Optional<ResultDto> findUserResultOfTest(Long userId, Long testId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            return resultRepository.findByUserId(userId, testId).map(ResultDto::map);
-        }
-        throw new UsernameNotFoundException(String.format("Username with ID %s not found", userId));
-    }
-
-    public boolean ifUserHasAccessToTest(Long userId, Long testId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            List<Course> courses = user.get().getCourses();
-            for (Course course : courses) {
-                for (Module module : course.getModules()) {
-                    for (Test test : module.getTest()) {
-                        if (test.getId().equals(testId)) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
 
     public Long findUserIdByEmail(String email) {
         Optional<Long> userId = userRepository.findByEmail(email).map(User::getId);

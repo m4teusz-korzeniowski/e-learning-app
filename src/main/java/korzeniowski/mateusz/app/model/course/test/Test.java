@@ -24,8 +24,6 @@ public class Test {
     private List<Attempt> attempts;
     @OneToMany(mappedBy = "test")
     private List<Question> questions = new ArrayList<>();
-    @OneToMany(mappedBy = "test")
-    private List<Result> results = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name="module_id")
     private Module module;
@@ -68,14 +66,6 @@ public class Test {
 
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
-    }
-
-    public List<Result> getResults() {
-        return results;
-    }
-
-    public void setResults(List<Result> results) {
-        this.results = results;
     }
 
     public Module getModule() {

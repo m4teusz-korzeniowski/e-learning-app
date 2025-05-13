@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import korzeniowski.mateusz.app.model.course.Course;
 import korzeniowski.mateusz.app.model.course.test.Attempt;
-import korzeniowski.mateusz.app.model.course.test.Result;
-import org.hibernate.validator.constraints.pl.PESEL;
 
 
 import java.util.ArrayList;
@@ -44,8 +42,6 @@ public class User {
     private List<Course> courses = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private List<Attempt> attempts = new ArrayList<>();
-    @OneToMany(mappedBy = "user")
-    private List<Result> results = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
@@ -105,14 +101,6 @@ public class User {
 
     public void setCourses(List<Course> courses) {
         this.courses = courses;
-    }
-
-    public List<Result> getResults() {
-        return results;
-    }
-
-    public void setResults(List<Result> results) {
-        this.results = results;
     }
 
     public Group getGroup() {

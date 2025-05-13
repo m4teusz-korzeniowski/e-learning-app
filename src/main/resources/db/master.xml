@@ -11,7 +11,6 @@
     <include file="create_table_module_item.xml" relativeToChangelogFile="true"/>
     <include file="create_table_test.xml" relativeToChangelogFile="true"/>
     <include file="create_table_question.xml" relativeToChangelogFile="true"/>
-    <include file="create_table_result.xml" relativeToChangelogFile="true"/>
     <include file="create_table_user_role.xml" relativeToChangelogFile="true"/>
     <include file="create_table_enrollment.xml" relativeToChangelogFile="true"/>
     <include file="create_table_user_roles.xml" relativeToChangelogFile="true"/>
@@ -29,7 +28,6 @@
     <include file="test/0001_module_item.xml" context="dev" relativeToChangelogFile="true"/>
     <include file="test/0001_test.xml" context="dev" relativeToChangelogFile="true"/>
     <include file="test/0001_question.xml" context="dev" relativeToChangelogFile="true"/>
-    <include file="test/0001_result.xml" context="dev" relativeToChangelogFile="true"/>
     <include file="test/0001_enrollment.xml" context="dev" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
