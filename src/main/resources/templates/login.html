@@ -6,24 +6,27 @@
     <th:block th:replace="~{fragments :: head}"></th:block>
 </head>
 <body>
-<div class="info-bar">
-    <h2>Logowanie</h2>
-</div>
-<br><br>
 <div class="user-courses">
+    <br>
     <form th:action="@{/login}" method="post">
-        <div th:if="${disabledError}" class="element" th:text="${disabledError}"></div>
-        <div th:if="${credentialsError}" class="element" th:text="${credentialsError}"></div>
-        <br>
-        <div class="element">
-            <p>Podaj dane:</p>
-            <input name="username" placeholder="e-mail">
-            <input name="password" type="password" placeholder="hasło">
-            <button type="submit">Zaloguj się</button>
+        <div th:if="${disabledError!=null} and ${!disabledError.isBlank()}"
+             class="alert alert-danger mt-2" style="max-width: 300px; margin: 20px auto" th:text="${disabledError}">
+        </div>
+        <div th:if="${credentialsError!=null} and ${!credentialsError.isBlank()}"
+             class="alert alert-danger mt-2" style="max-width: 300px; margin: 20px auto" th:text="${credentialsError}">
+        </div>
+        <div class="element" style="max-width: 300px; margin: 0 auto">
+            <label class="form-label">E-mail:</label>
+            <input class="form-control mb-2" name="username">
+            <label class="form-label">Hasło:</label>
+            <input class="form-control mb-2" name="password" type="password">
+            <div class="text-center mt-3">
+                <button class="btn btn-primary form-control" type="submit">Zaloguj się</button>
+            </div>
         </div>
         <br>
         <div th:if="${success!=null} and ${!success.isBlank()}"
-             class="alert alert-success mt-2" th:text="${success}">
+             class="alert alert-success mt-2" style="max-width: 300px; margin: 0 auto" th:text="${success}">
         </div>
     </form>
 </div>

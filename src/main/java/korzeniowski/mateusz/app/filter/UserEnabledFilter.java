@@ -25,6 +25,12 @@ public class UserEnabledFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+
+        String requestURI = request.getRequestURI();
+        if (requestURI.contains("/login")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth != null && auth.isAuthenticated() && auth.getPrincipal() instanceof UserDetails userDetails) {

@@ -2,8 +2,6 @@ spring:
   messages:
       basename: messages
       encoding: UTF-8
-  profiles:
-    active: prod
   liquibase:
     change-log: classpath:db/master.xml
   servlet:

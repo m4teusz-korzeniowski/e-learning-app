@@ -2,16 +2,16 @@ spring:
   liquibase:
     contexts: prod
   datasource:
-    url: jdbc:mysql://localhost:3306/e_learning_app_db?createDatabaseIfNotExist=true
+    url: ${DB_URL}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: admin
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: validate
 app:
-  url: http://localhost:8080
+  url: ${APP_URL}
 server:
-  address: 127.0.0.1
+  address: 0.0.0.0
   port: 8080
