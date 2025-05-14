@@ -14,7 +14,7 @@ services:
     networks:
       - app-network
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - "3306:3306"
 
   app:
     build:
