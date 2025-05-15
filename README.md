@@ -1,8 +1,13 @@
 # 🚀 E-Learning App
 
 This is an educational web application for creating and managing courses, tests, and user assessments. Built with Spring Boot.
+The app is publicly available at:  https://mkor-e-learning.pl
 
 ---
+
+## 🚧 Work in Progress
+This application is still under development. Some features might be incomplete, and bugs may occur.
+Demo account coming soon. Test user with limited access will be added shortly.
 
 ## Screenshots
 
@@ -17,9 +22,6 @@ This is an educational web application for creating and managing courses, tests,
 #### Password change
 ![Change password](password_change.png)
 
-## 🚧 Work in Progress
-This application is still under development. Some features might be incomplete, and bugs may occur.
-
 ## 📚 Project Context
 This application is a part of a bachelor's thesis project. It is being developed as an academic exercise and is not yet ready for production use.
 
@@ -33,49 +35,31 @@ git clone https://github.com/m4teusz-korzeniowski/e-learning-app.git
 cd e-learning-app
 ```
 
-### 2. Set Environment Variables
-
-To enable email, configure the following variables:
-
+### 2. Configure Environment
 ```bash
-SMTP_USERNAME=your_smtp_username
-SMTP_PASSWORD=your_smtp_password
-SMTP_FROM=your_email@example.com
+cp .env-example .env
 ```
 
-You can use any SMTP provider: Gmail, Brevo, Mailtrap, etc.
+### 3. Run Locally (dev profile)
 
-### 3. Choose a Spring Profile
+```bash
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+```
 
-The default profile is `prod` using MySQL. To run with an in-memory H2 database, activate the `dev` profile.
+A preloaded admin account is available (dev only):
+- Email: mk@gmail.com
+- Password: pass4
 
-### 4. Database Configuration
+### 4. Run with Docker (prod profile)
+For production, use Docker. The prod profile is enabled by default in the containerized setup.
 
-#### ✅ Prod (MySQL)
-Use `application-prod.yml`:
 
-- `spring.datasource.url`
-- `spring.datasource.username`
-- `spring.datasource.password`
-
-#### 🧪 Dev (H2)
-No configuration required. The schema and sample data are managed via Liquibase.
-
-### 5. Default Admin Login
-
-A preloaded admin account is available for testing:
-
-- Email: `mk@gmail.com`
-- Password: `pass4`
-
-Once logged in, you can:
-- Create courses and tests
-- Manage users
-- Attempt tests
-- Some features are only available to certain roles
 
 ---
 
 ## 📬 Mail Safety Notice
 
-Be cautious when using real email addresses from the preloaded dataset. Some are randomly generated and may correspond to real accounts. If unsure, consider replacing them with safe test emails.
+**Important:**  
+Some preloaded email addresses in the dataset are randomly generated and might resemble real accounts.  
+Avoid using them for email testing unless configured to use a safe SMTP service like Mailtrap or Brevo.
+I strongly recommend replacing email addresses with safe, internal ones before testing live mailing features.
