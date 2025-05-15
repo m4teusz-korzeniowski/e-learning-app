@@ -34,7 +34,7 @@
             <input type="hidden" th:field="*{testId}">
             <input type="hidden" th:field="*{id}">
 
-            <label for="description" class="form-label">Treść pytania:</label>
+            <label for="description" class="form-label fw-bold">Treść pytania:</label>
             <textarea id="description" class="form-control mb-3" style="display: none"
                       th:field="*{description}" name="description"></textarea>
             <div id="editor" class="mb-3"></div>
@@ -42,17 +42,17 @@
             <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback d-block mb-3"
                  th:errors="*{description}"></div>
 
-            <label class="form-label mt-2">Maksymalna ilość punktów za pytanie:</label>
+            <label class="form-label mt-2 fw-bold">Maksymalna ilość punktów za pytanie:</label>
             <input type="number" class="form-control mb-3" th:field="*{score}">
             <div th:if="${#fields.hasErrors('score')}" class="invalid-feedback d-block mb-3"
                  th:errors="*{score}"></div>
 
-            <label class="form-label">Kategoria:</label>
+            <label class="form-label fw-bold">Kategoria:</label>
             <input type="text" class="form-control mb-3" th:field="*{category}">
             <div th:if="${#fields.hasErrors('category')}" class="invalid-feedback d-block mb-3"
                  th:errors="*{category}"></div>
 
-            <label class="form-label">Wybierz typ pytania:</label>
+            <label class="form-label fw-bold">Wybierz typ pytania:</label>
             <select class="form-select mb-3" th:field="*{type}" id="type">
                 <option th:value="'SINGLE_CHOICE'">Pojedyńczy wybór</option>
                 <option th:value="'MULTIPLE_CHOICE'">Wielokrotny wybór</option>
@@ -62,7 +62,7 @@
         <br>
 
         <div class="element">
-            <label class="form-label">Odpowiedzi na pytanie:</label>
+            <label class="form-label fw-bold">Odpowiedzi na pytanie:</label>
             <div class="answer-edit" th:each="anwers,iter : *{answers}">
                 <div class="form-check mb-2">
                     <input type="checkbox" class="form-check-input"

@@ -24,15 +24,15 @@
 <div class="user-courses">
     <form th:action="@{/email}" method="post" th:object="${email}">
         <div class="element">
-            <span>Do:</span>
+            <span class="fw-bold">Do:</span>
             <input class="form-control mb-2" type="text" th:field="*{to}">
             <p></p>
             <p th:if="${#fields.hasErrors('to')}" class="invalid-feedback d-block mb-3" th:errors="*{to}"></p>
-            <span>Temat:</span>
+            <span class="fw-bold">Temat:</span>
             <input class="form-control mb-2" type="text" th:field="*{subject}">
             <p></p>
             <p th:if="${#fields.hasErrors('subject')}" class="invalid-feedback d-block mb-3" th:errors="*{subject}"></p>
-            <label for="description" class="form-label">Treść:</label>
+            <label for="description" class="fw-bold">Treść:</label>
             <p></p>
             <textarea id="description" class="form-control" style="display: none" th:field="*{text}"
                       name="description"></textarea>

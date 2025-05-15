@@ -19,12 +19,12 @@
     <span>&nbsp>&nbsp</span>
     <span>Potwierdzenie</span>
 </div>
-<br><br>
+<br>
 <div class="user-courses">
     <div th:if="${message!=null} and ${!message.isBlank()}"
          class="alert alert-success mt-2" th:text="${message}">
     </div>
-    <div th:if="${message == null}">
+    <div th:if="${message == null} or ${message.isBlank()}">
         <div class="alert alert-danger mt-2">*nie przeprowadzono żadnego zapisu!</div>
     </div>
 </div>

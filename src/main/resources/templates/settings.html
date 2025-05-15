@@ -26,17 +26,17 @@
          class="alert alert-success mt-2" th:text="${message}">
     </div>
     <div class="element" th:object="${user}">
-        <p>Imię:</p>
+        <p class="fw-bold">Imię:</p>
         <input disabled class="form-control mb-2" th:field="*{firstName}">
-        <p>Nazwisko:</p>
+        <p class="fw-bold">Nazwisko:</p>
         <input disabled class="form-control mb-2" th:field="*{lastName}">
-        <p>E-mail:</p>
+        <p class="fw-bold">E-mail:</p>
         <input disabled class="form-control mb-2" th:field="*{email}">
-        <p>Pesel:</p>
+        <p class="fw-bold">Pesel:</p>
         <input disabled class="form-control mb-2" th:field="*{pesel}">
-        <p>Grupa:</p>
+        <p class="fw-bold">Grupa:</p>
         <input disabled class="form-control mb-2" th:field="*{group}">
-        <p>Uprawnienia:</p>
+        <p class="fw-bold">Uprawnienia:</p>
         <input th:if="*{role.equals('STUDENT')}" class="form-control mb-2" disabled th:value="'Uczeń'">
         <input th:if="*{role.equals('TEACHER')}" class="form-control mb-2" disabled th:value="'Nauczyciel'">
         <input th:if="*{role.equals('ADMIN')}" class="form-control mb-2" disabled th:value="'Admin'">

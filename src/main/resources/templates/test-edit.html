@@ -34,28 +34,28 @@
             <input type="hidden" th:field="*{id}">
             <input type="hidden" th:field="*{courseId}">
             <input type="hidden" th:field="*{name}">
-            <label for="description" class="form-label">Opis testu:</label>
+            <label for="description" class="form-label fw-bold">Opis testu:</label>
             <textarea id="description" style="display: none" th:field="*{description}"
                       name="description"></textarea>
             <div id="editor"></div>
             <p th:if="${#fields.hasErrors('description')}" class="invalid-feedback d-block mb-3" th:errors="*{description}"></p>
             <br>
-            <p>Ilość pytań:</p>
+            <p class="fw-bold">Ilość pytań:</p>
             <input type="number" class="form-control mb-2" th:field="*{numberOfQuestions}">
             <p th:if="${#fields.hasErrors('numberOfQuestions')}" class="invalid-feedback d-block mb-3" th:errors="*{numberOfQuestions}"></p>
-            <p>Czas trwania(w minutach):</p>
+            <p class="fw-bold">Czas trwania(w minutach):</p>
             <input type="number" class="form-control mb-2" th:field="*{duration}">
             <p th:if="${#fields.hasErrors('duration')}" class="invalid-feedback d-block mb-3" th:errors="*{duration}"></p>
-            <p>Data otwarcia testu:</p>
+            <p class="fw-bold">Data otwarcia testu:</p>
             <input type="datetime-local" class="form-control mb-2" th:field="*{start}">
             <p th:if="${#fields.hasErrors('start')}" class="invalid-feedback d-block mb-3" th:errors="*{start}"></p>
-            <p>Data zakończenia testu:</p>
+            <p class="fw-bold">Data zakończenia testu:</p>
             <input type="datetime-local" class="form-control mb-2" th:field="*{end}">
             <p th:if="${#fields.hasErrors('end')}" class="invalid-feedback d-block mb-3" th:errors="*{end}"></p>
-            <p>Maksymalna ilość podejść</p>
+            <p class="fw-bold">Maksymalna ilość podejść</p>
             <input type="number" class="form-control mb-2" th:field="*{maxAttempts}">
             <p th:if="${#fields.hasErrors('maxAttempts')}" class="invalid-feedback d-block mb-3" th:errors="*{maxAttempts}"></p>
-            <p>Podgląd prób:</p>
+            <p class="fw-bold">Podgląd prób:</p>
             <select th:field="*{overviewEnabled}" class="form-select mb-2" id="overview">
                 <option th:value="false">Niedozwolony</option>
                 <option th:value="true">Dozwolony</option>
@@ -73,7 +73,7 @@
     <form id="questions-add-form" method="post" action="#" th:object="${question}"
           th:action="@{/teacher/test/{testId}/create-questions(testId=${testId})}">
         <div class="element">
-            <p>Ilość pytań do stworzenia:</p>
+            <p class="fw-bold">Ilość pytań do stworzenia:</p>
             <input type="number" class="form-control mb-2" th:field="*{numberOfQuestions}">
             <div th:if="${error!=null} and ${!error.isBlank()}">
                 <p class="invalid-feedback d-block mb-1" th:text="${error}"></p>

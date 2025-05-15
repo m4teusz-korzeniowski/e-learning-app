@@ -85,8 +85,37 @@ public class UserService {
         userRepository.save(user);
         PasswordToken token = passwordTokenService.generatePasswordTokenForUser(user);
         String registerConfirmationLink =
-                "<a href=\"" + appProperties.getUrl() + "/register?token=" +
-                        token.getToken() + "\">Dokończ rejestrację</a>";
+                "<!DOCTYPE html>" +
+                        "<html lang=\"pl\">" +
+                        "<head>" +
+                        "<meta charset=\"UTF-8\">" +
+                        "<style>" +
+                        "  body { font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px; }" +
+                        "  .container { background: #fff; padding: 30px; border-radius: 8px; max-width: 500px; margin: auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }" +
+                        "  h2 { color: #333333; }" +
+                        "  p { color: #555555; font-size: 15px; }" +
+                        "  .button {" +
+                        "    display: inline-block;" +
+                        "    padding: 12px 24px;" +
+                        "    margin-top: 20px;" +
+                        "    background-color: #007bff;" +
+                        "    color: white;" +
+                        "    text-decoration: none;" +
+                        "    border-radius: 5px;" +
+                        "    font-weight: bold;" +
+                        "  }" +
+                        "  .button:hover { background-color: #0056b3; }" +
+                        "</style>" +
+                        "</head>" +
+                        "<body>" +
+                        "  <div class=\"container\">" +
+                        "    <h2>Witaj!</h2>" +
+                        "    <p>Dziękujemy za rejestrację. Aby zakończyć proces i aktywować konto, kliknij w poniższy przycisk:</p>" +
+                        "    <a class=\"button\" href=\"" + appProperties.getUrl() + "/register?token=" + token.getToken() + "\">Dokończ rejestrację</a>" +
+                        "    <p style=\"margin-top: 30px; font-size: 13px; color: #888888;\">Jeśli nie rejestrowałeś się w naszym serwisie, zignoruj tę wiadomość.</p>" +
+                        "  </div>" +
+                        "</body>" +
+                        "</html>";
         try {
             emailService.sendHtmlMessage(
                     user.getEmail(),

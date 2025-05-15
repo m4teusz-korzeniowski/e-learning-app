@@ -9,6 +9,7 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
     volumes:
       - mysql-data:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf:ro
     networks:
       - app-network
     ports:

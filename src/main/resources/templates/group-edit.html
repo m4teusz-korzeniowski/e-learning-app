@@ -28,7 +28,7 @@
     </div>
     <form action="#" th:action="@{/admin/groups/display/edit/{id}(id=${id})}" method="post" th:object="${group}">
         <div class="element">
-            <p>Nazwa grupy:</p>
+            <p class="fw-bold">Nazwa grupy:</p>
             <input type="text" class="form-control mb-2" th:field="*{name}">
             <p th:if="${#fields.hasErrors('name')}" class="invalid-feedback d-block mb-3" th:errors="*{name}">Błędna nazwa</p>
         </div>

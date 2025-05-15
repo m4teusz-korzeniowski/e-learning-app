@@ -26,28 +26,28 @@
     </div>
     <form method="post" action="#" th:action="@{/admin/users/edit/{id}(id=${id})}" th:object="${user}">
         <div class="element">
-            <p>Imię:</p>
+            <p class="fw-bold">Imię:</p>
             <input type="text" class="form-control mb-2" th:field="*{firstName}" th:value="*{firstName}">
             <p th:if="${#fields.hasErrors('firstName')}" class="invalid-feedback d-block mb-3" th:errors="*{firstName}">Błędna nazwa</p>
-            <p>Nazwisko:</p>
+            <p class="fw-bold">Nazwisko:</p>
             <input type="text" th:field="*{lastName}" class="form-control mb-2" th:value="*{lastName}">
             <p th:if="${#fields.hasErrors('lastName')}" class="invalid-feedback d-block mb-3" th:errors="*{lastName}">Błędna nazwa</p>
-            <p>E-mail:</p>
+            <p class="fw-bold">E-mail:</p>
             <input type="text" th:field="*{email}" class="form-control mb-2" th:value="*{email}">
             <p th:if="${#fields.hasErrors('email')}" class="invalid-feedback d-block mb-3" th:errors="*{email}">Błędna nazwa</p>
-            <p>Pesel:</p>
+            <p class="fw-bold">Pesel:</p>
             <input type="text" th:field="*{pesel}" class="form-control mb-2" th:value="*{pesel}">
             <p th:if="${#fields.hasErrors('pesel')}" class="invalid-feedback d-block mb-3" th:errors="*{pesel}">Błędna nazwa</p>
-            <p>Grupa:</p>
+            <p class="fw-bold">Grupa:</p>
             <input disabled type="text" class="form-control mb-2" th:field="*{group}" th:value="*{group}">
-            <p>Rola:</p>
+            <p class="fw-bold">Rola:</p>
             <input disabled type="text" class="form-control mb-2" th:field="*{role}" th:value="*{role}">
         </div>
         <br>
         <div class="element">
-            <p>Status:</p>
+            <p class="fw-bold">Status:</p>
             <input disabled class="form-control mb-2" type="text" th:value="${user.enabled ? 'Aktywny' : 'Nieaktywny'}">
-            <p>Zmień status:</p>
+            <p class="fw-bold">Zmień status:</p>
             <select class="form-select" th:field="*{enabled}">
                 <option th:value="true">Aktywny</option>
                 <option th:value="false">Nieaktywny</option>
@@ -64,20 +64,20 @@
     </form>
     <form method="post" th:action="@{/admin/users/resend-token}" th:object="${token}">
         <div th:if="*{expiryDate != null}" class="element">
-            <p>Token rejestracyjny:</p>
+            <p class="fw-bold">Token rejestracyjny:</p>
             <div>
                 <input type="hidden" name="userId" th:value="${id}">
                 <div th:if="*{isExpired()}">
                     <input class="form-control mb-2" disabled value="Aktywny">
                     <p></p>
-                    <p>Data wygaśnięcia tokenu: </p>
+                    <p class="fw-bold">Data wygaśnięcia tokenu: </p>
                     <input class="form-control mb-2" disabled th:value="*{getFormattedExpiryDate()}">
                     <p></p>
                 </div>
                 <div th:if="*{!isExpired()}">
                     <input class="form-control mb-2" disabled value="Nieaktywny">
                     <p></p>
-                    <p>Token wygasł: </p>
+                    <p class="fw-bold">Token wygasł: </p>
                     <input class="form-control mb-2" disabled th:value="*{getFormattedExpiryDate()}">
                     <p></p>
                 </div>

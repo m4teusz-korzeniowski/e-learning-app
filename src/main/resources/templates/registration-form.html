@@ -19,21 +19,21 @@
 <div class="user-courses">
     <form action="#" th:action="@{/admin/register}" method="post" th:object="${user}">
         <div class="element">
-            <p>Imię:</p>
+            <p class="fw-bold">Imię:</p>
             <input type="text" class="form-control mb-2" th:field="*{firstName}">
             <p th:if="${#fields.hasErrors('firstName')}" class="invalid-feedback d-block mb-3" th:errors="*{firstName}"></p>
 
-            <p>Nazwisko:</p>
+            <p class="fw-bold">Nazwisko:</p>
             <input type="text" class="form-control mb-2" th:field="*{lastName}">
             <p th:if="${#fields.hasErrors('lastName')}" class="invalid-feedback d-block mb-3" th:errors="*{lastName}"></p>
 
-            <p>E-mail:</p>
+            <p class="fw-bold">E-mail:</p>
             <input th:field="*{email}" class="form-control mb-2">
             <p th:if="${#fields.hasErrors('email')}" class="invalid-feedback d-block mb-3" th:errors="*{email}"></p>
-            <p>Nr. Pesel:</p>
+            <p class="fw-bold">Nr. Pesel:</p>
             <input th:field="*{pesel}" class="form-control mb-2" type="text">
             <p th:if="${#fields.hasErrors('pesel')}" class="invalid-feedback d-block mb-3" th:errors="*{pesel}"></p>
-            <p>Wybierz rolę:</p>
+            <p class="fw-bold">Wybierz rolę:</p>
             <select th:field="*{role}" class="form-select mb-2">
                 <option th:value="'STUDENT'">Uczeń</option>
                 <option th:value="'TEACHER'">Nauczyciel</option>

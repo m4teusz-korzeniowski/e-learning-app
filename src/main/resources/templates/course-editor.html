@@ -24,7 +24,7 @@
     <form th:action="@{/teacher/course/edit/{id}(id=${id})}" method="post" th:object="${course}">
         <div class="element">
             <input type="hidden" th:field="*{creatorId}" th:value="*{creatorId}">
-            <label for="description">Opis kursu:</label>
+            <label for="description" class="fw-bold form-label">Opis kursu:</label>
             <textarea id="description" style="display: none" th:field="*{description}"
                       name="description"></textarea>
             <div id="editor"></div>

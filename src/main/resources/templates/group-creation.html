@@ -23,7 +23,7 @@
 <div class="user-courses">
     <form action="#" th:action="@{/admin/groups/create}" method="post" th:object="${group}">
         <div class="element">
-                <p>Nazwa grupy:</p>
+                <p class="fw-bold">Nazwa grupy:</p>
                 <span><input class="form-control mb-2" type="text" th:field="*{name}"></span>
                 <p
                         class="invalid-feedback d-block mb-3"

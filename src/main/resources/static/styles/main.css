@@ -18,7 +18,7 @@ a {
     padding: 10px;
     background: white;
     overflow: auto;
-    min-width: 700px;
+    min-width: 500px;
 }
 
 #test-name {
@@ -81,7 +81,6 @@ a {
     border-collapse: separate;
     border-spacing: 0;
     width: 100%;
-    max-width: 100%;
     background-color: white;
     text-align: center;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -132,7 +131,6 @@ a {
     color: wheat;
 }
 
-.icon-
 .element .change-pass {
     padding: 3px;
     border-style: solid;
@@ -227,7 +225,7 @@ a {
 
 
 .alert {
-    min-width: 700px;
+    min-width: 500px;
 }
 
 .email-input {
