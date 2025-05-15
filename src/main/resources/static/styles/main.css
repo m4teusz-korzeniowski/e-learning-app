@@ -18,7 +18,7 @@ a {
     padding: 10px;
     background: white;
     overflow: auto;
-    min-width: 500px;
+    min-width: 700px;
 }
 
 #test-name {
@@ -227,7 +227,7 @@ a {
 
 
 .alert {
-    min-width: 500px;
+    min-width: 700px;
 }
 
 .email-input {
