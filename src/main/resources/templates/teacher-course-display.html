@@ -27,7 +27,7 @@
     <br>
     <div th:if="${course.description != null} and ${!course.description.equals('<p><br></p>')}">
         <div class="element">
-            <p th:utext="${course.description}">Opis kursu</p>
+            <div th:utext="${course.description}">Opis kursu</div>
         </div>
         <br>
     </div>
@@ -35,7 +35,7 @@
         <div class="element">
             <h3 th:text="${courseModule.name}">Nazwa modułu</h3>
             <div th:each="item : ${courseModule.items}">
-                <p th:if="${item.description != null} and ${!item.description.equals('<p><br></p>')}" th:utext="${item.description}">Element modułu</p>
+                <div th:if="${item.description != null} and ${!item.description.equals('<p><br></p>')}" th:utext="${item.description}"></div>
                 <div th:if="${item.filePath != null}">
                     <div>
                         <a th:href="@{/resource/{filename}(filename=${item.filePath})}"
