@@ -64,7 +64,7 @@ public class RegistrationController {
 
     @GetMapping("/admin/confirmation")
     public String confirmation(@ModelAttribute("message") String message) {
-        return "/registration-completed";
+        return "registration-completed";
     }
 
     @GetMapping("/register")
