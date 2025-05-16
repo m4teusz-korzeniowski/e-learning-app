@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo - Strona Startowa</title>
+    <th:block th:replace="~{fragments :: head}"></th:block>
+</head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+<div class="info-bar">
+    <h2>Moje Kursy</h2>
+</div>
+<br><br>
+<div class="user-courses">
+    <div class="element">
+        <form th:action="@{/demo}" method="get">
+            <input name="keyword" type="text" th:value="${keyword}" placeholder="Wyszukaj...">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+    <br>
+    <div th:each="course: ${courses}">
+        <div class="element">
+            <p class="h5 mb-3" style="font-weight: bold"><a th:href="@{/course/{id}(id=${course.id})}"
+                                                            th:text="${course.name}">Nazwa kursu</a></p>
+            <p th:text="'Autor: ' + ${course.creatorName}"></p>
+        </div>
+        <br>
+    </div>
+    <div class="element">
+        <a class="page-span"
+           th:each="pageElem: ${#numbers.sequence(1,totalPages)}"
+           th:if="${pageElem > 0}"
+           th:href="@{/demo(keyword=${keyword},page=${pageElem}-1)}"
+           th:text="${pageElem}"
+        ></a>
+    </div>
+    <br>
+</div>
+</body>
+</html>

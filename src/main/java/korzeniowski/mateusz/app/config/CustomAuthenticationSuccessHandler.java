@@ -19,6 +19,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             redirect = "/";
         } else if (authentication.getAuthorities().stream().anyMatch(g -> g.getAuthority().equals("ROLE_TEACHER"))) {
             redirect = "/teacher";
+        } else if (authentication.getAuthorities().stream().anyMatch(g -> g.getAuthority().equals("ROLE_DEMO"))) {
+            redirect = "/demo";
         }
         response.sendRedirect(redirect);
     }

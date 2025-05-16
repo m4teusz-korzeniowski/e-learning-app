@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title th:text="${course.name}">Nazwa kursu</title>
@@ -13,7 +14,8 @@
     </div>
 </div>
 <div class="info-bar">
-    <a th:href="@{/}">Strona główna</a>
+    <a sec:authorize="hasAnyRole('STUDENT')" th:href="@{/}">Strona główna</a>
+    <a sec:authorize="hasAnyRole('DEMO')" th:href="@{/demo}">Strona główna</a>
     <span>&nbsp>&nbsp</span>
     <span>Moje kursy</span>
     <span>&nbsp>&nbsp</span>

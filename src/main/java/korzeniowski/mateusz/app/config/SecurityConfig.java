@@ -20,19 +20,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> request
+                .requestMatchers("/demo").hasAnyRole("DEMO")
                 .requestMatchers("/h2-console/**").hasAnyRole("ADMIN")
                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                 .requestMatchers("/teacher/**").hasAnyRole("TEACHER")
                 .requestMatchers("/").hasAnyRole("STUDENT")
-                .requestMatchers("/course/**").hasAnyRole("STUDENT")
+                .requestMatchers("/course/**").hasAnyRole("STUDENT", "DEMO")
                 .requestMatchers("/module/quiz/**").hasAnyRole("STUDENT")
                 .requestMatchers("/settings").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
                 .requestMatchers("/email/prepare-user").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
                 .requestMatchers("/email").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
                 .requestMatchers("/email/**").hasAnyRole("TEACHER", "ADMIN")
-                .requestMatchers("/resource/**").hasAnyRole("STUDENT", "TEACHER")
-                .requestMatchers("/attempt/**").hasAnyRole("STUDENT", "TEACHER")
-                .requestMatchers("/test/**").hasAnyRole("STUDENT", "TEACHER")
+                .requestMatchers("/resource/**").hasAnyRole("STUDENT", "TEACHER", "DEMO")
+                .requestMatchers("/attempt/**").hasAnyRole("STUDENT", "TEACHER", "DEMO")
+                .requestMatchers("/test/**").hasAnyRole("STUDENT", "TEACHER", "DEMO")
                 .requestMatchers("/styles/**", "/scripts/**", "/images/**").permitAll()
                 .requestMatchers("/register").permitAll()
                 .anyRequest().authenticated());

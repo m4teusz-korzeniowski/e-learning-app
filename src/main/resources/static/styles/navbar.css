@@ -105,14 +105,14 @@ h2 {
     border-radius: 4px;
 }
 
-.dropdown-item {
+.dropdown-item-2 {
     padding: 10px 0;
     font-size: 18px;
     display: flex;
     align-items: center;
 }
 
-.dropdown-item a {
+.dropdown-item-2 a {
     text-decoration: none;
     color: #333;
     display: flex;
@@ -120,9 +120,10 @@ h2 {
     gap: 10px;
     border-radius: 8px;
     padding: 8px;
+    width: 100%;
 }
 
-.dropdown-item a:hover {
+.dropdown-item-2 a:hover {
     background-color: #f0f8ff;
 }
 

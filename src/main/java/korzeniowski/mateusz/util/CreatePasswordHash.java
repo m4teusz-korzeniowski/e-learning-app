@@ -12,9 +12,6 @@ public final class CreatePasswordHash {
     }
 
     public static void main(String[] args) {
-        System.out.println(createHashBCrypt("pass1"));
-        System.out.println(createHashBCrypt("pass2"));
-        System.out.println(createHashBCrypt("pass3"));
-        System.out.println(createHashBCrypt("pass4"));
+        System.out.println(createHashBCrypt("demo"));
     }
 }

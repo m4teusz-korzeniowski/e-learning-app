@@ -99,7 +99,7 @@ public class AccessService {
             UserRole role = user.get().getUserRoles().iterator().next();
             if (role.getName().equals("TEACHER")) {
                 return hasLoggedInTeacherAccessToModuleItem(itemId, userId);
-            } else if (role.getName().equals("STUDENT")) {
+            } else if (role.getName().equals("STUDENT") || role.getName().equals("DEMO")) {
                 return moduleItemRepository.hasUserAccessToResourceFile(itemId, userId);
             }
         }
@@ -121,7 +121,7 @@ public class AccessService {
             UserRole role = user.get().getUserRoles().iterator().next();
             if (role.getName().equals("TEACHER")) {
                 return hasLoggedInTeacherAccessToTheTest(testId, userId);
-            } else if (role.getName().equals("STUDENT")) {
+            } else if (role.getName().equals("STUDENT") || role.getName().equals("DEMO")) {
                 return testRepository.hasUserAccessToTest(testId, userId);
             }
         }
@@ -134,7 +134,7 @@ public class AccessService {
             UserRole role = user.get().getUserRoles().iterator().next();
             if (role.getName().equals("TEACHER")) {
                 return hasTeacherAccessToAttempt(attemptId, userId);
-            } else if (role.getName().equals("STUDENT")) {
+            } else if (role.getName().equals("STUDENT") || role.getName().equals("DEMO")) {
                 return attemptRepository.hasUserAccessToAttempt(attemptId, userId);
             }
         }
