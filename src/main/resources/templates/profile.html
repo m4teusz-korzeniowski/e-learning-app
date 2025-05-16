@@ -24,14 +24,14 @@
 </div>
 <br><br>
 <div class="user-courses">
-    <div class="element">
-        <p th:text="'E-mail: ' + ${user.email}">E-mail:</p>
+    <div class="element" style="gap: 15px; display: flex">
+        <p class="form-label" th:text="'E-mail: ' + ${user.email}">E-mail:</p>
         <a
+                class="form-label"
                 th:href="@{/email/prepare-user(userId=${user.id})}"
                 target="_blank"
         >
-            <i class="fa-solid fa-envelope"></i>
-            Wyślij wiadomość:
+            <i class="fa-solid fa-envelope"></i> Wyślij wiadomość
         </a>
     </div>
 </div>

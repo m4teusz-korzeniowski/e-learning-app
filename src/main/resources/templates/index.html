@@ -23,10 +23,9 @@
     <br>
     <div th:each="course: ${courses}">
         <div class="element">
-            <a th:href="@{/course/{id}(id=${course.id})}" th:text="${course.name}">Nazwa kursu</a>
-            <p>
-                <a th:href="@{/user/{id}(id=${course.creatorId})}" th:text="'Autor: ' + ${course.creatorName}"></a>
-            </p>
+            <p class="h5 mb-3" style="font-weight: bold"><a th:href="@{/course/{id}(id=${course.id})}"
+                                                            th:text="${course.name}">Nazwa kursu</a></p>
+            <a th:href="@{/user/{id}(id=${course.creatorId})}" th:text="'Autor: ' + ${course.creatorName}"></a>
         </div>
         <br>
     </div>

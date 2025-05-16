@@ -7,9 +7,16 @@
 </head>
 <body>
 <header th:replace="~{fragments :: navbar}"></header>
-<div class="info-bar">
-    <h2>Bad request</h2>
-</div>
-<br>
+<main class="container text-center mt-5">
+    <div>
+        <h2 class="display-4 text-danger">400 – Błędne żądanie</h2>
+        <p class="lead mt-3">Wysłane żądanie jest nieprawidłowe lub niekompletne.</p>
+        <p>Upewnij się, że przesyłane dane są poprawne i spróbuj ponownie.</p>
+
+        <div class="mt-4">
+            <a href="javascript:history.back()" class="btn btn-primary btn-lg">Wróć</a>
+        </div>
+    </div>
+</main>
 </body>
 </html>

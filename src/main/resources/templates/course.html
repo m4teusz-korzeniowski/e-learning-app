@@ -29,20 +29,23 @@
     </div>
     <div th:each="courseModule : ${course.modules}">
         <div class="element">
-            <h3 th:text="${courseModule.name}">Nazwa modułu</h3>
+            <h3 class="mb-4" th:text="${courseModule.name}">Nazwa modułu</h3>
             <div th:each="item : ${courseModule.items}">
-                <p th:utext="${item.description}">Element modułu</p>
+                <div th:if="${item.description != null} and ${!item.description.equals('<p><br></p>')}"
+                     th:utext="${item.description}"></div>
                 <div th:if="${item.filePath != null}">
-                    <div>
+                    <div style="display: flex; gap: 10px">
+                        <p class="form-label"><i class="fa-regular fa-file"></i></i></p>
                         <a th:href="@{/resource/{filename}(filename=${item.filePath})}"
-                           th:text="${item.name}" target="_blank">Plik</a>
+                           th:text="${item.name}" class="form-label" target="_blank">Plik</a>
                     </div>
-                    <br>
                 </div>
             </div>
             <div th:each="test : ${courseModule.tests}">
-                <p><a href="#" th:href="@{/test/{id}/display(id=${test.getId()})}" th:text="${test.name}">Nazwa Testu</a>
-                </p>
+                <div style="display: flex; gap: 10px">
+                    <p class="form-label"><i class="fa-regular fa-clipboard"></i></p>
+                    <a class="form-label" href="#" th:href="@{/test/{id}/display(id=${test.getId()})}" th:text="${test.name}"></a>
+                </div>
             </div>
         </div>
         <br>

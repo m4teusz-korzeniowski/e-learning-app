@@ -6,9 +6,16 @@
     <th:block th:replace="~{fragments :: head}"></th:block>
 <body>
 <header th:replace="~{fragments :: navbar}"></header>
-<div class="info-bar">
-    <h2>Nie znaleziono wyszukiwanej strony</h2>
-</div>
-<br>
+<main class="container text-center mt-5">
+    <div>
+        <h2 class="display-4 text-danger">404 – Nie znaleziono strony</h2>
+        <p class="lead mt-3">Strona, której szukasz, mogła zostać usunięta, zmienić nazwę lub nigdy nie istniała.</p>
+        <p>Spróbuj wrócić na stronę główną lub sprawdź adres URL.</p>
+
+        <div class="mt-4">
+            <a href="javascript:history.back()" class="btn btn-primary btn-lg">Wróć</a>
+        </div>
+    </div>
+</main>
 </body>
 </html>
