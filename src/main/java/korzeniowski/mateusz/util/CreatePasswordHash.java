@@ -12,6 +12,5 @@ public final class CreatePasswordHash {
     }
 
     public static void main(String[] args) {
-
     }
 }

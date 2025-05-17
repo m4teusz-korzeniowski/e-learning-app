@@ -29,7 +29,7 @@ public class GroupController {
 
     private final GroupService groupService;
     private final UserService userService;
-    private static final int PAGE_SIZE = 2;
+    private static final int PAGE_SIZE = 20;
 
     public GroupController(GroupService groupService, UserService userService) {
         this.groupService = groupService;

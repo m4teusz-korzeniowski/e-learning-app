@@ -21,8 +21,8 @@ import java.util.Optional;
 @Controller
 public class TeacherController {
 
-    private final static int PAGE_SIZE = 10;
-    private final static int COURSE_PER_PAGE = 1;
+    private final static int PAGE_SIZE = 20;
+    private final static int COURSE_PER_PAGE = 10;
 
     private final CourseService courseService;
     private final AccessService accessService;

@@ -17,7 +17,7 @@ import java.util.List;
 @Controller
 public class HomeController {
 
-    private final static int COURSE_PER_PAGE = 1;
+    private final static int COURSE_PER_PAGE = 10;
 
     private final UserService userService;
     private final CourseService courseService;

@@ -22,7 +22,7 @@ import java.util.Optional;
 @Controller
 public class AdminUserController {
     private final UserService userService;
-    private static final int PAGE_SIZE = 10;
+    private static final int PAGE_SIZE = 20;
     private final CourseService courseService;
 
     public AdminUserController(UserService userService, CourseService courseService) {

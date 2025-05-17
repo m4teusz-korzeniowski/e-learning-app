@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
 @Controller
 public class AdminCourseController {
 
-    private final static int PAGE_SIZE = 10;
+    private final static int PAGE_SIZE = 20;
     private final UserService userService;
     private final CourseService courseService;
 
