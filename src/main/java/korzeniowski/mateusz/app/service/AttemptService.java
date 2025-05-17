@@ -77,6 +77,10 @@ public class AttemptService {
         return teacher.isPresent();
     }
 
+    private boolean isUserDemoUser(Long userId){
+        return userRepository.findUserByRoleAndId(userId, "DEMO").isPresent();
+    }
+
     private void deleteAttempt(Long userId, Long testId) {
         attemptRepository.deleteByUserIdAndTestId(userId, testId);
     }
@@ -100,6 +104,9 @@ public class AttemptService {
                 throw new ExceededTestAttemptsException("*przekroczono limit podejść do testu!");
             }
         } else {
+            if(isUserDemoUser(userId)) {
+                deleteAttempt(userId, test.getTestId());
+            }
             createNewAttempt(userId, test.getTestId());
             return true;
         }

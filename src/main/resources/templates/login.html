@@ -28,7 +28,65 @@
         <div th:if="${success!=null} and ${!success.isBlank()}"
              class="alert alert-success mt-2" style="max-width: 300px; margin: 0 auto" th:text="${success}">
         </div>
+        <div class="alert alert-info mt-2" style="max-width: 300px; margin: 20px auto">
+            <div class="login-info">
+                <p style="font-weight: bold">Projekt platformy e-learningowej</p>
+                <p>Aplikacja powstała jako część pracy licencjackiej na studiach
+                    informatycznych. Głównym celem projektu było stworzenie
+                    nowoczesnej i funkcjonalnej platformy wspierającej naukę zdalną.</p>
+                <p>System umożliwia m.in. przeglądanie kursów, dostęp do zasobów edukacyjnych,
+                    rozwiązywanie testów oraz zarządzanie treściami przez nauczycieli.</p>
+                <p>Projekt jest stale rozwijany – dodawane są nowe funkcje
+                    oraz poprawki optymalizujące działanie systemu.</p>
+                <p>
+                    Wszelkie uwagi lub pytania proszę kierować na adres:
+                    <a href="mailto:m4teusz.korzeniowski@gmail.com">m4teusz.korzeniowski@gmail.com</a>
+                </p>
+            </div>
+            <a id="toggle" class="btn btn-primary form-control mb-3" onclick="toggleDemo()">Pokaż dane testowe</a>
+            <div id="demo" style="display: none; margin-bottom: 5px" class="mt-2">
+                <table class="table table-striped table-bordered text-center">
+                    <thead class="table-primary">
+                    <tr>
+                        <th>Login</th>
+                        <th>Hasło</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>demo1</td>
+                        <td>Middenheim62</td>
+                    </tr>
+                    <tr>
+                        <td>demo2</td>
+                        <td>Averheim17</td>
+                    </tr>
+                    <tr>
+                        <td>demo3</td>
+                        <td>Marienburg31</td>
+                    </tr>
+                    <tr>
+                        <td>demo4</td>
+                        <td>Ubersreik98</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </form>
 </div>
+<script>
+    function toggleDemo() {
+        const demo = document.getElementById('demo');
+        const btn = document.getElementById('toggle');
+        if (demo.style.display === 'none' || demo.style.display === '') {
+            demo.style.display = 'block';
+            btn.textContent = 'Ukryj dane testowe';
+        } else {
+            demo.style.display = 'none';
+            btn.textContent = 'Pokaż dane testowe';
+        }
+    }
+</script>
 </body>
 </html>

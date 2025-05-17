@@ -100,7 +100,8 @@
     </script>
     <th:block th:if="${remainingTime != null}">
         <script th:inline="javascript">
-            let remainingTime = [[${remainingTime}]];
+            const initialRemainingTime = [[${remainingTime}]];
+            const startTimestamp = new Date().getTime();
 
             function formatTime(seconds) {
                 const minutes = Math.floor(seconds / 60);
@@ -109,23 +110,23 @@
             }
 
             function updateTimer() {
+                const now = new Date().getTime();
+                const elapsedSeconds = Math.floor((now - startTimestamp) / 1000);
+                const remainingTime = Math.max(0, initialRemainingTime - elapsedSeconds);
+
                 const timer = document.getElementById('timer');
                 if (timer) {
                     timer.textContent = formatTime(remainingTime);
                 }
+
+                if (remainingTime <= 0) {
+                    clearInterval(timerInterval);
+                    window.location.href = '/attempt/' + [[${attemptId}]] + '/finalize';
+                }
             }
 
             updateTimer();
-
-            setInterval(() => {
-                    if (remainingTime > 0) {
-                        remainingTime--;
-                        updateTimer();
-                    } else {
-                        window.location.href = '/attempt/' + [[${attemptId}]] + '/finalize';
-                    }
-                }
-                , 1000);
+            const timerInterval = setInterval(updateTimer, 1000);
         </script>
     </th:block>
 </div>

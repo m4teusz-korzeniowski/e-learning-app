@@ -325,4 +325,8 @@ blockquote {
     text-align: center;
 }
 
+.login-info p{
+    text-align: justify;
+}
+
 
