@@ -7,7 +7,7 @@ The app is publicly available at:  https://mkor-e-learning.pl
 
 ## 🚧 Work in Progress
 This application is still under development. Some features might be incomplete, and bugs may occur.
-Demo account coming soon. Demo users with limited access are now available.
+Demo users with limited access are now available.
 
 ## Screenshots
 
