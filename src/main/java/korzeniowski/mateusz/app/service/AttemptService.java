@@ -77,7 +77,7 @@ public class AttemptService {
         return teacher.isPresent();
     }
 
-    private boolean isUserDemoUser(Long userId){
+    private boolean isUserDemoUser(Long userId) {
         return userRepository.findUserByRoleAndId(userId, "DEMO").isPresent();
     }
 
@@ -104,7 +104,7 @@ public class AttemptService {
                 throw new ExceededTestAttemptsException("*przekroczono limit podejść do testu!");
             }
         } else {
-            if(isUserDemoUser(userId)) {
+            if (isUserDemoUser(userId)) {
                 deleteAttempt(userId, test.getTestId());
             }
             createNewAttempt(userId, test.getTestId());
@@ -353,6 +353,15 @@ public class AttemptService {
         List<Attempt> userAttempts = attemptRepository
                 .findAllUserAttemptsByCourseId(userId, courseId, AttemptStatus.COMPLETED);
         return UserResultsDto.map(userAttempts);
+    }
+
+    public boolean noneAnsweredChecked(QuestionAttemptDto question) {
+        for (AnswerAttemptDto answer : question.getAnswers()) {
+            if (answer.getUserAnswer()) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

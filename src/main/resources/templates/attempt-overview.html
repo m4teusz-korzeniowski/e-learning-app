@@ -32,7 +32,7 @@
                    th:text="${answer.content}"
                    th:classappend="${
                         (answer.userAnswer and answer.correctAnswer) ? 'correct' :
-                        ((answer.userAnswer and not answer.correctAnswer) or (not answer.userAnswer and answer.correctAnswer)) ? 'incorrect' :
+                        ((answer.userAnswer and  !answer.correctAnswer)) ? 'incorrect' :
                         'not-checked'}"></label>
         </div>
     </div>

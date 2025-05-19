@@ -237,6 +237,10 @@ public class TestController {
             } else if (questionNumber > attempt.getNumberOfQuestions()) {
                 questionNumber = attempt.getNumberOfQuestions();
             }
+
+            boolean noneAnsweredChecked = attemptService.noneAnsweredChecked(attempt.getQuestions().get(questionNumber - 1));
+            model.addAttribute("noneAnswersChecked", noneAnsweredChecked);
+
             model.addAttribute("totalQuestionNumber", attempt.getNumberOfQuestions());
             model.addAttribute("questionNo", questionNumber);
             model.addAttribute("attempt", attempt);
