@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Błąd serwera</title>
+    <th:block th:replace="~{fragments :: head}"></th:block>
+</head>
+<body>
+<header th:replace="~{fragments :: navbar}"></header>
+<main class="container text-center mt-5">
+    <div>
+        <h2 class="display-4 text-danger">500 – Wewnętrzny błąd serwera</h2>
+        <p class="lead mt-3">Wystąpił nieoczekiwany problem po stronie serwera.</p>
+        <p>Przepraszamy za niedogodności. Spróbuj ponownie później lub skontaktuj się z administratorem systemu.</p>
+
+        <div class="mt-4">
+            <a href="javascript:history.back()" class="btn btn-primary btn-lg">Wróć</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>
