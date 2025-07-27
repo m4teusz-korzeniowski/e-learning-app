@@ -1,0 +1,24 @@
+name: Build and Push Docker Image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Build and push Docker image
+        run: |
+          IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/e-learning-app:latest
+          docker build -t "$IMAGE_NAME" .
+          docker push "$IMAGE_NAME"
