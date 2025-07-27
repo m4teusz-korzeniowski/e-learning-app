@@ -27,5 +27,3 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/e-learning-app:latest
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/e-learning-app:cache
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/e-learning-app:cache,mode=max
