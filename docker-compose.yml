@@ -17,7 +17,7 @@ services:
       - "3306:3306"
 
   app:
-    image: ghcr.io/m4teusz-korzeniowski/e-learning-app/e-learning-app:latest
+    image: ghcr.io/m4teusz-korzeniowski/e-learning-app:latest
     container_name: e-learning-app
     restart: unless-stopped
     environment:
