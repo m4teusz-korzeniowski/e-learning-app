@@ -15,10 +15,17 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Log in to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
-        run: |
-          IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/e-learning-app:latest
-          docker build -t "$IMAGE_NAME" .
-          docker push "$IMAGE_NAME"
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/e-learning-app:latest
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/e-learning-app:cache
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/e-learning-app:cache,mode=max
