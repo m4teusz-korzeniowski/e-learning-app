@@ -28,7 +28,9 @@
 <br><br>
 <div class="user-courses">
     <form method="post" th:object="${question}"
-          th:action="@{/teacher/questions/edit/{questionId}(questionId=${questionId})}">
+          th:action="@{/teacher/questions/edit/{questionId}(questionId=${questionId})}"
+          enctype="multipart/form-data"
+    >
         <div class="element">
             <input type="hidden" th:field="*{courseId}">
             <input type="hidden" th:field="*{testId}">
@@ -41,6 +43,8 @@
 
             <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback d-block mb-3"
                  th:errors="*{description}"></div>
+
+            <input class="form-control" type="file" name="file">
 
             <label class="form-label mt-2 fw-bold">Maksymalna ilość punktów za pytanie:</label>
             <input type="number" class="form-control mb-3" th:field="*{score}">

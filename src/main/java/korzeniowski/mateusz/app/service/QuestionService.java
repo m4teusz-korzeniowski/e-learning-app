@@ -2,6 +2,8 @@ package korzeniowski.mateusz.app.service;
 
 import korzeniowski.mateusz.app.exceptions.QuestionNotFound;
 import korzeniowski.mateusz.app.exceptions.QuestionTypeException;
+import korzeniowski.mateusz.app.file.FileSystemStorageService;
+import korzeniowski.mateusz.app.file.StorageService;
 import korzeniowski.mateusz.app.model.course.test.Answer;
 import korzeniowski.mateusz.app.model.course.test.Question;
 import korzeniowski.mateusz.app.model.course.test.QuestionType;
@@ -10,11 +12,13 @@ import korzeniowski.mateusz.app.model.course.test.dto.QuestionDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionEditDto;
 import korzeniowski.mateusz.app.repository.AnswerRepository;
 import korzeniowski.mateusz.app.repository.QuestionRepository;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -25,12 +29,19 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final TestService testService;
     private final AnswerRepository answerRepository;
+    private final StorageService storageService;
     private final static int DEFAULT_NUMBER_OF_ANSWERS = 2;
+    private final static String QUESTION_DIRECTORY = "module/task/";
 
-    public QuestionService(QuestionRepository questionRepository, TestService testService, AnswerRepository answerRepository) {
+    public QuestionService(QuestionRepository questionRepository,
+                           TestService testService,
+                           AnswerRepository answerRepository,
+                           FileSystemStorageService storageService
+    ) {
         this.questionRepository = questionRepository;
         this.testService = testService;
         this.answerRepository = answerRepository;
+        this.storageService = storageService;
     }
 
     @Transactional
@@ -129,7 +140,7 @@ public class QuestionService {
         }
     }
 
-    public void editQuestion(QuestionEditDto dto) {
+    public void editQuestion(QuestionEditDto dto, MultipartFile file) {
         Optional<Question> question = questionRepository.findById(dto.getId());
         if (question.isPresent()) {
             question.get().setDescription(dto.getDescription());
@@ -140,6 +151,15 @@ public class QuestionService {
             } else {
                 question.get().setCategory(dto.getCategory());
             }
+            if (file != null && !file.isEmpty()) {
+                String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+                String fileName = "task_" + dto.getId() + "." + extension;
+                String path = QUESTION_DIRECTORY + fileName;
+                storageService.deleteAllStartsWith(QUESTION_DIRECTORY, "task_" + dto.getId() + ".");
+                storageService.store(file, path);
+                question.get().setFileUrl(path);
+            }
+            questionRepository.save(question.get());
         } else {
             throw new NoSuchElementException("Nie znaleziono pytania!");
         }

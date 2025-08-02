@@ -27,10 +27,11 @@ public class QuestionEditDto {
     private List<AnswerEditDto> answers;
     private Long courseId;
     private Long testId;
+    private String fileUrl;
 
     public QuestionEditDto(Long id, String description, Double score, String type,
                            String category, List<AnswerEditDto> answers,
-                           Long courseId, Long testId) {
+                           Long courseId, Long testId, String fileUrl) {
         this.id = id;
         this.description = description;
         this.score = score;
@@ -39,6 +40,7 @@ public class QuestionEditDto {
         this.answers = answers;
         this.courseId = courseId;
         this.testId = testId;
+        this.fileUrl = fileUrl;
     }
 
     public Long getId() {
@@ -105,6 +107,14 @@ public class QuestionEditDto {
         this.category = category;
     }
 
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
     public static QuestionEditDto map(Question question) {
         List<AnswerEditDto> answers = new ArrayList<>();
         for (Answer answer : question.getAnswers()) {
@@ -117,6 +127,8 @@ public class QuestionEditDto {
                 question.getCategory(),
                 answers,
                 question.getTest().getModule().getCourse().getId(),
-                question.getTest().getId());
+                question.getTest().getId(),
+                question.getFileUrl()
+        );
     }
 }

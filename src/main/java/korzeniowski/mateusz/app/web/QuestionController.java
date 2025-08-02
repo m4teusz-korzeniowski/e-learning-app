@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -134,6 +135,7 @@ public class QuestionController {
     @PostMapping("/teacher/questions/edit/{questionId}")
     public String editQuestion(@PathVariable long questionId, HttpSession session, Model model,
                                @ModelAttribute("question") @Valid QuestionEditDto question,
+                               @RequestParam(value = "file", required = false) MultipartFile file,
                                BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return returnQuestionEditForm(questionId, model, question);
@@ -144,7 +146,7 @@ public class QuestionController {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             if (questionService.isQuestionTypeOk(question)) {
-                questionService.editQuestion(question);
+                questionService.editQuestion(question, file);
                 if (question.getAnswers() != null) {
                     for (AnswerEditDto answer : question.getAnswers()) {
                         answerService.updateAnswer(answer);
