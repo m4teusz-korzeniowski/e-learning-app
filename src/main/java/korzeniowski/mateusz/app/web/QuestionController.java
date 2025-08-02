@@ -137,8 +137,9 @@ public class QuestionController {
     @PostMapping("/teacher/questions/edit/{questionId}")
     public String editQuestion(@PathVariable long questionId, HttpSession session, Model model,
                                @ModelAttribute("question") @Valid QuestionEditDto question,
+                               BindingResult bindingResult,
                                @RequestParam(value = "file", required = false) MultipartFile file,
-                               BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+                               RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return returnQuestionEditForm(questionId, model, question);
         }
