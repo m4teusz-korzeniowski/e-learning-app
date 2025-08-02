@@ -11,6 +11,7 @@ import korzeniowski.mateusz.app.service.AccessService;
 import korzeniowski.mateusz.app.service.AnswerService;
 import korzeniowski.mateusz.app.service.QuestionService;
 import korzeniowski.mateusz.app.service.TestService;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -146,6 +148,14 @@ public class QuestionController {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             if (questionService.isQuestionTypeOk(question)) {
+                if (file != null && !file.isEmpty()) {
+                    String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+
+                    if (!List.of("pdf", "png", "jpg", "jpeg").contains(extension)) {
+                        model.addAttribute("fileError", "*nieprawidłowy typ pliku. Dozwolone: .pdf, .jpg, .png");
+                        return returnQuestionEditForm(questionId, model, question);
+                    }
+                }
                 questionService.editQuestion(question, file);
                 if (question.getAnswers() != null) {
                     for (AnswerEditDto answer : question.getAnswers()) {

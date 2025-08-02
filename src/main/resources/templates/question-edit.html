@@ -45,6 +45,7 @@
                  th:errors="*{description}"></div>
 
             <input class="form-control" type="file" name="file">
+            <div th:if="${fileError}" class="invalid-feedback d-block mb-3" th:text="${fileError}"></div>
 
             <label class="form-label mt-2 fw-bold">Maksymalna ilość punktów za pytanie:</label>
             <input type="number" class="form-control mb-3" th:field="*{score}">
