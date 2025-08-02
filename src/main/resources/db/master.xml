@@ -18,7 +18,7 @@
     <include file="create_table_answer.xml" relativeToChangelogFile="true"/>
     <include file="create_table_password_token.xml" relativeToChangelogFile="true"/>
     <include file="create_table_attempt_state.xml" relativeToChangelogFile="true"/>
-    <include file="add_file.xml" relativeToChangelogFile="true"/>
+    <include file="add_file_url_column_to_question_table.xml" relativeToChangelogFile="true"/>
 
     <include file="test/0001_group.xml" relativeToChangelogFile="true"/>
     <include file="test/0001_application_user.xml" relativeToChangelogFile="true"/>
