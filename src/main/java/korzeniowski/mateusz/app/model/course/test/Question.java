@@ -21,6 +21,7 @@ public class Question {
     @OneToMany(mappedBy = "question")
     private List<Answer> answers = new ArrayList<>();
     private String category;
+    private String fileUrl;
 
     public Long getId() {
         return id;
@@ -76,5 +77,13 @@ public class Question {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
     }
 }
