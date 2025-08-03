@@ -56,5 +56,5 @@ jobs:
             fi
             
             echo "Running backup"
-            python3 backup_db.py
+            python3 scripts/backup_db.py
 
