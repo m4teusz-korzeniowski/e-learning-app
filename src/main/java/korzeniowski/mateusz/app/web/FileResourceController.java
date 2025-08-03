@@ -33,14 +33,21 @@ public class FileResourceController {
     @GetMapping("/resource/**")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(HttpServletRequest request) {
-
+        //extractId and getFile are versatile methods apart from detail that they're located in ModuleItemService
         try {
             String filePath = request.getRequestURI().substring(("/resource/").length());
             Long itemId = moduleItemService.extractItemIdFromFileName(filePath);
             UserSessionDto userInfo = (UserSessionDto) request.getSession().getAttribute("userInfo");
-            if (accessService.hasUserAccessToResourceFile(itemId, userInfo.getId())) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            if (filePath.startsWith("item/")) {
+                if (accessService.hasUserAccessToResourceFile(itemId, userInfo.getId())) {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+                }
+            } else if (filePath.startsWith("task/")) {
+                if (accessService.hasUserAccessToQuestionResourceFile(itemId, userInfo.getId())) {
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+                }
             }
+
             Resource file = moduleItemService.getFile(filePath);
             if (file == null)
                 return ResponseEntity.notFound().build();

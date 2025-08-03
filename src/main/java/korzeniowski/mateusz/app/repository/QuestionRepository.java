@@ -20,4 +20,13 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
                     " upper(q.questionType) like upper(concat('%', :keyword, '%')) or" +
                     " upper(coalesce(q.category,'Brak')) like upper(concat('%', :keyword, '%')))")
     Page<Question> findAllByKeywordAndTestId(@Param("keyword") String keyword, @Param("testId") Long testId, Pageable pageable);
+
+    @Query("select case when count(question) > 0 then false else true end" +
+            " from Question question" +
+            " join question.test test" +
+            " join test.module module" +
+            " join module.course course" +
+            " join course.users user" +
+            " where question.id = :questionId and user.id = :userId and module.visible = true")
+    Boolean hasUserAccessToResourceFile(@Param("questionId") Long questionId, @Param("userId") Long userId);
 }
