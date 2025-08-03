@@ -2,9 +2,9 @@ name: Create MySQL DB backup
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - '*'
+  schedule:
+    - cron: '0 22 * * 6'
+    - cron: '0 22 * * 4'
 
 jobs:
   backup:
