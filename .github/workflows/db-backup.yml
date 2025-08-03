@@ -1,0 +1,60 @@
+name: Create MySQL DB backup
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 22 * * 6'
+    - cron: '0 22 * * 4'
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Copy backup_db.py script to VPS
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "scripts/backup_db.py"
+          target: "/opt/e-learning-app/"
+
+      - name: Run backup script on VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            set -e
+            cd /opt/e-learning-app/
+            
+            if ! command -v python3 &> /dev/null; then
+              echo "python3 not found. Installing..."
+              apt update
+              apt install -y python3
+            else
+              echo "python3 is already installed."
+            fi
+            
+            if ! command -v pip3 &> /dev/null; then
+              echo "pip3 not found. Installing..."
+              apt install -y python3-pip
+            else
+              echo "pip3 is already installed."
+            fi
+            
+            if ! python3 -c 'import dotenv' &> /dev/null; then
+              echo "python-dotenv not found. Installing..."
+              pip3 install --quiet python-dotenv
+            else
+              echo "python-dotenv already installed."
+            fi
+            
+            echo "Running backup"
+            python3 scripts/backup_db.py
+
