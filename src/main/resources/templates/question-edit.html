@@ -28,7 +28,9 @@
 <br><br>
 <div class="user-courses">
     <form method="post" th:object="${question}"
-          th:action="@{/teacher/questions/edit/{questionId}(questionId=${questionId})}">
+          th:action="@{/teacher/questions/edit/{questionId}(questionId=${questionId})}"
+          enctype="multipart/form-data"
+    >
         <div class="element">
             <input type="hidden" th:field="*{courseId}">
             <input type="hidden" th:field="*{testId}">
@@ -41,6 +43,27 @@
 
             <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback d-block mb-3"
                  th:errors="*{description}"></div>
+
+            <div th:if="*{fileUrl != null}" class="mb-2 ">
+                <div class="mb-2" style="font-weight: bold;">Aktualnie załączony plik:</div>
+                <div th:if="*{fileUrl.toLowerCase().endsWith('.pdf')}">
+                    <iframe th:src="@{/resource/{filename}(filename=*{fileUrl})}"
+                            style="width: 100%; height: 800px; border: none;"></iframe>
+                </div>
+
+                <div th:if="*{fileUrl.toLowerCase().endsWith('.jpg') or
+                   fileUrl.toLowerCase().endsWith('.jpeg') or
+                   fileUrl.toLowerCase().endsWith('.png')}">
+                    <img class="mb-3" th:src="@{/resource/{filename}(filename=*{fileUrl})}" alt="Załączony plik"
+                         style="display: block; max-width: 100%; height: auto; max-height: 900px; object-fit: contain;"/>
+                </div>
+                <a th:href="@{/teacher/question/{questionId}/remove-file(questionId=${questionId})}"
+                   class="btn btn-danger btn-sm mb-2">Usuń</a>
+                <p></p>
+            </div>
+
+            <input class="form-control" type="file" name="file">
+            <div th:if="${fileError}" class="invalid-feedback d-block mb-3" th:text="${fileError}"></div>
 
             <label class="form-label mt-2 fw-bold">Maksymalna ilość punktów za pytanie:</label>
             <input type="number" class="form-control mb-3" th:field="*{score}">
@@ -97,6 +120,9 @@
         </div>
         <div th:if="${error!=null} and ${!error.isBlank()}">
             <div class="alert alert-danger mt-2" th:text="${error}"></div>
+        </div>
+        <div th:if="${success!=null} and ${!success.isBlank()}"
+             class="alert alert-success mt-2" th:text="${success}">
         </div>
         <div class="element" style="visibility: hidden">
             <div class="submit-button">

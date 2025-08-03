@@ -106,6 +106,19 @@ public class AccessService {
         return false;
     }
 
+    public boolean hasUserAccessToQuestionResourceFile(Long questionId, Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            UserRole role = user.get().getUserRoles().iterator().next();
+            if (role.getName().equals("TEACHER")) {
+                return hasLoggedInTeacherAccessToQuestion(questionId, userId);
+            } else if (role.getName().equals("STUDENT") || role.getName().equals("DEMO")) {
+                return questionRepository.hasUserAccessToResourceFile(questionId, userId);
+            }
+        }
+        return false;
+    }
+
     public boolean hasTeacherAccessToAttempt(Long attemptId, Long teacherId) {
         Optional<Attempt> attempt = attemptRepository.findById(attemptId);
         if (attempt.isPresent()) {

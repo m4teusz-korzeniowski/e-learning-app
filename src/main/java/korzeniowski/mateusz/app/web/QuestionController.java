@@ -3,6 +3,7 @@ package korzeniowski.mateusz.app.web;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import korzeniowski.mateusz.app.exceptions.QuestionTypeException;
+import korzeniowski.mateusz.app.exceptions.StorageException;
 import korzeniowski.mateusz.app.model.course.test.dto.AnswerEditDto;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionEditDto;
@@ -11,15 +12,18 @@ import korzeniowski.mateusz.app.service.AccessService;
 import korzeniowski.mateusz.app.service.AnswerService;
 import korzeniowski.mateusz.app.service.QuestionService;
 import korzeniowski.mateusz.app.service.TestService;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -134,7 +138,9 @@ public class QuestionController {
     @PostMapping("/teacher/questions/edit/{questionId}")
     public String editQuestion(@PathVariable long questionId, HttpSession session, Model model,
                                @ModelAttribute("question") @Valid QuestionEditDto question,
-                               BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+                               BindingResult bindingResult,
+                               @RequestParam(value = "file", required = false) MultipartFile file,
+                               RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return returnQuestionEditForm(questionId, model, question);
         }
@@ -144,7 +150,15 @@ public class QuestionController {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN);
             }
             if (questionService.isQuestionTypeOk(question)) {
-                questionService.editQuestion(question);
+                if (file != null && !file.isEmpty()) {
+                    String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+
+                    if (!List.of("pdf", "png", "jpg", "jpeg").contains(extension)) {
+                        model.addAttribute("fileError", "*nieprawidłowy typ pliku. Dozwolone: .pdf, .jpg, .png");
+                        return returnQuestionEditForm(questionId, model, question);
+                    }
+                }
+                questionService.editQuestion(question, file);
                 if (question.getAnswers() != null) {
                     for (AnswerEditDto answer : question.getAnswers()) {
                         answerService.updateAnswer(answer);
@@ -207,6 +221,20 @@ public class QuestionController {
 
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return "redirect:/teacher/questions/edit/" + questionId;
+    }
+
+    @GetMapping("/teacher/question/{questionId}/remove-file")
+    public String removeQuestionFile(@PathVariable long questionId,
+                                     RedirectAttributes redirectAttributes) {
+        try{
+            questionService.removeFile(questionId);
+            redirectAttributes.addFlashAttribute("success", "Poprawnie usunięto plik!");
+        } catch (NoSuchElementException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        } catch (StorageException e) {
+            redirectAttributes.addFlashAttribute("error", "*błąd operacji na pliku!");
         }
         return "redirect:/teacher/questions/edit/" + questionId;
     }

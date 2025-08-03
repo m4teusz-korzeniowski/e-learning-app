@@ -22,6 +22,21 @@
     <div class="element">
         <p style="font-weight: bold" th:text="'Pytanie ' + ${questionNo} + ' z ' + ${totalQuestionNumber}"></p>
         <p th:text="${attempt.questions[questionNo - 1].description}"></p>
+        <div th:if="${attempt.questions[questionNo - 1].filePath != null}">
+            <div th:if="${attempt.questions[questionNo - 1].filePath.toLowerCase().endsWith('.pdf')}">
+                <iframe th:src="@{/resource/{filename}(filename=${attempt.questions[questionNo - 1].filePath})}"
+                        style="width: 100%; height: 800px; border: none;"></iframe>
+            </div>
+
+            <div th:if="${attempt.questions[questionNo - 1].filePath.toLowerCase().endsWith('.jpg') or
+                   attempt.questions[questionNo - 1].filePath.toLowerCase().endsWith('.jpeg') or
+                   attempt.questions[questionNo - 1].filePath.toLowerCase().endsWith('.png')}">
+                <img class="mb-3"
+                     th:src="@{/resource/{filename}(filename=${attempt.questions[questionNo - 1].filePath})}"
+                     alt="Załączony plik"
+                     style="display: block; max-width: 100%; height: auto; max-height: 900px; object-fit: contain;"/>
+            </div>
+        </div>
         <div class="answers-overview" th:each="answer, iterStat : ${attempt.questions[questionNo - 1].answers}">
             <input disabled type="checkbox"
                    class="form-check-input answer-check-input"
