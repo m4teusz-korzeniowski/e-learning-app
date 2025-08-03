@@ -11,18 +11,20 @@ public class QuestionAttemptDto {
     private String category;
     private String questionType;
     private List<AnswerAttemptDto> answers;
+    private String filePath;
 
     public QuestionAttemptDto() {
     }
 
     public QuestionAttemptDto(Long id, String description, Double score, String category,
-                              String questionType, List<AnswerAttemptDto> answers) {
+                              String questionType, List<AnswerAttemptDto> answers, String filePath) {
         this.id = id;
         this.description = description;
         this.score = score;
         this.category = category;
         this.questionType = questionType;
         this.answers = answers;
+        this.filePath = filePath;
     }
 
     public String getDescription() {
@@ -73,13 +75,23 @@ public class QuestionAttemptDto {
         this.id = id;
     }
 
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
     public static QuestionAttemptDto map(Question question) {
         return new QuestionAttemptDto(
                 question.getId(),
                 question.getDescription(), question.getScore(),
                 question.getCategory(),
                 question.getQuestionType().name(),
-                question.getAnswers().stream().map(AnswerAttemptDto::map).toList());
+                question.getAnswers().stream().map(AnswerAttemptDto::map).toList(),
+                question.getFileUrl()
+                );
     }
 
     public Boolean didUserAnswer() {
