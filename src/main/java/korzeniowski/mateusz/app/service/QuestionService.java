@@ -165,6 +165,23 @@ public class QuestionService {
         }
     }
 
+    @Transactional
+    public void removeFile(Long questionId){
+        Optional<Question> question = questionRepository.findById(questionId);
+        if(question.isPresent()) {
+            if(question.get().getFileUrl() != null && !question.get().getFileUrl().isBlank()) {
+                storageService.delete(question.get().getFileUrl());
+                question.get().setFileUrl(null);
+                questionRepository.save(question.get());
+            }else {
+                throw new NoSuchElementException("*plik, który chcesz usunąć nie istnieje!");
+            }
+        }
+        else {
+            throw new NoSuchElementException("*nie znaleziono pytania!");
+        }
+    }
+
     public boolean isQuestionTypeOk(QuestionEditDto question) {
         if (QuestionType.valueOf(question.getType()) == QuestionType.SINGLE_CHOICE) {
             int counter = 0;

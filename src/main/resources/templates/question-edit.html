@@ -44,6 +44,12 @@
             <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback d-block mb-3"
                  th:errors="*{description}"></div>
 
+            <div th:if="*{fileUrl != null}" class="d-flex align-items-center mb-2" style="gap: 15px">
+                <span style="font-weight: bold" th:text="*{fileUrl}">Aktualnie plik:</span>
+                <a th:href="@{/teacher/question/{questionId}/remove-file(questionId=${questionId})}" class="btn btn-danger btn-sm">Usuń</a>
+                <p></p>
+            </div>
+
             <input class="form-control" type="file" name="file">
             <div th:if="${fileError}" class="invalid-feedback d-block mb-3" th:text="${fileError}"></div>
 
@@ -102,6 +108,9 @@
         </div>
         <div th:if="${error!=null} and ${!error.isBlank()}">
             <div class="alert alert-danger mt-2" th:text="${error}"></div>
+        </div>
+        <div th:if="${success!=null} and ${!success.isBlank()}"
+             class="alert alert-success mt-2" th:text="${success}">
         </div>
         <div class="element" style="visibility: hidden">
             <div class="submit-button">

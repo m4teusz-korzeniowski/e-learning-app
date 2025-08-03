@@ -3,6 +3,7 @@ package korzeniowski.mateusz.app.web;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import korzeniowski.mateusz.app.exceptions.QuestionTypeException;
+import korzeniowski.mateusz.app.exceptions.StorageException;
 import korzeniowski.mateusz.app.model.course.test.dto.AnswerEditDto;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionDisplayDto;
 import korzeniowski.mateusz.app.model.course.test.dto.QuestionEditDto;
@@ -220,6 +221,20 @@ public class QuestionController {
 
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return "redirect:/teacher/questions/edit/" + questionId;
+    }
+
+    @GetMapping("/teacher/question/{questionId}/remove-file")
+    public String removeQuestionFile(@PathVariable long questionId,
+                                     RedirectAttributes redirectAttributes) {
+        try{
+            questionService.removeFile(questionId);
+            redirectAttributes.addFlashAttribute("success", "Poprawnie usunięto plik!");
+        } catch (NoSuchElementException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        } catch (StorageException e) {
+            redirectAttributes.addFlashAttribute("error", "*błąd operacji na pliku!");
         }
         return "redirect:/teacher/questions/edit/" + questionId;
     }
