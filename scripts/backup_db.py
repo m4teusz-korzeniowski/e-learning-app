@@ -1,9 +1,13 @@
 import os
+import pathlib
 import subprocess
 from datetime import datetime
 from dotenv import load_dotenv
 
-load_dotenv()
+base_dir = pathlib.Path(__file__).parent.parent
+env_path = base_dir / '.env'
+
+load_dotenv(dotenv_path=env_path)
 
 db_user = os.getenv('DB_USER')
 db_password = os.getenv('DB_PASSWORD')
