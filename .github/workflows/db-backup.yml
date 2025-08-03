@@ -48,13 +48,13 @@ jobs:
               echo "pip3 is already installed."
             fi
             
-            if ! python3 -c "import dotenv" &> /dev/null; then
+            if ! python3 -c 'import dotenv' &> /dev/null; then
               echo "python-dotenv not found. Installing..."
               pip3 install --quiet python-dotenv
             else
               echo "python-dotenv already installed."
             fi
             
-            echo "Running backup
+            echo "Running backup"
             python3 backup_db.py
 
