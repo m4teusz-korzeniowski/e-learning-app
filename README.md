@@ -1,14 +1,8 @@
 # 🚀 E-Learning App
 
 This is an educational web application for creating and managing courses, tests, and user assessments. Built with Spring Boot.
-The app is publicly available at:  https://mkor-e-learning.pl
 
 ---
-
-## 🚧 Work in Progress
-This application is still under development. Some features might be incomplete, and bugs may occur.
-Demo users with limited access are now available.
-
 ## Screenshots
 
 #### Course edit
